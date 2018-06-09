@@ -167,9 +167,7 @@ const withOverload = (someFunction, allowDefault = true) => {
       let realArguments = arguments;
 
       while (matchingOverload.shouldPipe) {
-        const resultToPipe = matchingOverload.method(someFunction, ...realArguments);
-
-        realArguments = resultToPipe.PIPE;
+        const { PIPE: realArguments } = matchingOverload.method(someFunction, ...realArguments);
 
         matchingOverload = someFunction.getOverload(getSimpleSignature(...realArguments));
       }
