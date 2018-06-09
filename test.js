@@ -121,6 +121,10 @@ function SignatureError(signature, message) {
 
 const withOverload = (someFunction, allowDefault = true) => {
 
+  if (!someFunction) {
+    someFunction = x => x;
+  }
+
   const self = someFunction;
   someFunction.calls = new Map();
   someFunction.name = self.name ? self.name : "<lambda>";
@@ -207,9 +211,8 @@ bob.overloads
 console.log(bob(10, "apple")); // 10 apple
 console.log("----------");
 
-console.log(bob("orange", 12)); // current goes to: orange 12
-                                // WANT:            12 orange
+console.log(bob("orange", 12)); // 12 orange
 console.log("----------");
 
-console.log(bob("red", 55, "green"));
+console.log(bob("red", 55, "green")); // 55 redgreen
 console.log("----------");
