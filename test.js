@@ -9,6 +9,7 @@ const TYPES = {
 
 const TEST_STRING_ARRAY = ["string", "string"];
 
+const reduceObjectToSignature = someObject => Object.keys(someObject).map(key => `${key}:${switchOnTypeof(someObject[key])}`).join();
 
 const switchOnConstructorName = (param) => {
   const constructorName = param.constructor.name;
@@ -17,7 +18,7 @@ const switchOnConstructorName = (param) => {
     case 'Array':
       return TYPES.ARRAY;
     case 'Object':
-      return `{${Object.keys(param).map(key => `${key}:${switchOnTypeof(param[key])}`).join()}}`;
+      return `{${reduceObjectToSignature(param)}}`;
     default:
       return constructorName;
   }
@@ -67,7 +68,6 @@ function Signature(...parameters) {
   };
 }
 
-Signature.prototype = Object.create(Signature);
 
 
 function Overload({ signature, method, pipe = false }) {
