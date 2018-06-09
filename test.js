@@ -9,7 +9,10 @@ const TYPES = {
 
 const TEST_STRING_ARRAY = ["string", "string"];
 
-const reduceObjectToSignature = someObject => Object.keys(someObject).map(key => `${key}:${switchOnTypeof(someObject[key])}`).join();
+const reduceObjectToSignature = someObject =>
+  Object.keys(someObject)
+        .map(key => `${key}:${switchOnTypeof(someObject[key])}`)
+        .join();
 
 const switchOnConstructorName = (param) => {
   const constructorName = param.constructor.name;
@@ -69,8 +72,7 @@ function Signature(...parameters) {
 }
 
 
-
-function Overload({ signature, method, pipe = false }) {
+function Overload({ signature, method, pipe = null }) {
   const self = this;
 
   this.signature = (signature instanceof Signature) ? signature : new Signature(...signature);
@@ -79,7 +81,7 @@ function Overload({ signature, method, pipe = false }) {
   this.shouldPipe = pipe;
 
   const pipeHandler = {
-    apply: function(target, thisArg, argumentList) {
+    apply: function (target, thisArg, argumentList) {
       const functionWithOverloads = argumentList.shift();
       const resultOfCurrentCall = target(...argumentList);
 
@@ -123,8 +125,8 @@ const withOverload = (someFunction, allowDefault = true) => {
   someFunction.calls = new Map();
   someFunction.name = self.name ? self.name : "<lambda>";
 
-  someFunction.overload = ({ signature, method }) => {
-    const overload = new Overload({ signature, method });
+  someFunction.overload = ({ signature, method, pipe }) => {
+    const overload = new Overload({ signature, method, pipe });
     someFunction.calls.set(overload.key, overload);
     return self;
   };
@@ -132,28 +134,43 @@ const withOverload = (someFunction, allowDefault = true) => {
   someFunction.overloads = {
     all: self.calls,
     add: (...inputOverload) => {
-      self.overload(inputOverload);
-      return self;
+      self.overload(...inputOverload);
+
+      return self.overloads;
     },
   };
 
+  someFunction.getOverload = signature => someFunction.calls.get(signature);
 
   // now we hijack the main call....
   transformedFunctionCall = (...arguments) => {
+
     const signature = getSimpleSignature(...arguments);
-    console.log(signature);
+    console.log('transformed: ', signature);
 
     if (!someFunction.calls.has(signature)) {
       if (allowDefault) {
         return someFunction(...arguments);
       }
+
       throw new SignatureError(signature);
     }
 
     const enclosingFunction = someFunction;
-    const matchingOverload = someFunction.calls.get(signature);
+    let matchingOverload = someFunction.getOverload(signature);
+    let realArguments = arguments;
 
-    return matchingOverload.method(enclosingFunction, ...arguments);
+    while (matchingOverload.shouldPipe) {
+      console.log("this should pipe to...");
+      const resultToPipe = matchingOverload.method(enclosingFunction, ...realArguments);
+
+      realArguments = resultToPipe.PIPE;
+
+      console.log(realArguments);
+      matchingOverload = someFunction.getOverload(getSimpleSignature(...realArguments));
+    }
+
+    return matchingOverload.method(enclosingFunction, ...realArguments);
   };
 
   const handler = {
@@ -166,18 +183,33 @@ const withOverload = (someFunction, allowDefault = true) => {
 };
 
 const identity = x => x;
-const bob = withOverload(identity);
+const bob = withOverload(identity, false);
 
-bob.overload({ signature: new Signature(new Map(), 2), method: (a, b) => a + 100 })
-.overload({ signature: new Signature(1, 2), method: (a, b) => a + 100 })
-.overload({ signature: new Signature([1], 2), method: (a, b) => a + 100 })
-.overload({ signature: new Signature({ apple: 5, testing: [1,2,3], wobble: { orange: 5} }, 2), method: (a, b) => a + 100 })
-.overload({ signature: [1, 2], method: (a, b) => a + b })
-.overload({ signature: ["a", "b"], method: (a, b) => `${a}.${b}` })
-.overload({ signature: TEST_STRING_ARRAY, method: () => 45 });
+bob.overloads
+   .add({
+     signature: new Signature(1, "a"),
+     method: (a, b) => `${a} ${b}`
+   })
 
-// console.log(bob.calls);
-console.log(bob());
-console.log(bob(3,3));
-console.log(bob("x", "ssssb"));
-console.log(bob(["aa", "bdddd"]));
+   .add({
+     signature: new Signature("a", 1),
+     method: (a, b) => [b, a],
+     pipe: true
+   })
+
+   .add({
+     signature: new Signature("a", 1, "c"),
+     method: (a, b, c) => [`${a}${c}`, b],
+     pipe: true
+   })
+;
+
+console.log(bob(10, "apple")); // 10 apple
+console.log("----------");
+
+console.log(bob("orange", 12)); // current goes to: orange 12
+                                // WANT:            12 orange
+console.log("----------");
+
+console.log(bob("red", 55, "green"));
+console.log("----------");
