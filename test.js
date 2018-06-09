@@ -147,10 +147,9 @@ const withOverload = (someFunction, allowDefault = true) => {
   someFunction.getOverload = signature => someFunction.calls.get(signature);
 
   // now we hijack the main call....
-  transformedFunctionCall = (...arguments) => {
+  typedFunctionCall = (...arguments) => {
 
     const signature = getSimpleSignature(...arguments);
-    console.log('transformed: ', signature);
 
     if (!someFunction.calls.has(signature)) {
       if (allowDefault) {
@@ -165,12 +164,10 @@ const withOverload = (someFunction, allowDefault = true) => {
     let realArguments = arguments;
 
     while (matchingOverload.shouldPipe) {
-      console.log("this should pipe to...");
       const resultToPipe = matchingOverload.method(enclosingFunction, ...realArguments);
 
       realArguments = resultToPipe.PIPE;
 
-      console.log(realArguments);
       matchingOverload = someFunction.getOverload(getSimpleSignature(...realArguments));
     }
 
@@ -179,7 +176,7 @@ const withOverload = (someFunction, allowDefault = true) => {
 
   const handler = {
     apply: function (target, thisArg, argumentList) {
-      return transformedFunctionCall(...argumentList);
+      return typedFunctionCall(...argumentList);
     }
   };
 
