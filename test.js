@@ -147,36 +147,32 @@ const withOverload = (someFunction, allowDefault = true) => {
   someFunction.getOverload = signature => someFunction.calls.get(signature);
 
   // now we hijack the main call....
-  typedFunctionCall = (...arguments) => {
-
-    const signature = getSimpleSignature(...arguments);
-
-    if (!someFunction.calls.has(signature)) {
-      if (allowDefault) {
-        return someFunction(...arguments);
-      }
-
-      throw new SignatureError(signature);
-    }
-
-    const enclosingFunction = someFunction;
-    let matchingOverload = someFunction.getOverload(signature);
-    let realArguments = arguments;
-
-    while (matchingOverload.shouldPipe) {
-      const resultToPipe = matchingOverload.method(enclosingFunction, ...realArguments);
-
-      realArguments = resultToPipe.PIPE;
-
-      matchingOverload = someFunction.getOverload(getSimpleSignature(...realArguments));
-    }
-
-    return matchingOverload.method(enclosingFunction, ...realArguments);
-  };
-
   const handler = {
     apply: function (target, thisArg, argumentList) {
-      return typedFunctionCall(...argumentList);
+      const arguments = argumentList;
+      const signature = getSimpleSignature(...arguments);
+
+      if (!someFunction.calls.has(signature)) {
+        if (allowDefault) {
+          return someFunction(...arguments);
+        }
+
+        throw new SignatureError(signature);
+      }
+
+      const enclosingFunction = someFunction;
+      let matchingOverload = someFunction.getOverload(signature);
+      let realArguments = arguments;
+
+      while (matchingOverload.shouldPipe) {
+        const resultToPipe = matchingOverload.method(enclosingFunction, ...realArguments);
+
+        realArguments = resultToPipe.PIPE;
+
+        matchingOverload = someFunction.getOverload(getSimpleSignature(...realArguments));
+      }
+
+      return matchingOverload.method(enclosingFunction, ...realArguments);
     }
   };
 
