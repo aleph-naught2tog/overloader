@@ -1,10 +1,14 @@
 //import * as Helper from './manipulations';
+const VOID = (() => {})();
 
 const TYPES = {
-  STRING: 'string',
-  NUMBER: 'number',
-  BOOLEAN: 'boolean',
-  ARRAY: 'array'
+  STRING: typeof "apple",
+  NUMBER: typeof 15,
+  BOOLEAN: typeof true,
+  ARRAY: [].constructor.name,
+  VOID: '<VOID>',
+  NULL: '<NULL>',
+  UNDEFINED: '<UNDEFINED>'
 };
 
 const TEST_STRING_ARRAY = ["string", "string"];
@@ -16,7 +20,6 @@ const reduceObjectToSignature = someObject =>
 
 const switchOnConstructorName = (param) => {
   const constructorName = param.constructor.name;
-  console.log(param);
   switch (constructorName) {
     case 'Array':
       return TYPES.ARRAY;
@@ -28,6 +31,15 @@ const switchOnConstructorName = (param) => {
 };
 
 const switchOnTypeof = (param) => {
+  switch (param) {
+    case null:
+      return TYPES.NULL;
+    case undefined:
+      return TYPES.UNDEFINED;
+    case VOID:
+      return TYPES.VOID;
+  }
+
   const paramType = typeof param;
   switch (paramType) {
     case 'string':
@@ -46,16 +58,14 @@ const switchOnTypeof = (param) => {
 const mapTypes = (parameters) => parameters.map(switchOnTypeof);
 
 const getSimpleSignature = (...parameters) => {
-  return mapTypes(parameters).join();
+  return `${mapTypes(parameters).join()}`;
 };
 
 function Signature(...parameters) {
-  Signature.void = "";
 
   this.structure = mapTypes(parameters);
-  this.toString = () => `${getSimpleSignature(...parameters)}`;
+  this.toString = () => getSimpleSignature(...parameters);
   this.number = parameters.length;
-  this.types = Array.from(new Set(parameters));
 
   this.equals = (otherSignature) => {
     let result = false;
@@ -72,6 +82,20 @@ function Signature(...parameters) {
 }
 
 
+const pipeHandler = {
+  apply: function (target, self, argumentList) {
+    const functionWithOverloads = argumentList.shift();
+    const resultOfCurrentCall = target(...argumentList);
+
+    if (self.shouldPipe) {
+      return functionWithOverloads({ PIPE: resultOfCurrentCall });
+    } else {
+      return resultOfCurrentCall;
+    }
+
+  }
+};
+
 function Overload({ signature, method, pipe = null }) {
   const self = this;
 
@@ -80,38 +104,12 @@ function Overload({ signature, method, pipe = null }) {
   this.key = this.signature.toString();
   this.shouldPipe = pipe;
 
-  const pipeHandler = {
-    apply: function (target, thisArg, argumentList) {
-      const functionWithOverloads = argumentList.shift();
-      const resultOfCurrentCall = target(...argumentList);
-
-      if (self.shouldPipe) {
-        return functionWithOverloads({ PIPE: resultOfCurrentCall });
-      } else {
-        return resultOfCurrentCall;
-      }
-
-    }
-  };
-
   this.method = new Proxy(method, pipeHandler);
 
-  this[Symbol.iterator] = function* () {
-    yield signature;
-    yield method;
-    yield pipeTo;
-  };
+  this.getPipedOutput = (...arguments) => this.method(...arguments).PIPE;
 
   this.toString = this.signature.toString();
 }
-
-/*
-<ClassName>
-Array
-Number
-Function
-Object
-*/
 
 function SignatureError(signature, message) {
   this.name = 'SignatureError';
@@ -162,17 +160,16 @@ const withOverload = (someFunction, allowDefault = true) => {
   // now we hijack the main call....
   const handler = {
     apply: function (target, thisArg, arguments) {
-      let matchingOverload = someFunction.getOverloadByArguments(arguments);
-
+      let matchingOverload = target.getOverloadByArguments(arguments);
       let realArguments = arguments;
 
       while (matchingOverload.shouldPipe) {
-        const { PIPE: realArguments } = matchingOverload.method(someFunction, ...realArguments);
+        realArguments = matchingOverload.getPipedOutput(target, ...realArguments);
 
-        matchingOverload = someFunction.getOverload(getSimpleSignature(...realArguments));
+        matchingOverload = target.getOverloadByArguments(realArguments);
       }
 
-      return matchingOverload.method(someFunction, ...realArguments);
+      return matchingOverload.method(target, ...realArguments);
     }
   };
 
@@ -180,26 +177,39 @@ const withOverload = (someFunction, allowDefault = true) => {
 };
 
 const identity = x => x;
-const bob = withOverload(identity, false);
+const bob = withOverload(identity);
+
+function Test() {}
+
+const testObject = new Test();
 
 bob.overloads
-   .add({
-     signature: new Signature(1, "a"),
-     method: (a, b) => `${a} ${b}`
-   })
-
    .add({
      signature: new Signature("a", 1),
      method: (a, b) => [b, a],
      pipe: true
    })
-
+   .add({
+     signature: new Signature(1, "a"),
+     method: (a, b) => `${a} ${b}`
+   })
    .add({
      signature: new Signature("a", 1, "c"),
      method: (a, b, c) => [`${a}${c}`, b],
      pipe: true
    })
+  .add({
+    signature: new Signature(testObject),
+    method: a => [1, 'hello'],
+    pipe: true
+  })
+  .add({
+    signature: new Signature(),
+    method: () => "apple"
+  })
 ;
+
+
 
 console.log(bob(10, "apple")); // 10 apple
 console.log("----------");
@@ -209,3 +219,8 @@ console.log("----------");
 
 console.log(bob("red", 55, "green")); // 55 redgreen
 console.log("----------");
+
+console.log(bob(testObject));
+console.log(bob());
+
+// will this blow up?
