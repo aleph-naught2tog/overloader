@@ -145,6 +145,10 @@ function SignatureError(signature, message) {
   this.message = `No function matching signature <${signature}> found.`;
 }
 
+function SignedFunction({ signature, method }) {
+  this.signature = signature;
+  this.method = method;
+}
 
 const withOverload = (someFunction, allowDefault = true) => {
 
@@ -152,17 +156,26 @@ const withOverload = (someFunction, allowDefault = true) => {
     someFunction = x => x;
   }
 
-  const self = someFunction;
-  someFunction.calls = new Map();
-  someFunction.ownName = self.name ? self.name : "<lambda>";
+  let self;
 
-  someFunction.overload = ({ signature, method, pipe }) => {
+  if (someFunction instanceof SignedFunction) {
+    self = someFunction.method;
+  } else {
+    self = someFunction;
+  }
+
+  self.calls = new Map();
+
+  self.ownName = self.name ? self.name : "<lambda>";
+
+  self.overload = ({ signature, method, pipe }) => {
     const overload = new Overload({ signature, method, pipe });
-    someFunction.calls.set(overload.key, overload);
+    console.log(self.calls.keys());
+    self.calls.set(overload.key, overload);
     return self;
   };
 
-  someFunction.overloads = {
+  self.overloads = {
     all: self.calls,
     add: (...inputOverload) => {
       self.overload(...inputOverload);
@@ -171,19 +184,25 @@ const withOverload = (someFunction, allowDefault = true) => {
     },
   };
 
-  someFunction.getOverload = signature => someFunction.calls.get(signature);
-  someFunction.getOverloadByArguments = allArguments => {
-    const signature = getSimpleSignature(...allArguments);
+  if (someFunction instanceof SignedFunction) {
+    self.overloads.add({ signature: someFunction.signature, method: someFunction.method });
+  }
 
-    if (!someFunction.calls.has(signature)) {
+  self.getOverload = signature => self.calls.get(signature);
+  self.getOverloadByArguments = allArguments => {
+    const signature = getSimpleSignature(...allArguments);
+    console.log(allArguments);
+    if (!self.calls.has(signature)) {
       if (allowDefault) {
-        return someFunction(...allArguments);
+        return self(...allArguments);
       }
+
+      // TODO: switch signature check to nested --  ie, if there is an <String,Number> and <String,Array>
+      //    we want: [ string, [number, array] ]
 
       throw new SignatureError(signature);
     }
-
-    return someFunction.getOverload(signature);
+    return self.getOverload(signature);
   };
 
   // now we hijack the main call....
@@ -204,7 +223,7 @@ const withOverload = (someFunction, allowDefault = true) => {
     }
   };
 
-  return new Proxy(someFunction, handler);
+  return new Proxy(self, handler);
 };
 
 const identity = x => x;
@@ -262,13 +281,16 @@ const overloadedFilter = filter => withOverload(filter);
 
 
 const filterWithOverloads = filterBase => {
-  const filter = withOverload(filterBase);
+  const filter = withOverload(filterBase, false);
 
   filter.overloads
         .add({
-          signature: new Signature(TYPES.NUMBER),
-          method: a => [obj => obj.length >= 5],
-          pipe: true
+          signature: new Signature(TYPES.ARRAY),
+          method: array => array.filter(obj => obj.length >= 5),
+        })
+        .add({
+          signature: new Signature(TYPES.FUNCTION),
+          method: obj => obj.length >= 5
         })
   ;
 
@@ -276,9 +298,26 @@ const filterWithOverloads = filterBase => {
 };
 
 const testArray = ["apple", "bear", "twentytwo", "a"];
-const testArrayFilter = filterWithOverloads(testArray.filter);
+
+const SignedFilter = new SignedFunction({
+  signature: new Signature(TYPES.ANY, TYPES.NUMBER, TYPES.ARRAY),
+  method: (item, index, originalArray) => item
+});
+
+const filter2 = filterWithOverloads(identity);
+const filter = filterWithOverloads(SignedFilter);
 
 
-testArray.filter = testArrayFilter;
+console.log('filter2 ---------');
+console.log(filter2);
+console.log('----------------');
+console.log('----------------');
 
-console.log(testArray.filter(5));
+console.log('filter ---------');
+console.log(filter);
+console.log('----------------');
+
+filter(testArray);        // args => ["apple", ....]
+testArray.filter(filter); // args => [ "apple", 0, ["apple", "bear"... ] ] -- ie .filters arguments
+// console.log(filter(testArray));
+// console.log(testArray.filter(filter));

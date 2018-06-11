@@ -170,6 +170,14 @@ function SignatureError(signature, message) {
   this.message = 'No function matching signature <' + signature + '> found.';
 }
 
+function SignedFunction(_ref2) {
+  var signature = _ref2.signature,
+      method = _ref2.method;
+
+  this.signature = signature;
+  this.method = method;
+}
+
 var withOverload = function withOverload(someFunction) {
   var allowDefault = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
@@ -180,73 +188,84 @@ var withOverload = function withOverload(someFunction) {
     };
   }
 
-  var self = someFunction;
-  someFunction.calls = new Map();
-  someFunction.ownName = self.name ? self.name : "<lambda>";
+  var self = void 0;
 
-  someFunction.overload = function (_ref2) {
-    var signature = _ref2.signature,
-        method = _ref2.method,
-        pipe = _ref2.pipe;
+  if (someFunction instanceof SignedFunction) {
+    self = someFunction.method;
+  } else {
+    self = someFunction;
+  }
+
+  self.calls = new Map();
+
+  self.ownName = self.name ? self.name : "<lambda>";
+
+  self.overload = function (_ref3) {
+    var signature = _ref3.signature,
+        method = _ref3.method,
+        pipe = _ref3.pipe;
 
     var overload = new Overload({ signature: signature, method: method, pipe: pipe });
-    someFunction.calls.set(overload.key, overload);
+    console.log(self.calls.keys());
+    self.calls.set(overload.key, overload);
     return self;
   };
 
-  someFunction.overloads = {
+  self.overloads = {
     all: self.calls,
     add: function add() {
-      self.overload.apply(self, arguments);
+      var _self;
+
+      (_self = self).overload.apply(_self, arguments);
 
       return self.overloads;
     }
   };
 
-  someFunction.getOverload = function (signature) {
-    return someFunction.calls.get(signature);
-  };
-  someFunction.getOverloadByArguments = function (allArguments) {
-    var signature = getSimpleSignature.apply(undefined, _toConsumableArray(allArguments));
+  if (someFunction instanceof SignedFunction) {
+    self.overloads.add({ signature: someFunction.signature, method: someFunction.method });
+  }
 
-    if (!someFunction.calls.has(signature)) {
+  self.getOverload = function (signature) {
+    return self.calls.get(signature);
+  };
+  self.getOverloadByArguments = function (allArguments) {
+    var signature = getSimpleSignature.apply(undefined, _toConsumableArray(allArguments));
+    console.log(allArguments);
+    if (!self.calls.has(signature)) {
       if (allowDefault) {
-        return someFunction.apply(undefined, _toConsumableArray(allArguments));
+        return self.apply(undefined, _toConsumableArray(allArguments));
       }
+
+      // TODO: switch signature check to nested --  ie, if there is an <String,Number> and <String,Array>
+      //    we want: [ string, [number, array] ]
 
       throw new SignatureError(signature);
     }
-
-    return someFunction.getOverload(signature);
+    return self.getOverload(signature);
   };
 
   // now we hijack the main call....
   var handler = {
     apply: function apply(target, thisArg, allArguments) {
-      var _matchingOverload3;
+      var _matchingOverload2;
 
       var matchingOverload = target.getOverloadByArguments(allArguments);
       var realArguments = allArguments;
 
-      if (thisArg !== undefined) {
+      while (matchingOverload.shouldPipe) {
         var _matchingOverload;
 
-        return (_matchingOverload = matchingOverload).call.apply(_matchingOverload, [thisArg].concat(_toConsumableArray(realArguments)));
-      }
-
-      while (matchingOverload.shouldPipe) {
-        var _matchingOverload2;
-
-        realArguments = (_matchingOverload2 = matchingOverload).getPipedOutput.apply(_matchingOverload2, [target].concat(_toConsumableArray(realArguments)));
+        realArguments = (_matchingOverload = matchingOverload).getPipedOutput.apply(_matchingOverload, [target].concat(_toConsumableArray(realArguments)));
 
         matchingOverload = target.getOverloadByArguments(realArguments);
       }
 
-      return (_matchingOverload3 = matchingOverload).method.apply(_matchingOverload3, [target].concat(_toConsumableArray(realArguments)));
+      return (_matchingOverload2 = matchingOverload).method.apply(_matchingOverload2, [target].concat(_toConsumableArray(realArguments)));
     }
   };
 
-  return new Proxy(someFunction, handler);
+  return new Proxy(self, handler);
 };
 
 var identity = function identity(x) {
@@ -311,24 +330,47 @@ var overloadedFilter = function overloadedFilter(filter) {
 
 
 var filterWithOverloads = function filterWithOverloads(filterBase) {
-  var filter = withOverload(filterBase);
+  var filter = withOverload(filterBase, false);
 
   filter.overloads.add({
-    signature: new Signature(TYPES.NUMBER),
-    method: function method(a) {
-      return [function (obj) {
+    signature: new Signature(TYPES.ARRAY),
+    method: function method(array) {
+      return array.filter(function (obj) {
         return obj.length >= 5;
-      }];
-    },
-    pipe: true
+      });
+    }
+  }).add({
+    signature: new Signature(TYPES.FUNCTION),
+    method: function method(obj) {
+      return obj.length >= 5;
+    }
   });
 
   return filter;
 };
 
 var testArray = ["apple", "bear", "twentytwo", "a"];
-var testArrayFilter = filterWithOverloads(testArray.filter);
 
-testArray.filter = testArrayFilter;
+var SignedFilter = new SignedFunction({
+  signature: new Signature(TYPES.ANY, TYPES.NUMBER, TYPES.ARRAY),
+  method: function method(item, index, originalArray) {
+    return item;
+  }
+});
 
-console.log(testArray.filter(5));
+var filter2 = filterWithOverloads(identity);
+var filter = filterWithOverloads(SignedFilter);
+
+console.log('filter2 ---------');
+console.log(filter2);
+console.log('----------------');
+console.log('----------------');
+
+console.log('filter ---------');
+console.log(filter);
+console.log('----------------');
+
+filter(testArray); // args => ["apple", ....]
+testArray.filter(filter); // args => [ "apple", 0, ["apple", "bear"... ] ] -- ie .filters arguments
+// console.log(filter(testArray));
+// console.log(testArray.filter(filter));
