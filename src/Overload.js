@@ -98,6 +98,7 @@ export const withOverload = (someFunction, allowDefault = true) => {
   };
 
   self.getOverloadByArguments = allArguments => {
+    let overload;
     let signature = new Signature(...allArguments);
     const hasAllowedArgumentCount = self.hasSignaturesOfLength(allArguments.length);
     const mustBeExactMatch = !self.allowsAny() && !allowDefault;
@@ -107,14 +108,21 @@ export const withOverload = (someFunction, allowDefault = true) => {
     }
 
     if (self.hasOverloadFor(signature)) {
-      return getOverload(calls, signature);
+      overload = getOverload(calls, signature);
+    } else {
+      if (mustBeExactMatch) {
+        throw new NoSuchSignatureError(signature, self);
+      }
+
+      overload = self.getNextBestMatch(signature);
     }
 
-    if (mustBeExactMatch) {
+    if (overload) {
+      return overload;
+    } else {
       throw new NoSuchSignatureError(signature, self);
     }
 
-    return self.getNextBestMatch(signature);
   };
 
   const overloadedCallHandler = {

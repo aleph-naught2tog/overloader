@@ -40,16 +40,23 @@ bob.overloads
 ;
 
 
-console.log(bob(10, "apple")); // 10 apple
+console.log(bob(10, "apple"));        // 10 apple
 console.log("----------");
 
-console.log(bob("orange", 12)); // 12 orange
+console.log(bob("orange", 12));       // 12 orange
 console.log("----------");
 
 console.log(bob("red", 55, "green")); // 55 redgreen
 console.log("----------");
 
-console.log(bob([1, 2, 3]));
+console.log(bob([1, 2, 3]));          // "apple"
+console.log("----------");
+
+console.log(bob(new Test()));         // 1 hello
+console.log("----------");
+
+// should fail
+console.log(bob(null, null));
 console.log("----------");
 
 

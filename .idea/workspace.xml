@@ -3,11 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="d8eeb44c-70ed-469a-830d-64918bbbdd56" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.bin/babylon" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/babylon" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.bin/jsesc" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/jsesc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.bin/loose-envify" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/loose-envify" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.bin/regjsparser" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/regjsparser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Overload.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Overload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -21,20 +19,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="test.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1302">
-              <caret line="62" column="10" selection-start-line="62" selection-start-column="10" selection-end-line="62" selection-end-column="10" />
+            <state relative-caret-position="966">
+              <caret line="54" column="48" selection-start-line="54" selection-start-column="48" selection-end-line="54" selection-end-column="48" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Overload.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Overload.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Overload.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="101" column="17" selection-start-line="101" selection-start-column="17" selection-end-line="101" selection-end-column="17" />
+            <state relative-caret-position="612">
+              <caret line="140" column="29" lean-forward="true" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -119,8 +117,8 @@
         <option value="$PROJECT_DIR$/src/maps.js" />
         <option value="$PROJECT_DIR$/src/Signature.js" />
         <option value="$PROJECT_DIR$/src/manipulations.js" />
-        <option value="$PROJECT_DIR$/src/test.js" />
         <option value="$PROJECT_DIR$/src/Overload.js" />
+        <option value="$PROJECT_DIR$/src/test.js" />
       </list>
     </option>
   </component>
@@ -149,10 +147,11 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="22" />
-    <option name="width" value="1280" />
-    <option name="height" value="778" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="2253" />
+    <option name="y" value="-438" />
+    <option name="width" value="1578" />
+    <option name="height" value="1418" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -176,7 +175,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -208,12 +207,12 @@
       <workItem from="1528685344276" duration="8754000" />
       <workItem from="1528721346683" duration="3712000" />
       <workItem from="1528757219080" duration="24731000" />
-      <workItem from="1528804386085" duration="95000" />
+      <workItem from="1528804386085" duration="2757000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="91989000" />
+    <option name="totallyTimeSpent" value="94651000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -225,11 +224,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1280" height="778" extended-state="6" />
+    <frame x="2253" y="-438" width="1578" height="1418" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Remote Host" order="3" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16397415" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13216145" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -378,17 +377,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test.js">
+    <entry file="file://$PROJECT_DIR$/src/Overload.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1302">
-          <caret line="62" column="10" selection-start-line="62" selection-start-column="10" selection-end-line="62" selection-end-column="10" />
+        <state relative-caret-position="612">
+          <caret line="140" column="29" lean-forward="true" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Overload.js">
+    <entry file="file://$PROJECT_DIR$/src/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="101" column="17" selection-start-line="101" selection-start-column="17" selection-end-line="101" selection-end-column="17" />
+        <state relative-caret-position="966">
+          <caret line="54" column="48" selection-start-line="54" selection-start-column="48" selection-end-line="54" selection-end-column="48" />
         </state>
       </provider>
     </entry>
