@@ -20,9 +20,11 @@ var TYPES = {
   ARRAY: [].constructor.name,
   VOID: '<VOID>',
   NULL: '<NULL>',
+  CONSTRUCTOR: '<CONSTRUCTOR>',
   FUNCTION: 'FUNCTION',
   UNDEFINED: '<UNDEFINED>',
-  ANY: '<ANY>'
+  ANY: '<ANY>',
+  LAMBDA: '<LAMBDA>'
 };
 
 var reduceObjectToSignature = function reduceObjectToSignature(someObject) {
@@ -80,7 +82,13 @@ var switchOnTypeof = function switchOnTypeof(param) {
     case 'boolean':
       return TYPES.BOOLEAN;
     case 'function':
-      return isConstructor(param) ? "FUNCTION" : param.name;
+      if (isConstructor(param)) {
+        return TYPES.CONSTRUCTOR;
+      }
+      if (param.name) {
+        return param.name;
+      }
+      return TYPES.LAMBDA;
     default:
       return switchOnConstructorName(param);
   }
@@ -126,10 +134,8 @@ function Signature() {
 
 var pipeHandler = {
   apply: function apply(target, self, argumentList) {
-    console.log(argumentList);
     var functionWithOverloads = argumentList.shift();
     var resultOfCurrentCall = target.apply(undefined, _toConsumableArray(argumentList));
-
     if (self.shouldPipe) {
       return functionWithOverloads({ PIPE: resultOfCurrentCall });
     } else {
@@ -153,15 +159,23 @@ function Overload(_ref) {
   this.shouldPipe = pipe;
   this.method = new Proxy(method, pipeHandler);
   this.getPipedOutput = function () {
-    console.log(_this2.method.apply(_this2, arguments));
     return _this2.method.apply(_this2, arguments).PIPE;
   };
   this.toString = this.signature.toString();
 }
 
-function SignatureError(signature, message) {
-  this.name = 'SignatureError';
-  this.message = 'No function matching signature <' + signature + '> found.';
+function NoSuchSignatureError(signature, overloadedFunction) {
+  this.name = 'NoSuchSignatureError';
+  this.message = 'No function matching signature <' + signature + '> found.\nDid you mean:\n    ' + overloadedFunction.getSignatures().map(function (signature) {
+    return signature.toString();
+  }) + '\n';
+}
+
+function NoSignatureOfLengthError(signature, overloadedFunction) {
+  this.name = 'NoSignatureOfLengthError';
+  this.message = 'No function with a signature <' + signature + '> of length ' + signature.number + ' was found.\nDid you mean:\n    ' + overloadedFunction.getSignaturesOfNumber(signature.number).map(function (signature) {
+    return '* ' + signature.toString();
+  });
 }
 
 function SignedFunction(_ref2) {
@@ -200,7 +214,6 @@ var withOverload = function withOverload(someFunction) {
         pipe = _ref3.pipe;
 
     var overload = new Overload({ signature: signature, method: method, pipe: pipe });
-    console.log(overload);
     self.calls.set(overload.signature, overload);
     return self;
   };
@@ -216,7 +229,10 @@ var withOverload = function withOverload(someFunction) {
   };
 
   if (someFunction instanceof SignedFunction) {
-    self.overloads.add({ signature: someFunction.signature, method: someFunction.method });
+    self.overloads.add({
+      signature: someFunction.signature,
+      method: someFunction.method
+    });
   }
 
   self.getSignatures = function () {
@@ -244,7 +260,7 @@ var withOverload = function withOverload(someFunction) {
     var matchingKey = self.getSignatures().find(matchByStructure);
 
     if (matchingKey === undefined) {
-      throw new SignatureError(signature);
+      throw new NoSuchSignatureError(signature);
     }
 
     return self.calls.get(matchingKey);
@@ -252,6 +268,11 @@ var withOverload = function withOverload(someFunction) {
 
   self.hasSignaturesOfNumber = function (number) {
     return self.getSignatures().find(function (signature) {
+      return signature.number === number;
+    });
+  };
+  self.getSignaturesOfNumber = function (number) {
+    return self.getSignatures().filter(function (signature) {
       return signature.number === number;
     });
   };
@@ -271,49 +292,51 @@ var withOverload = function withOverload(someFunction) {
       var sameType = function sameType(typeOne, typeTwo) {
         return typeOne === typeTwo || typeOne === TYPES.ANY || typeTwo === TYPES.ANY;
       };
-      wildcardSignature.structure.forEach(function (type, index) {
-        allTypesMatch = sameType(type, signature.structure[index]);
-      });
+
+      wildcardSignature.structure.map(function (type, index) {
+        return sameType(type, signature.structure[index]);
+      }).reduce(function (isTrueSoFar, maybeTrue) {
+        return isTrueSoFar && maybeTrue;
+      }, true);
 
       return allTypesMatch;
     });
   };
 
   self.getOverloadByArguments = function (allArguments) {
+    var signature = new (Function.prototype.bind.apply(Signature, [null].concat(_toConsumableArray(allArguments))))();
     var hasAllowedArgumentCount = self.hasSignaturesOfNumber(allArguments.length);
-
-    var shouldFailFast = !hasAllowedArgumentCount && !self.allowsAny() && !self.allowsDefault;
     var mustBeExactMatch = !self.allowsAny() && !self.allowsDefault;
 
-    if (shouldFailFast) {
-      throw new SignatureError(signature);
+    if (!hasAllowedArgumentCount) {
+      throw new NoSignatureOfLengthError(signature, self);
     }
 
-    var signature = new (Function.prototype.bind.apply(Signature, [null].concat(_toConsumableArray(allArguments))))();
+    var overload = void 0;
 
-    console.log(allArguments);
-    console.log(signature);
+    if (self.doesNotHaveOverloadFor(signature)) {
+      if (mustBeExactMatch) {
+        throw new NoSuchSignatureError(signature, self);
+      }
 
-    if (self.hasOverloadFor(signature)) {
-      console.log('has overload');
-      console.log(self.getOverload(signature));
-      return self.getOverload(signature);
-    }
-
-    if (mustBeExactMatch) {
-      throw new SignatureError(signature);
-    }
-
-    if (self.allowsAny()) {
-      var maybeSignature = matchWithAnyFound(signature);
-
-      if (maybeSignature) {
-        return self.getOverload(maybeSignature);
+      if (self.allowsAny()) {
+        var maybeSignature = matchWithAnyFound(signature);
+        if (maybeSignature) {
+          overload = self.getOverload(maybeSignature);
+        }
+      } else if (self.allowsDefault) {
+        overload = self.apply(undefined, _toConsumableArray(allArguments));
       }
     }
 
-    if (self.allowsDefault) {
-      return self.apply(undefined, _toConsumableArray(allArguments));
+    if (self.hasOverloadFor(signature)) {
+      overload = self.getOverload(signature);
+    }
+
+    if (overload) {
+      return overload;
+    } else {
+      throw new Error("Something has gone very wrong.");
     }
   };
 
@@ -322,7 +345,6 @@ var withOverload = function withOverload(someFunction) {
     apply: function apply(target, thisArg, allArguments) {
       var _matchingOverload2;
 
-      console.log(allArguments);
       var matchingOverload = target.getOverloadByArguments(allArguments);
       var realArguments = allArguments;
 
@@ -406,7 +428,7 @@ var overloadedFilter = function overloadedFilter(filter) {
 
 
 var lengthFilterWithOverloads = function lengthFilterWithOverloads(filterBase) {
-  var filter = withOverload(filterBase, false);
+  var filter = withOverload(filterBase.method, false);
 
   filter.overloads.add({
     signature: new Signature(TYPES.ARRAY),
@@ -416,9 +438,17 @@ var lengthFilterWithOverloads = function lengthFilterWithOverloads(filterBase) {
       });
     }
   }).add({
-    signature: new Signature(TYPES.FUNCTION),
-    method: function method(obj) {
-      return obj.length >= 5;
+    signature: new Signature(TYPES.NUMBER),
+    method: function method(number) {
+      return [function (obj, i, a) {
+        return obj.length >= number;
+      }];
+    },
+    pipe: true
+  }).add({
+    signature: new Signature(TYPES.LAMBDA),
+    method: function method(filterFunction) {
+      return filterFunction;
     }
   });
 
@@ -430,14 +460,16 @@ var testArray = ["apple", "bear", "twentytwo", "a"];
 var SignedFilter = new SignedFunction({
   signature: new Signature(TYPES.FUNCTION),
   method: function method(filterFunction) {
-    return function (item, index, originalArray) {
-      return filterFunction(item, index, originalArray);
-    };
+    return filterFunction;
   }
 });
 
 //const filter2 = lengthFilterWithOverloads(identity);
-var filter = lengthFilterWithOverloads(SignedFilter);
+var filter = lengthFilterWithOverloads(identity);
+console.log("......");
+console.log((0, _manipulations.getMapKeys)(filter.calls).map(function (key) {
+  return key.toString();
+}));
 
 // console.log('filter2 ---------');
 // console.log(filter2);
@@ -449,7 +481,7 @@ var filter = lengthFilterWithOverloads(SignedFilter);
 // console.log('----------------');
 
 //filter(testArray);        // args => ["apple", ....]
-var omgItWorked = testArray.filter(filter); // args => [ "apple", 0, ["apple", "bear"... ] ] -- ie .filters
+var omgItWorked = testArray.filter(filter(5)); // args => [ "apple", 0, ["apple", "bear"... ] ] -- ie .filters
 // arguments
 // console.log(filter(testArray));
 // console.log(testArray.filter(filter));
