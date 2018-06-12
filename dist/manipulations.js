@@ -138,6 +138,9 @@ var randomItemByKey = exports.randomItemByKey = function randomItemByKey(object,
 var hasKey = exports.hasKey = function hasKey(object, key) {
   return Object.keys(object).includes(key);
 };
+var doesNotHaveKey = exports.doesNotHaveKey = function doesNotHaveKey(object, key) {
+  return !hasKey(object, key);
+};
 
 var generateRandomStudent = function generateRandomStudent() {
   return {
@@ -166,4 +169,54 @@ var _filterBy_3 = function _filterBy_3(array, key, targetValue) {
 
 var _filterBy_2 = function _filterBy_2(array, condition) {
   return array.filter(condition);
+};
+
+var regexKeyFilter = function regexKeyFilter(map, regex) {
+  return mapFilter(map, function (key) {
+    return regex.test(key);
+  });
+};
+
+var mapKeyArrayHasFilter = function mapKeyArrayHasFilter(map, object) {
+  return mapFilter(map, function (key) {
+    return key.includes(object);
+  });
+};
+
+var getMapKeys = exports.getMapKeys = function getMapKeys(map) {
+  var mapKeys = [];
+  map.forEach(function (index, key) {
+    return mapKeys.push(key);
+  });
+  return mapKeys;
+};
+
+var mapMap = function mapMap(map, callback) {
+  var mappedMap = new Map();
+
+  getMapKeys(map).forEach(function (key) {
+    return mappedMap.set(key, callback(key, map.get(key)));
+  });
+
+  return mappedMap;
+};
+
+var mapFilter = function mapFilter(map, callback) {
+  var filteredMap = new Map();
+
+  getMapKeys(map).forEach(function (key) {
+    var isTrue = callback(key, map.get(key));
+
+    if (isTrue) {
+      filteredMap.set(key, map.get(key));
+    }
+  });
+
+  return filteredMap;
+};
+
+var mapToString = function mapToString(array) {
+  return array.map(function (item) {
+    return item.toString();
+  });
 };

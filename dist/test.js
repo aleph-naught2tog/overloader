@@ -1,5 +1,10 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.mapTypes = undefined;
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _manipulations = require('./manipulations');
@@ -19,13 +24,6 @@ var TYPES = {
   UNDEFINED: '<UNDEFINED>',
   ANY: '<ANY>'
 };
-
-var asOptional = function asOptional(param) {};
-var withDefault = function withDefault(param) {
-  return param || defaultValue;
-};
-
-var TEST_STRING_ARRAY = ["string", "string"];
 
 var reduceObjectToSignature = function reduceObjectToSignature(someObject) {
   return Object.keys(someObject).map(function (key) {
@@ -83,13 +81,12 @@ var switchOnTypeof = function switchOnTypeof(param) {
       return TYPES.BOOLEAN;
     case 'function':
       return isConstructor(param) ? "FUNCTION" : param.name;
-    // return getSimpleSignature(param);
     default:
       return switchOnConstructorName(param);
   }
 };
 
-var mapTypes = function mapTypes(parameters) {
+var mapTypes = exports.mapTypes = function mapTypes(parameters) {
   return parameters.map(switchOnTypeof);
 };
 
@@ -113,7 +110,6 @@ function Signature() {
     return getSimpleSignature.apply(undefined, parameters);
   };
   this.number = parameters.length;
-
   this.equals = function (otherSignature) {
     var result = false;
     if (otherSignature instanceof Signature) {
@@ -123,7 +119,6 @@ function Signature() {
         });
       }
     }
-
     return result;
   };
 }
@@ -153,15 +148,13 @@ function Overload(_ref) {
 
   this.signature = signature instanceof Signature ? signature : new (Function.prototype.bind.apply(Signature, [null].concat(_toConsumableArray(signature))))();
 
-  this.key = this.signature.toString();
+  // this.key = this.signature.toString();
+  this.key = this.signature;
   this.shouldPipe = pipe;
-
   this.method = new Proxy(method, pipeHandler);
-
   this.getPipedOutput = function () {
     return _this2.method.apply(_this2, arguments).PIPE;
   };
-
   this.toString = this.signature.toString();
 }
 
@@ -217,7 +210,6 @@ var withOverload = function withOverload(someFunction) {
       var _self;
 
       (_self = self).overload.apply(_self, arguments);
-
       return self.overloads;
     }
   };
@@ -227,21 +219,40 @@ var withOverload = function withOverload(someFunction) {
   }
 
   self.getOverload = function (signature) {
-    return self.calls.get(signature);
+    var keys = (0, _manipulations.getMapKeys)(self.calls);
+
+    var matchByStructure = function matchByStructure(keySignature) {
+      return keySignature.equals(signature);
+    };
+
+    var matchingKey = keys.find(matchByStructure);
+
+    return self.calls.get(matchingKey);
   };
+
+  self.getSignatures = function () {
+    return (0, _manipulations.getMapKeys)(self.calls);
+  };
+
+  self.hasOverloadFor = function (signature) {
+    return self.getSignatures().map(function (key) {
+      return key.toString();
+    }).includes(signature.toString());
+  };
+  self.doesNotHaveOverloadFor = function (signature) {
+    return !self.hasOverloadFor(signature);
+  };
+
   self.getOverloadByArguments = function (allArguments) {
-    var signature = getSimpleSignature.apply(undefined, _toConsumableArray(allArguments));
-    console.log(allArguments);
-    if (!self.calls.has(signature)) {
+    var signature = new (Function.prototype.bind.apply(Signature, [null].concat(_toConsumableArray(allArguments))))();
+
+    if (self.doesNotHaveOverloadFor(signature)) {
       if (allowDefault) {
         return self.apply(undefined, _toConsumableArray(allArguments));
       }
-
-      // TODO: switch signature check to nested --  ie, if there is an <String,Number> and <String,Array>
-      //    we want: [ string, [number, array] ]
-
       throw new SignatureError(signature);
     }
+
     return self.getOverload(signature);
   };
 
@@ -257,7 +268,6 @@ var withOverload = function withOverload(someFunction) {
         var _matchingOverload;
 
         realArguments = (_matchingOverload = matchingOverload).getPipedOutput.apply(_matchingOverload, [target].concat(_toConsumableArray(realArguments)));
-
         matchingOverload = target.getOverloadByArguments(realArguments);
       }
 
@@ -307,15 +317,14 @@ bob.overloads.add({
   }
 });
 
-//
-// console.log(bob(10, "apple")); // 10 apple
-// console.log("----------");
-//
-// console.log(bob("orange", 12)); // 12 orange
-// console.log("----------");
-//
-// console.log(bob("red", 55, "green")); // 55 redgreen
-// console.log("----------");
+console.log(bob(10, "apple")); // 10 apple
+console.log("----------");
+
+console.log(bob("orange", 12)); // 12 orange
+console.log("----------");
+
+console.log(bob("red", 55, "green")); // 55 redgreen
+console.log("----------");
 //
 // console.log(bob(testObject));
 // console.log(bob());
@@ -358,19 +367,19 @@ var SignedFilter = new SignedFunction({
   }
 });
 
-var filter2 = filterWithOverloads(identity);
+//const filter2 = filterWithOverloads(identity);
 var filter = filterWithOverloads(SignedFilter);
 
-console.log('filter2 ---------');
-console.log(filter2);
-console.log('----------------');
-console.log('----------------');
+// console.log('filter2 ---------');
+// console.log(filter2);
+// console.log('----------------');
+// console.log('----------------');
+//
+// console.log('filter ---------');
+// console.log(filter);
+// console.log('----------------');
 
-console.log('filter ---------');
-console.log(filter);
-console.log('----------------');
-
-filter(testArray); // args => ["apple", ....]
-testArray.filter(filter); // args => [ "apple", 0, ["apple", "bear"... ] ] -- ie .filters arguments
+//filter(testArray);        // args => ["apple", ....]
+//testArray.filter(filter); // args => [ "apple", 0, ["apple", "bear"... ] ] -- ie .filters arguments
 // console.log(filter(testArray));
 // console.log(testArray.filter(filter));

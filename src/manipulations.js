@@ -83,6 +83,7 @@ export const randomItem = array => array[randomIndex(array)];
 export const randomItemByKey = (object, key) => randomItem(object[key]);
 
 export const hasKey = (object, key) => Object.keys(object).includes(key);
+export const doesNotHaveKey = (object, key) => !hasKey(object, key);
 
 const generateRandomStudent = () => ({
   age: randomItemByKey(STUDENT_VALUES, 'age'),
@@ -102,3 +103,38 @@ const TEST_DATA = generateRandomStudents(10);
 const _filterBy_3 = (array, key, targetValue) => array.filter(item => item[key] === targetValue);
 
 const _filterBy_2 = (array, condition) => array.filter(condition);
+
+const regexKeyFilter = (map, regex) => mapFilter(map, key => regex.test(key));
+
+const mapKeyArrayHasFilter = (map, object) => mapFilter(map, key => key.includes(object));
+
+export const getMapKeys = map => {
+  const mapKeys = [];
+  map.forEach((index, key) => mapKeys.push(key));
+  return mapKeys;
+};
+
+const mapMap = (map, callback) => {
+  const mappedMap = new Map();
+
+  getMapKeys(map).forEach(key => mappedMap.set(key, callback(key, map.get(key))));
+
+  return mappedMap;
+};
+
+const mapFilter = (map, callback) => {
+  const filteredMap = new Map();
+
+  getMapKeys(map).forEach(key => {
+    const isTrue = callback(key, map.get(key));
+
+    if (isTrue) {
+      filteredMap.set(key, map.get(key));
+    }
+
+  });
+
+  return filteredMap;
+};
+
+const mapToString = array => array.map(item => item.toString());
