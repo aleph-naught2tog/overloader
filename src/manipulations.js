@@ -18,6 +18,11 @@ export const requireIterable = (...valuesToTest) => {
 };
 
 
+// .map(whetherTypesMatch(signature))
+// .reduce((isTrueSoFar, maybeTrue) => isTrueSoFar && maybeTrue, true);
+
+
+
 // noinspection JSUnusedLocalSymbols
 const isIterable = value => (value instanceof Array
   || value instanceof Set);
