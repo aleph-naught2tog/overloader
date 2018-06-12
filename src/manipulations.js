@@ -104,9 +104,9 @@ const _filterBy_3 = (array, key, targetValue) => array.filter(item => item[key] 
 
 const _filterBy_2 = (array, condition) => array.filter(condition);
 
-const regexKeyFilter = (map, regex) => mapFilter(map, key => regex.test(key));
+const regexKeyFilter = (map, regex) => filterMap(map, key => regex.test(key));
 
-const mapKeyArrayHasFilter = (map, object) => mapFilter(map, key => key.includes(object));
+const mapKeyArrayHasFilter = (map, object) => filterMap(map, key => key.includes(object));
 
 export const getMapKeys = map => {
   const mapKeys = [];
@@ -122,7 +122,7 @@ const mapMap = (map, callback) => {
   return mappedMap;
 };
 
-const mapFilter = (map, callback) => {
+export const filterMap = (map, callback) => {
   const filteredMap = new Map();
 
   getMapKeys(map).forEach(key => {
@@ -137,4 +137,4 @@ const mapFilter = (map, callback) => {
   return filteredMap;
 };
 
-const mapToString = array => array.map(item => item.toString());
+export const mapToString = array => array.map(item => item.toString());

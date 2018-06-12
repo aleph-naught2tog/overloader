@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8eeb44c-70ed-469a-830d-64918bbbdd56" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.compile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.run" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/manipulations.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/manipulations.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/manipulations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/manipulations.js" afterDir="false" />
@@ -22,11 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="test.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="185" column="52" lean-forward="true" selection-start-line="185" selection-start-column="52" selection-end-line="185" selection-end-column="52" />
+            <state relative-caret-position="322">
+              <caret line="374" column="43" selection-start-line="374" selection-start-column="43" selection-end-line="374" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -40,11 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="manipulations.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="manipulations.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/manipulations.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="536">
-              <caret line="139" column="64" selection-start-line="139" selection-start-column="64" selection-end-line="139" selection-end-column="64" />
+            <state relative-caret-position="221">
+              <caret line="124" column="22" selection-start-line="124" selection-start-column="22" selection-end-line="124" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -68,6 +65,7 @@
       <find>name</find>
       <find>!hasKey</find>
       <find>var</find>
+      <find>getPiped</find>
     </findStrings>
     <replaceStrings>
       <replace>let</replace>
@@ -87,8 +85,8 @@
         <option value="$PROJECT_DIR$/manipulations.js" />
         <option value="$PROJECT_DIR$/test.js" />
         <option value="$PROJECT_DIR$/src/maps.js" />
-        <option value="$PROJECT_DIR$/src/test.js" />
         <option value="$PROJECT_DIR$/src/manipulations.js" />
+        <option value="$PROJECT_DIR$/src/test.js" />
       </list>
     </option>
   </component>
@@ -174,12 +172,12 @@
       <workItem from="1528581692280" duration="4282000" />
       <workItem from="1528685344276" duration="8754000" />
       <workItem from="1528721346683" duration="3712000" />
-      <workItem from="1528757219080" duration="6999000" />
+      <workItem from="1528757219080" duration="12575000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74162000" />
+    <option name="totallyTimeSpent" value="79738000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -225,7 +223,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="4" />
+      <option name="time" value="5" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -325,6 +323,13 @@
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/dist/src/test.js" />
+    <entry file="file://$PROJECT_DIR$/src/manipulations.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="124" column="22" selection-start-line="124" selection-start-column="22" selection-end-line="124" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/maps.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="359">
@@ -334,15 +339,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="185" column="52" lean-forward="true" selection-start-line="185" selection-start-column="52" selection-end-line="185" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/manipulations.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="139" column="64" selection-start-line="139" selection-start-column="64" selection-end-line="139" selection-end-column="64" />
+        <state relative-caret-position="322">
+          <caret line="374" column="43" selection-start-line="374" selection-start-column="43" selection-end-line="374" selection-end-column="43" />
         </state>
       </provider>
     </entry>

@@ -172,13 +172,13 @@ var _filterBy_2 = function _filterBy_2(array, condition) {
 };
 
 var regexKeyFilter = function regexKeyFilter(map, regex) {
-  return mapFilter(map, function (key) {
+  return filterMap(map, function (key) {
     return regex.test(key);
   });
 };
 
 var mapKeyArrayHasFilter = function mapKeyArrayHasFilter(map, object) {
-  return mapFilter(map, function (key) {
+  return filterMap(map, function (key) {
     return key.includes(object);
   });
 };
@@ -201,7 +201,7 @@ var mapMap = function mapMap(map, callback) {
   return mappedMap;
 };
 
-var mapFilter = function mapFilter(map, callback) {
+var filterMap = exports.filterMap = function filterMap(map, callback) {
   var filteredMap = new Map();
 
   getMapKeys(map).forEach(function (key) {
@@ -215,7 +215,7 @@ var mapFilter = function mapFilter(map, callback) {
   return filteredMap;
 };
 
-var mapToString = function mapToString(array) {
+var mapToString = exports.mapToString = function mapToString(array) {
   return array.map(function (item) {
     return item.toString();
   });

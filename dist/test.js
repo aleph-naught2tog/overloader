@@ -106,6 +106,7 @@ function Signature() {
   }
 
   this.structure = mapTypes(parameters);
+  this.allowsAny = this.structure.includes(TYPES.ANY);
   this.toString = function () {
     return getSimpleSignature.apply(undefined, parameters);
   };
@@ -125,6 +126,7 @@ function Signature() {
 
 var pipeHandler = {
   apply: function apply(target, self, argumentList) {
+    console.log(argumentList);
     var functionWithOverloads = argumentList.shift();
     var resultOfCurrentCall = target.apply(undefined, _toConsumableArray(argumentList));
 
@@ -148,11 +150,10 @@ function Overload(_ref) {
 
   this.signature = signature instanceof Signature ? signature : new (Function.prototype.bind.apply(Signature, [null].concat(_toConsumableArray(signature))))();
 
-  // this.key = this.signature.toString();
-  this.key = this.signature;
   this.shouldPipe = pipe;
   this.method = new Proxy(method, pipeHandler);
   this.getPipedOutput = function () {
+    console.log(_this2.method.apply(_this2, arguments));
     return _this2.method.apply(_this2, arguments).PIPE;
   };
   this.toString = this.signature.toString();
@@ -199,8 +200,8 @@ var withOverload = function withOverload(someFunction) {
         pipe = _ref3.pipe;
 
     var overload = new Overload({ signature: signature, method: method, pipe: pipe });
-    console.log(self.calls.keys());
-    self.calls.set(overload.key, overload);
+    console.log(overload);
+    self.calls.set(overload.signature, overload);
     return self;
   };
 
@@ -218,42 +219,102 @@ var withOverload = function withOverload(someFunction) {
     self.overloads.add({ signature: someFunction.signature, method: someFunction.method });
   }
 
-  self.getOverload = function (signature) {
-    var keys = (0, _manipulations.getMapKeys)(self.calls);
+  self.getSignatures = function () {
+    return (0, _manipulations.getMapKeys)(self.calls);
+  };
+  self.getStringSignatures = function () {
+    return (0, _manipulations.mapToString)(self.getSignatures());
+  };
 
+  self.allowsDefault = allowDefault;
+  self.getSignaturesWithAny = function () {
+    return self.getSignatures().filter(function (signature) {
+      return signature.allowsAny;
+    });
+  };
+
+  self.allowsAny = function () {
+    return self.getSignaturesWithAny().length !== 0;
+  };
+
+  self.getOverload = function (signature) {
     var matchByStructure = function matchByStructure(keySignature) {
       return keySignature.equals(signature);
     };
+    var matchingKey = self.getSignatures().find(matchByStructure);
 
-    var matchingKey = keys.find(matchByStructure);
+    if (matchingKey === undefined) {
+      throw new SignatureError(signature);
+    }
 
     return self.calls.get(matchingKey);
   };
 
-  self.getSignatures = function () {
-    return (0, _manipulations.getMapKeys)(self.calls);
+  self.hasSignaturesOfNumber = function (number) {
+    return self.getSignatures().find(function (signature) {
+      return signature.number === number;
+    });
   };
 
   self.hasOverloadFor = function (signature) {
-    return self.getSignatures().map(function (key) {
-      return key.toString();
-    }).includes(signature.toString());
+    return self.getStringSignatures().includes(signature.toString());
   };
   self.doesNotHaveOverloadFor = function (signature) {
     return !self.hasOverloadFor(signature);
   };
 
-  self.getOverloadByArguments = function (allArguments) {
-    var signature = new (Function.prototype.bind.apply(Signature, [null].concat(_toConsumableArray(allArguments))))();
+  var matchWithAnyFound = function matchWithAnyFound(signature) {
+    return self.getSignaturesWithAny().filter(function (wildcardSignature) {
+      return wildcardSignature.number === signature.number;
+    }).find(function (wildcardSignature) {
+      var allTypesMatch = false;
+      var sameType = function sameType(typeOne, typeTwo) {
+        return typeOne === typeTwo || typeOne === TYPES.ANY || typeTwo === TYPES.ANY;
+      };
+      wildcardSignature.structure.forEach(function (type, index) {
+        allTypesMatch = sameType(type, signature.structure[index]);
+      });
 
-    if (self.doesNotHaveOverloadFor(signature)) {
-      if (allowDefault) {
-        return self.apply(undefined, _toConsumableArray(allArguments));
-      }
+      return allTypesMatch;
+    });
+  };
+
+  self.getOverloadByArguments = function (allArguments) {
+    var hasAllowedArgumentCount = self.hasSignaturesOfNumber(allArguments.length);
+
+    var shouldFailFast = !hasAllowedArgumentCount && !self.allowsAny() && !self.allowsDefault;
+    var mustBeExactMatch = !self.allowsAny() && !self.allowsDefault;
+
+    if (shouldFailFast) {
       throw new SignatureError(signature);
     }
 
-    return self.getOverload(signature);
+    var signature = new (Function.prototype.bind.apply(Signature, [null].concat(_toConsumableArray(allArguments))))();
+
+    console.log(allArguments);
+    console.log(signature);
+
+    if (self.hasOverloadFor(signature)) {
+      console.log('has overload');
+      console.log(self.getOverload(signature));
+      return self.getOverload(signature);
+    }
+
+    if (mustBeExactMatch) {
+      throw new SignatureError(signature);
+    }
+
+    if (self.allowsAny()) {
+      var maybeSignature = matchWithAnyFound(signature);
+
+      if (maybeSignature) {
+        return self.getOverload(maybeSignature);
+      }
+    }
+
+    if (self.allowsDefault) {
+      return self.apply(undefined, _toConsumableArray(allArguments));
+    }
   };
 
   // now we hijack the main call....
@@ -261,6 +322,7 @@ var withOverload = function withOverload(someFunction) {
     apply: function apply(target, thisArg, allArguments) {
       var _matchingOverload2;
 
+      console.log(allArguments);
       var matchingOverload = target.getOverloadByArguments(allArguments);
       var realArguments = allArguments;
 
@@ -315,6 +377,11 @@ bob.overloads.add({
   method: function method() {
     return "apple";
   }
+}).add({
+  signature: new Signature(TYPES.ANY),
+  method: function method(bob) {
+    return "apple";
+  }
 });
 
 console.log(bob(10, "apple")); // 10 apple
@@ -338,7 +405,7 @@ var overloadedFilter = function overloadedFilter(filter) {
 // console.log(new Signature(1, a => "a"));
 
 
-var filterWithOverloads = function filterWithOverloads(filterBase) {
+var lengthFilterWithOverloads = function lengthFilterWithOverloads(filterBase) {
   var filter = withOverload(filterBase, false);
 
   filter.overloads.add({
@@ -367,8 +434,8 @@ var SignedFilter = new SignedFunction({
   }
 });
 
-//const filter2 = filterWithOverloads(identity);
-var filter = filterWithOverloads(SignedFilter);
+//const filter2 = lengthFilterWithOverloads(identity);
+var filter = lengthFilterWithOverloads(SignedFilter);
 
 // console.log('filter2 ---------');
 // console.log(filter2);
@@ -380,6 +447,9 @@ var filter = filterWithOverloads(SignedFilter);
 // console.log('----------------');
 
 //filter(testArray);        // args => ["apple", ....]
-//testArray.filter(filter); // args => [ "apple", 0, ["apple", "bear"... ] ] -- ie .filters arguments
+var omgItWorked = testArray.filter(filter); // args => [ "apple", 0, ["apple", "bear"... ] ] -- ie .filters
+// arguments
 // console.log(filter(testArray));
 // console.log(testArray.filter(filter));
+
+console.log(omgItWorked);

@@ -1,4 +1,4 @@
-import { hasKey, getMapKeys } from './manipulations';
+import { hasKey, getMapKeys, mapToString, filterMap } from './manipulations';
 
 const VOID = (() => {
 })();
@@ -83,6 +83,7 @@ const getSimpleSignature = (...parameters) => {
 
 function Signature(...parameters) {
   this.structure = mapTypes(parameters);
+  this.allowsAny = this.structure.includes(TYPES.ANY);
   this.toString = () => getSimpleSignature(...parameters);
   this.number = parameters.length;
   this.equals = (otherSignature) => {
@@ -101,6 +102,7 @@ function Signature(...parameters) {
 
 const pipeHandler = {
   apply: function (target, self, argumentList) {
+    console.log(argumentList);
     const functionWithOverloads = argumentList.shift();
     const resultOfCurrentCall = target(...argumentList);
 
@@ -118,11 +120,12 @@ function Overload({ signature, method, pipe = null }) {
 
   this.signature = (signature instanceof Signature) ? signature : new Signature(...signature);
 
-  // this.key = this.signature.toString();
-  this.key = this.signature;
   this.shouldPipe = pipe;
   this.method = new Proxy(method, pipeHandler);
-  this.getPipedOutput = (...allArguments) => this.method(...allArguments).PIPE;
+  this.getPipedOutput = (...allArguments) => {
+    console.log(this.method(...allArguments));
+    return this.method(...allArguments).PIPE
+  };
   this.toString = this.signature.toString();
 }
 
@@ -156,8 +159,8 @@ const withOverload = (someFunction, allowDefault = true) => {
 
   self.overload = ({ signature, method, pipe }) => {
     const overload = new Overload({ signature, method, pipe });
-    console.log(self.calls.keys());
-    self.calls.set(overload.key, overload);
+    console.log(overload);
+    self.calls.set(overload.signature, overload);
     return self;
   };
 
@@ -173,38 +176,91 @@ const withOverload = (someFunction, allowDefault = true) => {
     self.overloads.add({ signature: someFunction.signature, method: someFunction.method });
   }
 
+
+  self.getSignatures = () => getMapKeys(self.calls);
+  self.getStringSignatures = () => mapToString(self.getSignatures());
+
+  self.allowsDefault = allowDefault;
+  self.getSignaturesWithAny = () => self.getSignatures().filter(signature => signature.allowsAny);
+
+  self.allowsAny = () => self.getSignaturesWithAny().length !== 0;
+
   self.getOverload = signature => {
-    const keys = getMapKeys(self.calls);
-
     const matchByStructure = keySignature => keySignature.equals(signature);
+    const matchingKey = self.getSignatures().find(matchByStructure);
 
-    const matchingKey = keys.find(matchByStructure);
+    if (matchingKey === undefined) {
+      throw new SignatureError(signature);
+    }
 
     return self.calls.get(matchingKey);
   };
 
-  self.getSignatures = () => getMapKeys(self.calls);
+  self.hasSignaturesOfNumber = number => self.getSignatures().find(signature => signature.number === number);
 
-  self.hasOverloadFor = signature => self.getSignatures().map(key => key.toString()).includes(signature.toString());
+  self.hasOverloadFor = signature => self.getStringSignatures().includes(signature.toString());
   self.doesNotHaveOverloadFor = signature => !self.hasOverloadFor(signature);
 
-  self.getOverloadByArguments = allArguments => {
-    const signature = new Signature(...allArguments);
+  const matchWithAnyFound = signature => {
+    return self.getSignaturesWithAny()
+               .filter(wildcardSignature => wildcardSignature.number === signature.number)
+               .find(wildcardSignature => {
+                 let allTypesMatch = false;
+                 const sameType = (typeOne, typeTwo) => typeOne === typeTwo || typeOne === TYPES.ANY || typeTwo === TYPES.ANY;
+                 wildcardSignature.structure.forEach((type, index) => {
+                   allTypesMatch = sameType(type, signature.structure[index]);
+                 });
 
-    if (self.doesNotHaveOverloadFor(signature)) {
-      if (allowDefault) {
-        return self(...allArguments);
-      }
+                 return allTypesMatch;
+               })
+      ;
+  };
+
+  self.getOverloadByArguments = allArguments => {
+    const hasAllowedArgumentCount = self.hasSignaturesOfNumber(allArguments.length);
+
+    const shouldFailFast = !hasAllowedArgumentCount && !self.allowsAny() && !self.allowsDefault;
+    const mustBeExactMatch = !self.allowsAny() && !self.allowsDefault;
+
+    if (shouldFailFast) {
       throw new SignatureError(signature);
     }
 
-    return self.getOverload(signature);
+    let signature = new Signature(...allArguments);
+
+    console.log(allArguments);
+    console.log(signature);
+
+    if (self.hasOverloadFor(signature)) {
+      console.log('has overload');
+      console.log(self.getOverload(signature));
+      return self.getOverload(signature);
+    }
+
+
+    if (mustBeExactMatch) {
+      throw new SignatureError(signature);
+    }
+
+    if (self.allowsAny()) {
+      const maybeSignature = matchWithAnyFound(signature);
+
+      if (maybeSignature) {
+        return self.getOverload(maybeSignature);
+      }
+    }
+
+    if (self.allowsDefault) {
+      return self(...allArguments);
+    }
+
+
   };
 
   // now we hijack the main call....
   const handler = {
     apply: function (target, thisArg, allArguments) {
-
+      console.log(allArguments);
       let matchingOverload = target.getOverloadByArguments(allArguments);
       let realArguments = allArguments;
 
@@ -252,6 +308,10 @@ bob.overloads
      signature: new Signature(),
      method: () => "apple"
    })
+   .add({
+     signature: new Signature(TYPES.ANY),
+     method: (bob) => "apple"
+   })
 ;
 
 
@@ -274,7 +334,7 @@ const overloadedFilter = filter => withOverload(filter);
 // console.log(new Signature(1, a => "a"));
 
 
-const filterWithOverloads = filterBase => {
+const lengthFilterWithOverloads = filterBase => {
   const filter = withOverload(filterBase, false);
 
   filter.overloads
@@ -298,8 +358,8 @@ const SignedFilter = new SignedFunction({
   method: (item, index, originalArray) => item
 });
 
-//const filter2 = filterWithOverloads(identity);
-const filter = filterWithOverloads(SignedFilter);
+//const filter2 = lengthFilterWithOverloads(identity);
+const filter = lengthFilterWithOverloads(SignedFilter);
 
 
 // console.log('filter2 ---------');
@@ -312,6 +372,9 @@ const filter = filterWithOverloads(SignedFilter);
 // console.log('----------------');
 
 //filter(testArray);        // args => ["apple", ....]
-//testArray.filter(filter); // args => [ "apple", 0, ["apple", "bear"... ] ] -- ie .filters arguments
+const omgItWorked = testArray.filter(filter); // args => [ "apple", 0, ["apple", "bear"... ] ] -- ie .filters
+// arguments
 // console.log(filter(testArray));
 // console.log(testArray.filter(filter));
+
+console.log(omgItWorked);
