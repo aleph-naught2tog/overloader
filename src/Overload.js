@@ -13,6 +13,7 @@ const pipeHandler = {
     }
   }
 };
+
 const overloadedCallHandler = {
   apply: function (target, thisArg, allArguments) {
     let matchingOverload = target.getOverloadByArguments(allArguments);
@@ -39,6 +40,25 @@ function Overload({ signature, method, pipe = null }) {
   this.toString = () => signature.toString();
 }
 
+
+const matchByStructure = signature => keySignature => keySignature.equals(signature);
+const byLength = length => signature => signature.length === length;
+const whetherTypesMatch = signature => (type, index) => {
+  const typeOne = type;
+  const typeTwo = signature.structure[index];
+  return typeOne === typeTwo || typeOne === TYPES.ANY || typeTwo === TYPES.ANY;
+};
+
+const matchWithAnyFound = (signature, signaturesWithAny) => {
+  const whereAllTypesMatchOrAny = wildcard => wildcard.structure.every(whetherTypesMatch(signature));
+
+  return signaturesWithAny
+    .filter(byLength(signature.length))
+    .find(whereAllTypesMatchOrAny);
+};
+
+
+
 export const withOverload = (someFunction, allowDefault = true) => {
 
   if (!someFunction) {
@@ -46,71 +66,41 @@ export const withOverload = (someFunction, allowDefault = true) => {
   }
 
   const self = someFunction;
-
-  self.calls = new Map();
-
-  self.ownName = self.name ? self.name : "<lambda>";
-
-  self.overload = ({ signature, method, pipe }) => {
-    const overload = new Overload({ signature, method, pipe });
-    self.calls.set(overload.getSignature(), overload);
-    return self;
-  };
+  const calls = new Map();
+  const signatures = () => getMapKeys(calls);
 
   self.overloads = {
-    all: self.calls,
-    add: (...inputOverload) => {
-      self.overload(...inputOverload);
+    all: calls,
+    add: ({ signature, method, pipe }) => {
+      const overload = new Overload({ signature, method, pipe });
+      calls.set(overload.getSignature(), overload);
       return self.overloads;
     },
   };
 
-  self.getSignatures = () => getMapKeys(self.calls);
-  self.getStringSignatures = () => mapToString(self.getSignatures());
 
-  self.allowsDefault = allowDefault;
-  self.getSignaturesWithAny = () => self.getSignatures().filter(signature => signature.allowsAny);
-
+  self.hasSignaturesOfLength = length => signatures().find(byLength(length));
+  self.getSignaturesOfLength = length => signatures().filter(byLength(length));
   self.allowsAny = () => self.getSignaturesWithAny().length !== 0;
+  self.getSignaturesWithAny = () => signatures().filter(signature => signature.allowsAny);
 
-  self.getOverload = signature => {
-    const matchByStructure = keySignature => keySignature.equals(signature);
-    const matchingKey = self.getSignatures().find(matchByStructure);
+  self.hasOverloadFor = signature => mapToString(signatures()).includes(signature.toString());
+  self.doesNotHaveOverloadFor = signature => !self.hasOverloadFor(signature);
+
+  const getOverload = (calls, signature) => {
+    const matchingKey = signatures().find(matchByStructure(signature));
 
     if (matchingKey === undefined) {
       throw new NoSuchSignatureError(signature);
     }
 
-    return self.calls.get(matchingKey);
+    return calls.get(matchingKey);
   };
-
-  const byLength = length => signature => signature.length === length;
-  const whetherTypesMatch = signature => (type, index) => {
-    const typeOne = type;
-    const typeTwo = signature.structure[index];
-    return typeOne === typeTwo || typeOne === TYPES.ANY || typeTwo === TYPES.ANY;
-  };
-
-  self.hasSignaturesOfLength = length => self.getSignatures().find(byLength(length));
-  self.getSignaturesOfLength = length => self.getSignatures().filter(byLength(length));
-
-  self.hasOverloadFor = signature => self.getStringSignatures().includes(signature.toString());
-  self.doesNotHaveOverloadFor = signature => !self.hasOverloadFor(signature);
-
-  const matchWithAnyFound = signature => {
-
-    const whereAllTypesMatchOrAny = wildcard =>
-      wildcard.structure.every(whetherTypesMatch(signature));
-
-    return self.getSignaturesWithAny()
-               .filter(byLength(signature.length))
-               .find(whereAllTypesMatchOrAny);
-  };
-
+  
   self.getOverloadByArguments = allArguments => {
     let signature = new Signature(...allArguments);
     const hasAllowedArgumentCount = self.hasSignaturesOfLength(allArguments.length);
-    const mustBeExactMatch = !self.allowsAny() && !self.allowsDefault;
+    const mustBeExactMatch = !self.allowsAny() && !allowDefault;
 
     if (!hasAllowedArgumentCount) {
       throw new NoSignatureOfLengthError(signature, self);
@@ -122,17 +112,17 @@ export const withOverload = (someFunction, allowDefault = true) => {
       if (mustBeExactMatch) {
         throw new NoSuchSignatureError(signature, self);
       } else if (self.allowsAny()) {
-        const maybeSignature = matchWithAnyFound(signature);
+        const maybeSignature = matchWithAnyFound(signature, self.getSignaturesWithAny());
         if (maybeSignature) {
-          overload = self.getOverload(maybeSignature);
+          overload = getOverload(calls, maybeSignature);
         }
-      } else if (self.allowsDefault) {
+      } else if (allowDefault) {
         overload = self(...allArguments);
       }
     }
 
     if (self.hasOverloadFor(signature)) {
-      overload = self.getOverload(signature);
+      overload = getOverload(calls, signature);
     }
 
     if (overload) {

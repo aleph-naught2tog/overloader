@@ -29,6 +29,10 @@ var requireIterable = exports.requireIterable = function requireIterable() {
   });
 };
 
+// .map(whetherTypesMatch(signature))
+// .reduce((isTrueSoFar, maybeTrue) => isTrueSoFar && maybeTrue, true);
+
+
 // noinspection JSUnusedLocalSymbols
 var isIterable = function isIterable(value) {
   return value instanceof Array || value instanceof Set;
