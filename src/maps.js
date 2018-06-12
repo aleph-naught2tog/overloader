@@ -1,4 +1,4 @@
-import { mapTypes } from './test';
+import { mapTypes } from './Signature';
 import { hasKey, doesNotHaveKey } from './manipulations';
 
 const STRING = "1string";

@@ -17,23 +17,35 @@ export const requireIterable = (...valuesToTest) => {
   });
 };
 
-export const isIterable = value => (value instanceof Array
+
+// noinspection JSUnusedLocalSymbols
+const isIterable = value => (value instanceof Array
   || value instanceof Set);
 
 export const isNumber = value => !isNaN(value);
-export const isNotANumber = value => isNaN(value);
+
+// noinspection JSUnusedLocalSymbols
+const isNotANumber = value => !isNumber(value);
 export const isString = value => typeof value === 'string';
-export const isNotString = value => typeof value !== 'string';
+
+// noinspection JSUnusedLocalSymbols
+const isNotString = value => !isString(value);
 export const isArray = value => Array.isArray(value);
-export const isNotArray = value => !isArray(value);
+
+// noinspection JSUnusedLocalSymbols
+const isNotArray = value => !isArray(value);
 export const isSet = value => value instanceof Set;
-export const isNotSet = value => !isSet(value);
+
+// noinspection JSUnusedLocalSymbols
+const isNotSet = value => !isSet(value);
 export const isNotEmpty = value => isArray(value) && value.length !== 0;
 
-// noinspection EqualityComparisonWithCoercionJS
-export const isFalsy = value => value == false; // intentional ==
-// noinspection EqualityComparisonWithCoercionJS
-export const isTruthy = value => value == true; // intentional ==
+// noinspection EqualityComparisonWithCoercionJS, JSUnusedLocalSymbols
+const isFalsy = value => value == false; // intentional ==
+
+
+// noinspection EqualityComparisonWithCoercionJS // noinspection JSUnusedLocalSymbols
+const isTruthy = value => value == true; // intentional ==
 
 export const range = (minimum, maximum, step = 1, shouldIncludeEndPoints = true) => {
   requireNumbers(minimum, maximum);
@@ -51,6 +63,7 @@ export const randomIndex = array => {
   return Math.round(Math.random() * (array.length - 1));
 };
 
+// noinspection JSUnusedLocalSymbols
 export const shuffle = array => {
   let shuffledArray = [];
 
@@ -71,13 +84,6 @@ const STUDENT_VALUES = {
     core: ['unicorn hair', 'phoenix feather', 'veela hair', 'kneazle whisper', 'dragon heartstring']
   }
 };
-
-const Student = ({ age, house, pet, wand: { wood, length, core } }) => ({
-  age,
-  house,
-  pet,
-  wand: { wood, length, core }
-});
 
 export const randomItem = array => array[randomIndex(array)];
 export const randomItemByKey = (object, key) => randomItem(object[key]);
@@ -100,12 +106,11 @@ const generateRandomStudents = number => Array(number).fill(0).map(generateRando
 
 const TEST_DATA = generateRandomStudents(10);
 
-const _filterBy_3 = (array, key, targetValue) => array.filter(item => item[key] === targetValue);
-
-const _filterBy_2 = (array, condition) => array.filter(condition);
-
+// noinspection JSUnusedLocalSymbols
 const regexKeyFilter = (map, regex) => filterMap(map, key => regex.test(key));
 
+
+// noinspection JSUnusedLocalSymbols
 const mapKeyArrayHasFilter = (map, object) => filterMap(map, key => key.includes(object));
 
 export const getMapKeys = map => {
@@ -114,6 +119,8 @@ export const getMapKeys = map => {
   return mapKeys;
 };
 
+
+// noinspection JSUnusedLocalSymbols
 const mapMap = (map, callback) => {
   const mappedMap = new Map();
 

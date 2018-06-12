@@ -4,7 +4,7 @@ var _TYPE_DICT;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _test = require('./test');
+var _Signature = require('./Signature');
 
 var _manipulations = require('./manipulations');
 
@@ -42,7 +42,7 @@ var getConstant = function getConstant() {
     arrayOfArguments[_key] = arguments[_key];
   }
 
-  console.log((0, _test.mapTypes)(arrayOfArguments).map(function (item) {
+  console.log((0, _Signature.mapTypes)(arrayOfArguments).map(function (item) {
     return TYPE_DICT[item];
   }));
 };

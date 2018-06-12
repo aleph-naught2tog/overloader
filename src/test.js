@@ -1,158 +1,47 @@
-import { hasKey, getMapKeys, mapToString, filterMap } from './manipulations';
-
-const VOID = (() => {
-})();
-
-const TYPES = {
-  STRING: (typeof "apple"),
-  NUMBER: (typeof 15),
-  BOOLEAN: (typeof true),
-  ARRAY: ([].constructor.name),
-  VOID: '<VOID>',
-  NULL: '<NULL>',
-  CONSTRUCTOR: '<CONSTRUCTOR>',
-  FUNCTION: 'FUNCTION',
-  UNDEFINED: '<UNDEFINED>',
-  ANY: '<ANY>',
-  LAMBDA: '<LAMBDA>'
-};
-
-const reduceObjectToSignature = someObject =>
-  Object.keys(someObject)
-        .map(key => `${key}:${switchOnTypeof(someObject[key])}`)
-        .join();
-
-const isConstructor = param => {
-  let isConstructor = false;
-
-  try {
-    param();
-  } catch (error) {
-    if (error.message.indexOf("class constructors must be invoked") >= 0) {
-      isConstructor = true;
-    }
-  }
-
-  return isConstructor;
-};
-
-const switchOnConstructorName = (param) => {
-  const constructorName = param.constructor.name;
-  switch (constructorName) {
-    case 'Array':
-      return TYPES.ARRAY;
-    case 'Object':
-      return `{${reduceObjectToSignature(param)}}`;
-    default:
-      return constructorName;
-  }
-};
-
-const switchOnTypeof = (param) => {
-  if (Object.values(TYPES).includes(param)) {
-    return param;
-  }
-
-  switch (param) {
-    case null:
-      return TYPES.NULL;
-    case undefined:
-      return TYPES.UNDEFINED;
-    case VOID:
-      return TYPES.VOID;
-  }
-
-  const paramType = typeof param;
-  switch (paramType) {
-    case 'string':
-      return TYPES.STRING;
-    case 'number':
-      return TYPES.NUMBER;
-    case 'boolean':
-      return TYPES.BOOLEAN;
-    case 'function':
-      if (isConstructor(param)) {
-        return TYPES.CONSTRUCTOR;
-      }
-      if (param.name) {
-        return param.name;
-      }
-      return TYPES.LAMBDA;
-    default:
-      return switchOnConstructorName(param);
-  }
-};
-
-export const mapTypes = (parameters) => parameters.map(switchOnTypeof);
-
-const getSimpleSignature = (...parameters) => {
-  return `${mapTypes(parameters).join()}`;
-};
-
-function Signature(...parameters) {
-  this.structure = mapTypes(parameters);
-  this.allowsAny = this.structure.includes(TYPES.ANY);
-  this.toString = () => getSimpleSignature(...parameters);
-  this.number = parameters.length;
-  this.equals = (otherSignature) => {
-    let result = false;
-    if (otherSignature instanceof Signature) {
-      if (otherSignature.number === this.number) {
-        result = this.structure.every(
-          (currentParameter, index) => currentParameter === otherSignature.structure[index]
-        );
-      }
-    }
-    return result;
-  };
-}
+import { getMapKeys, mapToString } from './manipulations';
+import { NoSignatureOfLengthError, NoSuchSignatureError, Signature, TYPES } from "./Signature";
 
 
 const pipeHandler = {
   apply: function (target, self, argumentList) {
     const functionWithOverloads = argumentList.shift();
     const resultOfCurrentCall = target(...argumentList);
+
     if (self.shouldPipe) {
       return functionWithOverloads({ PIPE: resultOfCurrentCall });
     } else {
       return resultOfCurrentCall;
     }
+  }
+};
 
+const overloadedCallHandler = {
+  apply: function (target, thisArg, allArguments) {
+    let matchingOverload = target.getOverloadByArguments(allArguments);
+    let realArguments = allArguments;
+
+    while (matchingOverload.shouldPipe) {
+      realArguments = matchingOverload.getPipedOutput(target, ...realArguments);
+      matchingOverload = target.getOverloadByArguments(realArguments);
+    }
+
+    return matchingOverload.method(target, ...realArguments);
   }
 };
 
 function Overload({ signature, method, pipe = null }) {
-  const self = this;
-
   this.signature = (signature instanceof Signature) ? signature : new Signature(...signature);
 
-  this.shouldPipe = pipe;
   this.method = new Proxy(method, pipeHandler);
+  this.shouldPipe = pipe;
+
   this.getPipedOutput = (...allArguments) => {
     return this.method(...allArguments).PIPE
   };
-  this.toString = this.signature.toString();
+
+  this.toString = () => this.signature.toString();
 }
 
-function NoSuchSignatureError(signature, overloadedFunction) {
-  this.name = 'NoSuchSignatureError';
-  this.message = `No function matching signature <${signature}> found.
-Did you mean:
-    ${overloadedFunction.getSignatures().map(signature => signature.toString())}
-`;
-}
-
-function NoSignatureOfLengthError(signature, overloadedFunction) {
-  this.name = 'NoSignatureOfLengthError';
-  this.message = `No function with a signature <${signature}> of length ${signature.number} was found.
-Did you mean:
-    ${overloadedFunction.getSignaturesOfNumber(signature.number).map(signature => `* ${signature.toString()}`)}`;
-}
-
-function SignedFunction({ signature, method }) {
-  this.signature = signature;
-  this.method = method;
-}
 
 const withOverload = (someFunction, allowDefault = true) => {
 
@@ -160,13 +49,7 @@ const withOverload = (someFunction, allowDefault = true) => {
     someFunction = x => x;
   }
 
-  let self;
-
-  if (someFunction instanceof SignedFunction) {
-    self = someFunction.method;
-  } else {
-    self = someFunction;
-  }
+  const self = someFunction;
 
   self.calls = new Map();
 
@@ -185,14 +68,6 @@ const withOverload = (someFunction, allowDefault = true) => {
       return self.overloads;
     },
   };
-
-  if (someFunction instanceof SignedFunction) {
-    self.overloads.add({
-      signature: someFunction.signature,
-      method: someFunction.method
-    });
-  }
-
 
   self.getSignatures = () => getMapKeys(self.calls);
   self.getStringSignatures = () => mapToString(self.getSignatures());
@@ -213,15 +88,15 @@ const withOverload = (someFunction, allowDefault = true) => {
     return self.calls.get(matchingKey);
   };
 
-  self.hasSignaturesOfNumber = number => self.getSignatures().find(signature => signature.number === number);
-  self.getSignaturesOfNumber = number => self.getSignatures().filter(signature => signature.number === number);
+  self.hasSignaturesOfNumber = number => self.getSignatures().find(signature => signature.length === number);
+  self.getSignaturesOfNumber = number => self.getSignatures().filter(signature => signature.length === number);
 
   self.hasOverloadFor = signature => self.getStringSignatures().includes(signature.toString());
   self.doesNotHaveOverloadFor = signature => !self.hasOverloadFor(signature);
 
   const matchWithAnyFound = signature => {
     return self.getSignaturesWithAny()
-               .filter(wildcardSignature => wildcardSignature.number === signature.number)
+               .filter(wildcardSignature => wildcardSignature.length === signature.length)
                .find(wildcardSignature => {
                  let allTypesMatch = false;
                  const sameType = (typeOne, typeTwo) => typeOne === typeTwo || typeOne === TYPES.ANY || typeTwo === TYPES.ANY;
@@ -273,29 +148,13 @@ const withOverload = (someFunction, allowDefault = true) => {
 
   };
 
-  // now we hijack the main call....
-  const handler = {
-    apply: function (target, thisArg, allArguments) {
-      let matchingOverload = target.getOverloadByArguments(allArguments);
-      let realArguments = allArguments;
-
-      while (matchingOverload.shouldPipe) {
-        realArguments = matchingOverload.getPipedOutput(target, ...realArguments);
-        matchingOverload = target.getOverloadByArguments(realArguments);
-      }
-
-      return matchingOverload.method(target, ...realArguments);
-    }
-  };
-
-  return new Proxy(self, handler);
+  return new Proxy(self, overloadedCallHandler);
 };
 
 const identity = x => x;
 const bob = withOverload(identity);
 
-function Test() {
-}
+function Test() {}
 
 const testObject = new Test();
 
@@ -338,16 +197,6 @@ console.log("----------");
 
 console.log(bob("red", 55, "green")); // 55 redgreen
 console.log("----------");
-//
-// console.log(bob(testObject));
-// console.log(bob());
-
-// will this blow up?
-
-const overloadedFilter = filter => withOverload(filter);
-
-// console.log(new Signature(1, a => "a"));
-
 
 const lengthFilterWithOverloads = filterBase => {
   const filter = withOverload(filterBase.method, false);
@@ -359,7 +208,7 @@ const lengthFilterWithOverloads = filterBase => {
         })
         .add({
           signature: new Signature(TYPES.NUMBER),
-          method: number => [((obj, i, a) => {
+          method: number => [((obj) => {
             return obj.length >= number
           })]
           , pipe: true
@@ -375,29 +224,8 @@ const lengthFilterWithOverloads = filterBase => {
 
 const testArray = ["apple", "bear", "twentytwo", "a"];
 
-const SignedFilter = new SignedFunction({
-  signature: new Signature(TYPES.FUNCTION),
-  method: filterFunction => filterFunction
-});
-
-//const filter2 = lengthFilterWithOverloads(identity);
 const filter = lengthFilterWithOverloads(identity);
-console.log("......");
-console.log(getMapKeys(filter.calls).map(key => key.toString()));
 
-// console.log('filter2 ---------');
-// console.log(filter2);
-// console.log('----------------');
-// console.log('----------------');
-//
-// console.log('filter ---------');
-// console.log(filter);
-// console.log('----------------');
-
-//filter(testArray);        // args => ["apple", ....]
-const omgItWorked = testArray.filter(filter(5)); // args => [ "apple", 0, ["apple", "bear"... ] ] -- ie .filters
-// arguments
-// console.log(filter(testArray));
-// console.log(testArray.filter(filter));
+const omgItWorked = testArray.filter(filter(5));
 
 console.log(omgItWorked);

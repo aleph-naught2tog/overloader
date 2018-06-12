@@ -29,44 +29,55 @@ var requireIterable = exports.requireIterable = function requireIterable() {
   });
 };
 
-var isIterable = exports.isIterable = function isIterable(value) {
+// noinspection JSUnusedLocalSymbols
+var isIterable = function isIterable(value) {
   return value instanceof Array || value instanceof Set;
 };
 
 var isNumber = exports.isNumber = function isNumber(value) {
   return !isNaN(value);
 };
-var isNotANumber = exports.isNotANumber = function isNotANumber(value) {
-  return isNaN(value);
+
+// noinspection JSUnusedLocalSymbols
+var isNotANumber = function isNotANumber(value) {
+  return !isNumber(value);
 };
 var isString = exports.isString = function isString(value) {
   return typeof value === 'string';
 };
-var isNotString = exports.isNotString = function isNotString(value) {
-  return typeof value !== 'string';
+
+// noinspection JSUnusedLocalSymbols
+var isNotString = function isNotString(value) {
+  return !isString(value);
 };
 var isArray = exports.isArray = function isArray(value) {
   return Array.isArray(value);
 };
-var isNotArray = exports.isNotArray = function isNotArray(value) {
+
+// noinspection JSUnusedLocalSymbols
+var isNotArray = function isNotArray(value) {
   return !isArray(value);
 };
 var isSet = exports.isSet = function isSet(value) {
   return value instanceof Set;
 };
-var isNotSet = exports.isNotSet = function isNotSet(value) {
+
+// noinspection JSUnusedLocalSymbols
+var isNotSet = function isNotSet(value) {
   return !isSet(value);
 };
 var isNotEmpty = exports.isNotEmpty = function isNotEmpty(value) {
   return isArray(value) && value.length !== 0;
 };
 
-// noinspection EqualityComparisonWithCoercionJS
-var isFalsy = exports.isFalsy = function isFalsy(value) {
+// noinspection EqualityComparisonWithCoercionJS, JSUnusedLocalSymbols
+var isFalsy = function isFalsy(value) {
   return value == false;
 }; // intentional ==
-// noinspection EqualityComparisonWithCoercionJS
-var isTruthy = exports.isTruthy = function isTruthy(value) {
+
+
+// noinspection EqualityComparisonWithCoercionJS // noinspection JSUnusedLocalSymbols
+var isTruthy = function isTruthy(value) {
   return value == true;
 }; // intentional ==
 
@@ -91,6 +102,7 @@ var randomIndex = exports.randomIndex = function randomIndex(array) {
   return Math.round(Math.random() * (array.length - 1));
 };
 
+// noinspection JSUnusedLocalSymbols
 var shuffle = exports.shuffle = function shuffle(array) {
   var shuffledArray = [];
 
@@ -110,22 +122,6 @@ var STUDENT_VALUES = {
     length: range(10, 15, 0.5),
     core: ['unicorn hair', 'phoenix feather', 'veela hair', 'kneazle whisper', 'dragon heartstring']
   }
-};
-
-var Student = function Student(_ref) {
-  var age = _ref.age,
-      house = _ref.house,
-      pet = _ref.pet,
-      _ref$wand = _ref.wand,
-      wood = _ref$wand.wood,
-      length = _ref$wand.length,
-      core = _ref$wand.core;
-  return {
-    age: age,
-    house: house,
-    pet: pet,
-    wand: { wood: wood, length: length, core: core }
-  };
 };
 
 var randomItem = exports.randomItem = function randomItem(array) {
@@ -161,22 +157,14 @@ var generateRandomStudents = function generateRandomStudents(number) {
 
 var TEST_DATA = generateRandomStudents(10);
 
-var _filterBy_3 = function _filterBy_3(array, key, targetValue) {
-  return array.filter(function (item) {
-    return item[key] === targetValue;
-  });
-};
-
-var _filterBy_2 = function _filterBy_2(array, condition) {
-  return array.filter(condition);
-};
-
+// noinspection JSUnusedLocalSymbols
 var regexKeyFilter = function regexKeyFilter(map, regex) {
   return filterMap(map, function (key) {
     return regex.test(key);
   });
 };
 
+// noinspection JSUnusedLocalSymbols
 var mapKeyArrayHasFilter = function mapKeyArrayHasFilter(map, object) {
   return filterMap(map, function (key) {
     return key.includes(object);
@@ -191,6 +179,7 @@ var getMapKeys = exports.getMapKeys = function getMapKeys(map) {
   return mapKeys;
 };
 
+// noinspection JSUnusedLocalSymbols
 var mapMap = function mapMap(map, callback) {
   var mappedMap = new Map();
 
