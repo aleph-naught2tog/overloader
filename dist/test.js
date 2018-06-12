@@ -428,9 +428,11 @@ var lengthFilterWithOverloads = function lengthFilterWithOverloads(filterBase) {
 var testArray = ["apple", "bear", "twentytwo", "a"];
 
 var SignedFilter = new SignedFunction({
-  signature: new Signature(TYPES.ANY, TYPES.NUMBER, TYPES.ARRAY),
-  method: function method(item, index, originalArray) {
-    return item;
+  signature: new Signature(TYPES.FUNCTION),
+  method: function method(filterFunction) {
+    return function (item, index, originalArray) {
+      return filterFunction(item, index, originalArray);
+    };
   }
 });
 

@@ -354,8 +354,8 @@ const lengthFilterWithOverloads = filterBase => {
 const testArray = ["apple", "bear", "twentytwo", "a"];
 
 const SignedFilter = new SignedFunction({
-  signature: new Signature(TYPES.ANY, TYPES.NUMBER, TYPES.ARRAY),
-  method: (item, index, originalArray) => item
+  signature: new Signature(TYPES.FUNCTION),
+  method: filterFunction => (item, index, originalArray) => filterFunction(item, index, originalArray)
 });
 
 //const filter2 = lengthFilterWithOverloads(identity);

@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8eeb44c-70ed-469a-830d-64918bbbdd56" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/dist/manipulations.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/manipulations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/manipulations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/manipulations.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -22,8 +19,8 @@
       <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="374" column="43" selection-start-line="374" selection-start-column="43" selection-end-line="374" selection-end-column="43" />
+            <state relative-caret-position="248">
+              <caret line="357" column="102" selection-start-line="357" selection-start-column="102" selection-end-line="357" selection-end-column="102" />
             </state>
           </provider>
         </entry>
@@ -172,12 +169,12 @@
       <workItem from="1528581692280" duration="4282000" />
       <workItem from="1528685344276" duration="8754000" />
       <workItem from="1528721346683" duration="3712000" />
-      <workItem from="1528757219080" duration="12575000" />
+      <workItem from="1528757219080" duration="12659000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="79738000" />
+    <option name="totallyTimeSpent" value="79822000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -339,8 +336,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="374" column="43" selection-start-line="374" selection-start-column="43" selection-end-line="374" selection-end-column="43" />
+        <state relative-caret-position="248">
+          <caret line="357" column="102" selection-start-line="357" selection-start-column="102" selection-end-line="357" selection-end-column="102" />
         </state>
       </provider>
     </entry>
