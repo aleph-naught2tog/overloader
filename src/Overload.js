@@ -14,20 +14,6 @@ const pipeHandler = {
   }
 };
 
-const overloadedCallHandler = {
-  apply: function (target, thisArg, allArguments) {
-    let matchingOverload = target.getOverloadByArguments(allArguments);
-    let realArguments = allArguments;
-
-    while (matchingOverload.shouldPipe) {
-      realArguments = matchingOverload.getPipedOutput(target, ...realArguments);
-      matchingOverload = target.getOverloadByArguments(realArguments);
-    }
-
-    return matchingOverload.method(target, ...realArguments);
-  }
-};
-
 function Overload({ signature, method, pipe = null }) {
   this.signature = (signature instanceof Signature) ? signature : new Signature(...signature);
 
@@ -50,14 +36,13 @@ const whetherTypesMatch = signature => (type, index) => {
 };
 
 const matchWithAnyFound = (signature, signaturesWithAny) => {
-  const whereAllTypesMatchOrAny = wildcard => wildcard.structure.every(whetherTypesMatch(signature));
+  const whereAllTypesMatchOrAny =
+    wildcard => wildcard.structure.every(whetherTypesMatch(signature));
 
   return signaturesWithAny
     .filter(byLength(signature.length))
     .find(whereAllTypesMatchOrAny);
 };
-
-
 
 export const withOverload = (someFunction, allowDefault = true) => {
 
@@ -81,8 +66,8 @@ export const withOverload = (someFunction, allowDefault = true) => {
 
   self.hasSignaturesOfLength = length => signatures().find(byLength(length));
   self.getSignaturesOfLength = length => signatures().filter(byLength(length));
-  self.allowsAny = () => self.getSignaturesWithAny().length !== 0;
   self.getSignaturesWithAny = () => signatures().filter(signature => signature.allowsAny);
+  self.allowsAny = () => self.getSignaturesWithAny().length !== 0;
 
   self.hasOverloadFor = signature => mapToString(signatures()).includes(signature.toString());
   self.doesNotHaveOverloadFor = signature => !self.hasOverloadFor(signature);
@@ -96,7 +81,22 @@ export const withOverload = (someFunction, allowDefault = true) => {
 
     return calls.get(matchingKey);
   };
-  
+
+  self.getNextBestMatch = signature => {
+    if (self.allowsAny()) {
+      const maybeSignature =
+        matchWithAnyFound(signature, self.getSignaturesWithAny());
+
+      if (maybeSignature) {
+        return getOverload(calls, maybeSignature);
+      }
+    }
+
+    if (allowDefault) {
+      return self(...allArguments);
+    }
+  };
+
   self.getOverloadByArguments = allArguments => {
     let signature = new Signature(...allArguments);
     const hasAllowedArgumentCount = self.hasSignaturesOfLength(allArguments.length);
@@ -106,31 +106,33 @@ export const withOverload = (someFunction, allowDefault = true) => {
       throw new NoSignatureOfLengthError(signature, self);
     }
 
-    let overload;
+    if (self.hasOverloadFor(signature)) {
+      return getOverload(calls, signature);
+    }
 
-    if (self.doesNotHaveOverloadFor(signature)) {
-      if (mustBeExactMatch) {
-        throw new NoSuchSignatureError(signature, self);
-      } else if (self.allowsAny()) {
-        const maybeSignature = matchWithAnyFound(signature, self.getSignaturesWithAny());
-        if (maybeSignature) {
-          overload = getOverload(calls, maybeSignature);
+    if (mustBeExactMatch) {
+      throw new NoSuchSignatureError(signature, self);
+    }
+
+    return self.getNextBestMatch(signature);
+  };
+
+  const overloadedCallHandler = {
+    apply: function (target, thisArg, allArguments) {
+      try {
+        let matchingOverload = target.getOverloadByArguments(allArguments);
+        let realArguments = allArguments;
+
+        while (matchingOverload.shouldPipe) {
+          realArguments = matchingOverload.getPipedOutput(target, ...realArguments);
+          matchingOverload = target.getOverloadByArguments(realArguments);
         }
-      } else if (allowDefault) {
-        overload = self(...allArguments);
+
+        return matchingOverload.method(target, ...realArguments);
+      } catch (someOverloadingError) {
+        console.log('caught');
       }
     }
-
-    if (self.hasOverloadFor(signature)) {
-      overload = getOverload(calls, signature);
-    }
-
-    if (overload) {
-      return overload;
-    } else {
-      throw new Error("Something has gone very wrong.");
-    }
-
   };
 
   return new Proxy(self, overloadedCallHandler);
