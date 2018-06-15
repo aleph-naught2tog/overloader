@@ -2,9 +2,82 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8eeb44c-70ed-469a-830d-64918bbbdd56" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/manipulations.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/manipulations.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Overload.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Overload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.bin/babylon" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/babylon" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.bin/jsesc" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/jsesc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.bin/loose-envify" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/loose-envify" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.bin/regjsparser" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/regjsparser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/ansi-regex/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/ansi-regex/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/ansi-styles/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/ansi-styles/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-code-frame/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-code-frame/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-helper-call-delegate/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-helper-call-delegate/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-helper-define-map/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-helper-define-map/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-helper-function-name/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-helper-function-name/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-helper-get-function-arity/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-helper-get-function-arity/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-helper-hoist-variables/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-helper-hoist-variables/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-helper-optimise-call-expression/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-helper-optimise-call-expression/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-helper-regex/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-helper-regex/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-helper-replace-supers/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-helper-replace-supers/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-messages/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-messages/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-check-es2015-constants/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-check-es2015-constants/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-arrow-functions/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-arrow-functions/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-block-scoped-functions/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-block-scoped-functions/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-block-scoping/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-block-scoping/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-classes/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-classes/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-computed-properties/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-computed-properties/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-destructuring/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-destructuring/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-duplicate-keys/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-duplicate-keys/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-for-of/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-for-of/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-function-name/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-function-name/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-literals/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-literals/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-modules-amd/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-modules-amd/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-modules-commonjs/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-modules-commonjs/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-modules-systemjs/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-modules-systemjs/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-modules-umd/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-modules-umd/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-object-super/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-object-super/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-parameters/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-parameters/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-shorthand-properties/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-shorthand-properties/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-spread/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-spread/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-sticky-regex/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-sticky-regex/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-template-literals/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-template-literals/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-typeof-symbol/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-typeof-symbol/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-unicode-regex/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-es2015-unicode-regex/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-regenerator/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-regenerator/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-plugin-transform-strict-mode/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-plugin-transform-strict-mode/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-preset-es2015/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-preset-es2015/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-runtime/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-runtime/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-template/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-template/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-traverse/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-traverse/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babel-types/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babel-types/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/babylon/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/babylon/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/chalk/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/chalk/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/core-js/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/core-js/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/debug/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/debug/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/escape-string-regexp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/escape-string-regexp/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/esutils/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/esutils/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/globals/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/globals/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/has-ansi/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/has-ansi/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/invariant/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/invariant/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/js-tokens/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/js-tokens/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jsesc/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsesc/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/lodash/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/lodash/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/loose-envify/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/loose-envify/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/ms/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/ms/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/private/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/private/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/regenerate/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/regenerate/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/regenerator-runtime/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/regenerator-runtime/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/regenerator-transform/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/regenerator-transform/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/regexpu-core/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/regexpu-core/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/regjsgen/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/regjsgen/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/regjsparser/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/regjsparser/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/strip-ansi/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/strip-ansi/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/supports-color/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/supports-color/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/to-fast-properties/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/to-fast-properties/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Signature.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Signature.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/manipulations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/manipulations.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -19,11 +92,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="test.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="966">
-              <caret line="54" column="48" selection-start-line="54" selection-start-column="48" selection-end-line="54" selection-end-column="48" />
+            <state relative-caret-position="2662">
+              <caret line="121" column="18" selection-start-line="121" selection-start-column="18" selection-end-line="121" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="manipulations.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/manipulations.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="160">
+              <caret line="273" column="75" selection-start-line="273" selection-start-column="75" selection-end-line="273" selection-end-column="75" />
             </state>
           </provider>
         </entry>
@@ -31,8 +113,8 @@
       <file leaf-file-name="Overload.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Overload.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="140" column="29" lean-forward="true" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
+            <state relative-caret-position="3080">
+              <caret line="140" column="29" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -40,26 +122,8 @@
       <file leaf-file-name="Signature.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Signature.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2310">
-              <caret line="110" column="1" selection-start-line="110" selection-start-column="1" selection-end-line="110" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="maps.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/maps.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="903">
-              <caret line="43" column="29" selection-start-line="43" selection-start-column="29" selection-end-line="43" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="manipulations.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/manipulations.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="36" />
+            <state relative-caret-position="1958">
+              <caret line="89" column="19" selection-start-line="89" selection-start-column="19" selection-end-line="89" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -115,10 +179,12 @@
         <option value="$PROJECT_DIR$/manipulations.js" />
         <option value="$PROJECT_DIR$/test.js" />
         <option value="$PROJECT_DIR$/src/maps.js" />
-        <option value="$PROJECT_DIR$/src/Signature.js" />
-        <option value="$PROJECT_DIR$/src/manipulations.js" />
         <option value="$PROJECT_DIR$/src/Overload.js" />
+        <option value="$PROJECT_DIR$/src/index.js" />
+        <option value="$PROJECT_DIR$/src/students.js" />
+        <option value="$PROJECT_DIR$/src/Signature.js" />
         <option value="$PROJECT_DIR$/src/test.js" />
+        <option value="$PROJECT_DIR$/src/manipulations.js" />
       </list>
     </option>
   </component>
@@ -148,10 +214,10 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2253" />
-    <option name="y" value="-438" />
-    <option name="width" value="1578" />
-    <option name="height" value="1418" />
+    <option name="x" value="190" />
+    <option name="y" value="22" />
+    <option name="width" value="1090" />
+    <option name="height" value="778" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -159,8 +225,24 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="overloader" type="b2602c69:ProjectViewProjectNode" />
+              <item name="overloader" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="overloader" type="b2602c69:ProjectViewProjectNode" />
+              <item name="overloader" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope" />
-      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -175,7 +257,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -188,6 +270,19 @@
         </RuleState>
       </list>
     </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="JUnit" default="true" selected="false">
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="TestNG" default="true" selected="false">
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+    </configuration>
   </component>
   <component name="SvnConfiguration">
     <configuration>$USER_HOME$/.subversion</configuration>
@@ -208,11 +303,18 @@
       <workItem from="1528721346683" duration="3712000" />
       <workItem from="1528757219080" duration="24731000" />
       <workItem from="1528804386085" duration="2757000" />
+      <workItem from="1528952179548" duration="2833000" />
+      <workItem from="1528976822452" duration="1090000" />
+      <workItem from="1528980233903" duration="4035000" />
+      <workItem from="1528984581843" duration="760000" />
+      <workItem from="1528987565563" duration="193000" />
+      <workItem from="1528987784510" duration="9000" />
+      <workItem from="1529015024276" duration="14476000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="94651000" />
+    <option name="totallyTimeSpent" value="118947000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -224,27 +326,34 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="2253" y="-438" width="1578" height="1418" extended-state="0" />
+    <frame x="190" y="22" width="1090" height="778" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info anchor="right" id="Remote Host" order="3" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13216145" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="5" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.329296" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.33333334" />
+      <window_info anchor="right" id="Remote Host" order="3" />
+      <window_info id="Designer" order="3" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.14006515" />
+      <window_info anchor="right" id="Database" order="4" show_stripe_button="false" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32892805" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Code comment" order="11" weight="0.329296" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info id="npm" order="2" show_stripe_button="false" side_tool="true" weight="0.32956383" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Inspection Results" order="8" weight="0.32892805" />
-      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32892805" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,97 +371,47 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/manipulations.js" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/webstorm.vmoptions" />
     <entry file="file://$PROJECT_DIR$/manipulations.js" />
     <entry file="file://$PROJECT_DIR$/test.js" />
     <entry file="file://$PROJECT_DIR$/dist/src/test.js" />
@@ -363,31 +422,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/manipulations.js">
+    <entry file="file://$PROJECT_DIR$/src/students.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="36" />
+        <state relative-caret-position="560">
+          <caret line="28" column="27" selection-start-line="28" selection-start-column="27" selection-end-line="28" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="3" selection-start-column="3" selection-end-column="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Signature.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2310">
-          <caret line="110" column="1" selection-start-line="110" selection-start-column="1" selection-end-line="110" selection-end-column="1" />
+        <state relative-caret-position="1958">
+          <caret line="89" column="19" selection-start-line="89" selection-start-column="19" selection-end-line="89" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Overload.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="140" column="29" lean-forward="true" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
+        <state relative-caret-position="3080">
+          <caret line="140" column="29" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="966">
-          <caret line="54" column="48" selection-start-line="54" selection-start-column="48" selection-end-line="54" selection-end-column="48" />
+        <state relative-caret-position="2662">
+          <caret line="121" column="18" selection-start-line="121" selection-start-column="18" selection-end-line="121" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/manipulations.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="273" column="75" selection-start-line="273" selection-start-column="75" selection-end-line="273" selection-end-column="75" />
         </state>
       </provider>
     </entry>

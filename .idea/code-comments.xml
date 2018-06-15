@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CodeComments">
+    <comments>
+      <comment>
+        <place path="src/test.js" from="4515" to="4547" />
+        <text>console.log(aggregate(strings));</text>
+        <data>bob</data>
+      </comment>
+    </comments>
+  </component>
+</project>

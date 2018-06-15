@@ -159,7 +159,7 @@ var generateRandomStudents = function generateRandomStudents(number) {
   return Array(number).fill(0).map(generateRandomStudent);
 };
 
-var TEST_DATA = generateRandomStudents(10);
+var TEST_DATA = generateRandomStudents(25);
 
 // noinspection JSUnusedLocalSymbols
 var regexKeyFilter = function regexKeyFilter(map, regex) {
@@ -194,6 +194,20 @@ var mapMap = function mapMap(map, callback) {
   return mappedMap;
 };
 
+function Counter() {
+  var _this = this;
+
+  this.count = 0;
+
+  this.increment = function () {
+    _this.count = _this.count + 1;
+  };
+
+  this.decrement = function () {
+    _this.count = _this.count - 1;
+  };
+}
+
 var filterMap = exports.filterMap = function filterMap(map, callback) {
   var filteredMap = new Map();
 
@@ -212,4 +226,169 @@ var mapToString = exports.mapToString = function mapToString(array) {
   return array.map(function (item) {
     return item.toString();
   });
+};
+
+var compareCodePoints = function compareCodePoints(objectOne, objectTwo) {
+  var stringArrayOne = objectOne.toString().split("").map(function (char) {
+    return char.codePointAt(0);
+  });
+  var stringArrayTwo = objectTwo.toString().split("").map(function (char) {
+    return char.codePointAt(0);
+  });
+
+  while (isNotEmpty(stringArrayOne)) {
+    var charOne = stringArrayOne.shift();
+    var charTwo = stringArrayTwo.shift();
+
+    if (charOne === charTwo) {
+      continue;
+    } else {
+      return charOne - charTwo;
+    }
+  }
+};
+
+var sortByKey = function sortByKey(key) {
+  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "string";
+
+  switch (type) {
+    case "string":
+      return function (a, b) {
+        return compareCodePoints(a[key], b[key]);
+      };
+    case "number":
+      return function (a, b) {
+        return a[key] - b[key];
+      };
+    default:
+      return function (a, b) {
+        return compareCodePoints(a[key], b[key]);
+      };
+      break;
+  }
+};
+
+console.log(TEST_DATA.sort(sortByKey('house')).map(function (o) {
+  return o['house'];
+}));
+var reducer = function reducer(howToReduce) {
+  var result = {
+    withInitialObject: function withInitialObject(array) {
+      return array.reduce(howToReduce, {});
+    },
+    withInitialArray: function withInitialArray(array) {
+      return array.reduce(howToReduce, []);
+    }
+  };
+
+  return result;
+};
+
+var reduce = function reduce(what) {
+  var result = {
+    by: {
+      counting: function counting(how) {
+        return reducer(how);
+      },
+      summing: function summing(how) {
+        return reducer(how);
+      }
+    }
+  };
+
+  return result;
+};
+
+var columnGetFunction = function columnGetFunction(key) {
+  return function (data) {
+    return data[key];
+  };
+};
+
+var row = function row(schema) {
+  return function (data) {
+    return {
+      get: function get(key) {
+        return data[key];
+      }
+    };
+  };
+};
+
+var resultSet = function resultSet(results) {
+  var resultObject = {
+
+    groupBy: null // bloop,
+  };
+
+  return resultObject;
+};
+
+var chainable = function chainable(clause) {
+  clause.and = function () {};
+  clause.or = function () {};
+};
+
+var subTable = function subTable(table) {
+  table.where = function (keyOrCondition) {
+    var where = void 0;
+
+    if (typeof keyOrCondition === "string") {
+      var key = keyOrCondition; // rename for clarity
+      where = {
+        equals: function equals(value) {
+          return subTable(table).where(function (row) {
+            return row[key] === value;
+          });
+        }
+      };
+    } else {
+      where = subTable(table.filter(keyOrCondition));
+    }
+
+    return where;
+  };
+
+  return table;
+};
+
+var select = function select() {
+  for (var _len3 = arguments.length, columns = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+    columns[_key3] = arguments[_key3];
+  }
+
+  var selectFunction = {};
+
+  var withColumns = function withColumns(table) {
+    return table;
+  };
+
+  var columnMapper = function columnMapper(row) {
+    var rowObject = {};
+
+    columns.forEach(function (column) {
+      return rowObject[column] = row[column];
+    });
+
+    return rowObject;
+  };
+
+  selectFunction.from = function (table) {
+    return withColumns(subTable(table.map(columnMapper)));
+  };
+
+  // () => resultSet(table.map(columnMapper));
+
+  return selectFunction;
+};
+
+console.log(select("age", "house").from(TEST_DATA).where('pet').equals('cat'));
+
+// SELECT: (...columns) => function that maps each row to those column values
+
+var table = function table(arrayOfObjects) {
+  var self = {};
+  var tokenObject = arrayOfObjects[0];
+
+  self.rows = arrayOfObjects;
 };

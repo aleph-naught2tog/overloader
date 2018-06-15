@@ -17,6 +17,7 @@ const reduceObjectToSignature = someObject =>
   Object.keys(someObject)
         .map(key => `${key}:${getTypeNameOf(someObject[key])}`)
         .join();
+
 const isConstructor = param => {
   let isConstructor = false;
 
