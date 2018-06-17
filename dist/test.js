@@ -1,7 +1,5 @@
 "use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _Signature = require("./Signature");
 
 var _Overload = require("./Overload");
@@ -142,33 +140,23 @@ var Orange = function Orange(name) {
 };
 
 var UnionType = function UnionType(name) {
-  var Unioner = function () {
-    _createClass(Unioner, null, [{
-      key: "bob",
+  var Unioner =
 
+  // static [Symbol.hasInstance](maybeInstance) {
+  //   //const type = mapTypes([maybeInstance])[0];
+  //   //return types.includes(type);
+  // };
 
-      // static [Symbol.hasInstance](maybeInstance) {
-      //   //const type = mapTypes([maybeInstance])[0];
-      //   //return types.includes(type);
-      // };
+  // static [Symbol.hasInstance](instance) {
+  //   return Array.isArray(instance);
+  // }
 
-      value: function bob() {}
+  function Unioner(object) {
+    _classCallCheck(this, Unioner);
 
-      // static [Symbol.hasInstance](instance) {
-      //   return Array.isArray(instance);
-      // }
-
-    }]);
-
-    function Unioner(object) {
-      _classCallCheck(this, Unioner);
-
-      console.log('this', this);
-      console.log(object);
-    }
-
-    return Unioner;
-  }();
+    console.log('this', this);
+    console.log(object);
+  };
 
   // Unioner.types = mapTypes(types);
   // Unioner.box = (object) => {
@@ -199,9 +187,8 @@ var wrap = function wrap(object, klass) {
 };
 
 var Concattable = UnionType('Concattable', _Signature.TYPES.STRING, _Signature.TYPES.NUMBER);
-
-console.log(Concattable);
-console.log(new Concattable());
+var apple = new Concattable();
+console.log(apple instanceof Concattable);
 
 var bloop = (0, _Overload.withOverload)(function (x) {
   return x;
@@ -216,7 +203,7 @@ bloop.overloads.add({
 
 // console.log(bloop.overloads.all);
 
-// console.log(bloop([], "b"));
+console.log(bloop(new Concattable("a"), new Concattable("b")));
 
 // let orange = new Orange("meow");
 // console.log(orange.withApple("potato", "beef"));

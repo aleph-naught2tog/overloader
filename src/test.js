@@ -128,10 +128,6 @@ const UnionType = (name, ...types) => {
     //   //return types.includes(type);
     // };
 
-    static bob() {
-
-    }
-
     // static [Symbol.hasInstance](instance) {
     //   return Array.isArray(instance);
     // }
@@ -172,9 +168,8 @@ const wrap = (object, klass) => {
 
 
 const Concattable = UnionType('Concattable', TYPES.STRING, TYPES.NUMBER);
-
-console.log(Concattable);
-console.log(new Concattable());
+const apple = new Concattable();
+console.log(apple instanceof Concattable);
 
 const bloop = withOverload(x => x, false);
 
@@ -185,7 +180,7 @@ bloop.overloads.add({
 
 // console.log(bloop.overloads.all);
 
-// console.log(bloop([], "b"));
+console.log(bloop(new Concattable("a"), new Concattable("b")));
 
 // let orange = new Orange("meow");
 // console.log(orange.withApple("potato", "beef"));
