@@ -1,1 +1,4 @@
-node dist/test.js
+#!/bin/sh
+filename=$1
+node dist/$1.js
+

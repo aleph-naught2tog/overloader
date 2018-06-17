@@ -1,22 +1,115 @@
-const VOID = (() => {
-})();
+import { getMapKeys } from "./manipulations";
+
+const VOID = ( () => {
+} )();
+
+const TYPES_REGISTRY = new Map();
+
+const checkTypes = parameter => {
+  let keys = getMapKeys(TYPES_REGISTRY);
+  return keys.map(key => TYPES_REGISTRY.get(key))
+             .find(type => ( parameter instanceof type ));
+};
+
 export const TYPES = {
-  STRING: (typeof "apple"),
-  NUMBER: (typeof 15),
-  BOOLEAN: (typeof true),
-  ARRAY: ([].constructor.name),
+  STRING: ( typeof "apple" ),
+  NUMBER: ( typeof 15 ),
+  BOOLEAN: ( typeof true ),
+  ARRAY: ( [].constructor.name ),
   VOID: '<VOID>',
   NULL: '<NULL>',
   CONSTRUCTOR: '<CONSTRUCTOR>',
   FUNCTION: 'FUNCTION',
   UNDEFINED: '<UNDEFINED>',
   ANY: '<ANY>',
-  LAMBDA: '<LAMBDA>'
+  LAMBDA: '<LAMBDA>',
+
+  REGISTRY: {
+    HAS: stringName => {
+      return TYPES_REGISTRY.has(Symbol.for(stringName));
+    },
+    SEARCH: parameter => checkTypes(parameter)
+  },
+
+  register: (className, TypeClass) => TYPES_REGISTRY.set(Symbol.for(className), TypeClass),
 };
-const reduceObjectToSignature = someObject =>
-  Object.keys(someObject)
-        .map(key => `${key}:${getTypeNameOf(someObject[key])}`)
-        .join();
+
+class DefinedBy {
+  constructor(someObject) {
+    this.canonical =
+      Object.keys(someObject)
+            .reduce((keysCoveredSoFar, currentKey) => {
+              return ( {
+                ...keysCoveredSoFar,
+                [currentKey]: getTypeNameOf(someObject[currentKey])
+              } );
+            }, {});
+
+    TYPES.register(this.toString(), this);
+  }
+
+  toString() {
+    return Object.keys(this.canonical)
+                 .map(key => `${key}:${this.canonical[key]}`)
+                 .join();
+  }
+}
+
+export const NamedType = (name, instanceCheck, ...types) => {
+  class GenericClass {
+    static types = mapTypes(types);
+    static check = instanceCheck(GenericClass.types);
+
+    static [Symbol.hasInstance](maybeInstance) {
+      const type = mapTypes([maybeInstance])[0];
+
+      if (type === this.name) {
+        return true;
+      }
+
+      return this.check(type); // slot: InstanceMethodCheck (obj) : bool
+    };
+
+    constructor(object) {
+      if (( object instanceof GenericClass ) === false) {
+        throw new Error("cannot be cast");
+      }
+      this.unboxed = object;
+
+      return new Proxy(this, {
+        get: function (thisArg, prop) {
+          if (thisArg[prop]) {
+            return thisArg[prop];
+          } else {
+            return thisArg.unboxed[prop];
+          }
+        }
+      })
+    }
+
+    // noinspection JSUnusedGlobalSymbols
+    valueOf() {
+      return this.unboxed;
+    }
+  }
+
+  GenericClass.typeName = name;
+
+  const klass = GenericClass;
+
+  Object.defineProperty(klass, 'name', {
+    writable: false, enumerable: false, configurable: true, value: name
+  });
+
+  TYPES.register(name, klass);
+
+  return klass;
+};
+
+
+const unionInstanceCheck = array => oneType => array.includes(oneType);
+
+export const UnionType = (name, ...types) => NamedType(name, unionInstanceCheck, ...types);
 
 const isConstructor = param => {
   let isConstructor = false;
@@ -37,12 +130,44 @@ const switchOnConstructorName = (param) => {
     case 'Array':
       return TYPES.ARRAY;
     case 'Object':
-      return `{${reduceObjectToSignature(param)}}`;
+      let newParam = new DefinedBy(param);
+      return `{${newParam.toString()}}`;
     default:
       return constructorName;
   }
 };
-const getTypeNameOf = (param) => {
+
+class Type {
+  static [Symbol.hasInstance](maybeType) {
+    const typeName = maybeType.constructor.name;
+
+    if (!typeName) {
+      throw new Error(`${maybeType} has no constructor name to check.`);
+    }
+
+    const doesExist = TYPES.REGISTRY.HAS(typeName);
+    if (doesExist) {
+      maybeType.class = typeName;
+    }
+
+    return doesExist;
+  }
+}
+
+
+const getTypeNameOf = (param, onWayIn = false) => {
+  if (param instanceof Type) {
+    return Symbol.keyFor(Symbol.for(param.constructor.name));
+  }
+
+  if (onWayIn) {
+    let maybeType = TYPES.REGISTRY.SEARCH(param);
+
+    if (maybeType) {
+      return maybeType;
+    }
+  }
+
   if (Object.values(TYPES).includes(param)) {
     return param;
   }
@@ -76,8 +201,7 @@ const getTypeNameOf = (param) => {
       return switchOnConstructorName(param);
   }
 };
-
-export const mapTypes = (parameters) => parameters.map(getTypeNameOf);
+export const mapTypes = (parameters) => parameters.map(p => getTypeNameOf(p));
 
 const getSimpleSignature = (...parameters) => {
   return `${mapTypes(parameters).join()}`;
@@ -85,10 +209,17 @@ const getSimpleSignature = (...parameters) => {
 
 export function Signature(...parameters) {
   this.structure = mapTypes(parameters);
+
+  this.needsBoxCheck = this.structure.find(aParam => {
+    return ( aParam instanceof Type );
+  });
+
+
   this.allowsAny = this.structure.includes(TYPES.ANY);
 
   this.length = parameters.length;
 
+  // noinspection JSUnusedGlobalSymbols
   this.toString = () => getSimpleSignature(...parameters);
   this.equals = (otherSignature) => {
     let result = false;
@@ -103,16 +234,15 @@ export function Signature(...parameters) {
   };
 }
 
-export function NoSuchSignatureError(signature, overloadedFunction) {
+export function NoSuchSignatureError(signature) {
   this.name = 'NoSuchSignatureError';
-  this.message = `No function matching signature <${signature}> found.
-Did you mean:
-    ${overloadedFunction.getSignatures().map(signature => signature.toString())}
-`;
+  // noinspection JSUnusedGlobalSymbols
+  this.message = `No function matching signature <${signature}> found.`;
 }
 
 export function NoSignatureOfLengthError(signature, overloadedFunction) {
   this.name = 'NoSignatureOfLengthError';
+  // noinspection JSUnusedGlobalSymbols
   this.message = `No function with a signature <${signature}> of length ${signature.length} was found.
 Did you mean:
     ${overloadedFunction.getSignaturesOfLength(signature.length).map(signature => `* ${signature.toString()}`)}`;

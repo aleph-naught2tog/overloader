@@ -15,14 +15,13 @@ const pipeHandler = {
 };
 
 function Overload({ signature, method, pipe = null }) {
-  this.signature = (signature instanceof Signature) ? signature : new Signature(...signature);
-
   this.method = new Proxy(method, pipeHandler);
 
   this.getSignature = () => signature;
   this.shouldPipe = pipe;
 
   this.getPipedOutput = (...allArguments) => this.method(...allArguments).PIPE;
+  // noinspection JSUnusedGlobalSymbols
   this.toString = () => signature.toString();
 }
 
@@ -52,13 +51,18 @@ export const withOverload = (someFunction, allowDefault = true) => {
 
   const self = someFunction;
   const calls = new Map();
-  const signatures = () => getMapKeys(calls);
+  const signatures = () => {
+    return getMapKeys(calls);
+  };
+
+  const allTypes = new Set();
 
   self.overloads = {
     all: calls,
     add: ({ signature, method, pipe }) => {
       const overload = new Overload({ signature, method, pipe });
       calls.set(overload.getSignature(), overload);
+      allTypes.add(...overload.getSignature().structure);
       return self.overloads;
     },
   };
@@ -67,14 +71,16 @@ export const withOverload = (someFunction, allowDefault = true) => {
   self.hasSignaturesOfLength = length => signatures().find(byLength(length));
   self.getSignaturesOfLength = length => signatures().filter(byLength(length));
   self.getSignaturesWithAny = () => signatures().filter(signature => signature.allowsAny);
+
+  self.shouldCheckBoxes = () => signatures().find(signature => signature.needsBoxCheck);
   self.allowsAny = () => self.getSignaturesWithAny().length !== 0;
 
   self.hasOverloadFor = signature => mapToString(signatures()).includes(signature.toString());
   self.doesNotHaveOverloadFor = signature => !self.hasOverloadFor(signature);
 
   const getOverload = (calls, signature) => {
-    const matchingKey = signatures().find(matchByStructure(signature));
 
+    const matchingKey = signatures().find(matchByStructure(signature));
     if (matchingKey === undefined) {
       throw new NoSuchSignatureError(signature);
     }
@@ -93,15 +99,16 @@ export const withOverload = (someFunction, allowDefault = true) => {
     }
 
     if (allowDefault) {
-      return self(...allArguments);
+      return self;
     }
   };
 
   self.getOverloadByArguments = allArguments => {
     let overload;
+
     let signature = new Signature(...allArguments);
-    const hasAllowedArgumentCount = self.hasSignaturesOfLength(allArguments.length);
     const mustBeExactMatch = !self.allowsAny() && !allowDefault;
+    const hasAllowedArgumentCount = self.hasSignaturesOfLength(allArguments.length);
 
     if (!hasAllowedArgumentCount) {
       throw new NoSignatureOfLengthError(signature, self);

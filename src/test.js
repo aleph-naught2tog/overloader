@@ -1,14 +1,49 @@
-import { Signature, TYPES } from "./Signature";
+import { Signature, TYPES, UnionType } from "./Signature";
 import { withOverload } from "./Overload";
 
-const identity = x => x;
-const bob = withOverload(identity);
 
-function Test() {
-}
+const assertTrue = value => {
+  if (value) {
+    return true;
+  } else {
+    throw new Error("assertion failed");
+  }
+};
 
-const testObject = new Test();
+const assertFalse = value => assert(!value);
 
+const assert = something => ( {
+  equals: value => assertTrue(something === value),
+  willThrowOn: (...args) => {
+    let didThrow = false;
+
+    try {
+      something(...args);
+    } catch (error) {
+      didThrow = true;
+    }
+
+    assertTrue(didThrow);
+  },
+} );
+
+assertTrue(true);
+assertFalse(false);
+assert(assertTrue).willThrowOn(false);
+const Concattable = UnionType('Concattable', TYPES.STRING, TYPES.NUMBER);
+
+const bloop = withOverload(x => x, true);
+
+bloop.overloads.add({
+  signature: new Signature(Concattable, Concattable),
+  method: (a, b) => a + b
+});
+
+const newConcat1 = new Concattable("orange");
+const newConcat2 = new Concattable(12);
+console.log(bloop(newConcat1, newConcat2));
+
+let bob = withOverload(x => x);
 bob.overloads
    .add({
      signature: new Signature("a", 1),
@@ -25,17 +60,8 @@ bob.overloads
      pipe: true
    })
    .add({
-     signature: new Signature(testObject),
-     method: a => [1, 'hello'],
-     pipe: true
-   })
-   .add({
      signature: new Signature(),
      method: () => "orange"
-   })
-   .add({
-     signature: new Signature(TYPES.ANY),
-     method: (bob) => "apple"
    })
 ;
 
@@ -49,141 +75,26 @@ console.log("----------");
 console.log(bob("red", 55, "green")); // 55 redgreen
 console.log("----------");
 
-console.log(bob([1, 2, 3]));          // "apple"
-console.log("----------");
+const hasColor = { color: "bdsadsa" };
+const Colorable = UnionType('Colorable', hasColor);
+const Readable = UnionType('Readable', { read: TYPES.LAMBDA });
+console.log(Readable);
 
-console.log(bob(new Test()));         // 1 hello
-console.log("----------");
+const IsReadableOrColorable = UnionType('IsReadableOrColorable', Colorable, Readable);
+console.log(IsReadableOrColorable);
 
-// should fail
-console.log(bob(null, null));
-console.log("----------");
-
-
-const lengthFilterWithOverloads = filterBase => {
-  const filter = withOverload(filterBase.method, false);
-  
-  filter.overloads
-        .add({
-          signature: new Signature(TYPES.ARRAY),
-          method: array => array.filter(obj => obj.length >= 5),
-        })
-        .add({
-          signature: new Signature(TYPES.NUMBER),
-          method: number => [( (obj) => {
-            return obj.length >= number
-          } )]
-          , pipe: true
-        })
-        .add({
-          signature: new Signature(TYPES.LAMBDA),
-          method: filterFunction => filterFunction
-        })
-  ;
-  
-  return filter;
-};
-
-const testArray = ["apple", "bear", "twentytwo", "a"];
-
-const filter = lengthFilterWithOverloads(identity);
-
-const omgItWorked = testArray.filter(filter(5));
-
-console.log(omgItWorked);
-
-class WrongTypeError extends Error {
-  constructor(message) {
-    super(message);
-    this.message = message;
-    this.name = 'WrongTypeError';
-  }
+try {
+  new Colorable("green");
+} catch (err) {
+  console.log("green only hopefully this threw!")
 }
 
-function TypedArray(type) {
-  const array = [];
-  array.type = type;
-  
-  array.addValue = value => {
-    if (typeof value === type) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-  
-  return new Proxy(array, ( {
-      set: (target, property, value, receiver) => {
-        let shouldProceed = false;
-        
-        switch (property) {
-          case "length":
-            shouldProceed = true;
-            break;
-          default: // should be the number of location
-            shouldProceed = target.addValue(value);
-            break;
-        }
-        
-        if (shouldProceed) {
-          target[property] = value;
-          return true;
-        } else {
-          throw new WrongTypeError(`<${value}> is not of ${array.type}`);
-        }
-      }
-    } )
-  );
+try {
+  new Colorable({ color: 12 });
+} catch (err) {
+  console.log("color 12 hopefully this threw!")
 }
 
-function StringArray() {
-  let result = TypedArray.call(this, "string");
-  
-  return result;
-}
-
-function NumberArray() {
-  return new TypedArray("number");
-}
-
-function BooleanArray() {
-  return new TypedArray("boolean");
-}
-
-const aggregate = withOverload(x => x, false);
-aggregate.overloads
-         .add({
-           signature: new Signature(new StringArray()),
-           method: (array) => [array, (a, b) => `${a}${b}`],
-           pipe: true
-         })
-         // .add({ signature: new Signature(new NumberArray()) })
-         .add({ signature: new Signature(new BooleanArray()), method: (array) => [array, (a, b) => "xX"], pipe: true })
-         .add({ signature: new Signature(new NumberArray()), method: (array) => [array, (a, b) => a + b], pipe: true })
-         .add({ signature: new Signature(TYPES.ANY, TYPES.LAMBDA), method: (array, reducer) => array.reduce(reducer) })
-;
-
-let strings = new StringArray();
-strings.push("apple");
-strings.push("banana");
-console.log(strings);
-console.log(typeof strings);
-console.log(strings.constructor.name);
-
-let numbers = new NumberArray();
-numbers.push(1);
-numbers.push(22);
-numbers.push(900);
-
-let booleans = new BooleanArray();
-booleans.push(true);
-booleans.push(true);
-booleans.push(true);
-booleans.push(false);
-booleans.push(false);
-
-console.log(strings);
-
-console.log(aggregate(strings));
-console.log(aggregate(numbers));
-console.log(aggregate(booleans));
+const blue = new Colorable({ color: "blue" });
+console.log(blue);
+console.log(blue.color);
