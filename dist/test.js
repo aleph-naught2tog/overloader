@@ -1,5 +1,7 @@
 "use strict";
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _Signature = require("./Signature");
 
 var _Overload = require("./Overload");
@@ -140,25 +142,36 @@ var Orange = function Orange(name) {
 };
 
 var UnionType = function UnionType(name) {
-  var Unioner =
+  for (var _len = arguments.length, types = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    types[_key - 1] = arguments[_key];
+  }
 
-  // static [Symbol.hasInstance](maybeInstance) {
-  //   //const type = mapTypes([maybeInstance])[0];
-  //   //return types.includes(type);
-  // };
+  var Unioner = function () {
+    _createClass(Unioner, null, [{
+      key: "isA",
+      value: function isA(maybeInstance) {
+        console.log(maybeInstance);
+        console.log((0, _Signature.mapTypes)([maybeInstance])[0]);
+        var type = (0, _Signature.mapTypes)([maybeInstance])[0];
+        return types.includes(type);
+      }
+    }]);
 
-  // static [Symbol.hasInstance](instance) {
-  //   return Array.isArray(instance);
-  // }
+    function Unioner(object) {
+      _classCallCheck(this, Unioner);
 
-  function Unioner(object) {
-    _classCallCheck(this, Unioner);
+      console.log("hello");
+      console.log(this);
+      console.log(object);
+      if (Unioner.isA(object) === false) {
+        throw new Error("cannot be cast");
+      }
+    }
 
-    console.log('this', this);
-    console.log(object);
-  };
+    return Unioner;
+  }();
 
-  // Unioner.types = mapTypes(types);
+  Unioner.types = (0, _Signature.mapTypes)(types);
   // Unioner.box = (object) => {
   //   return new Unioner(object);
   // };
@@ -187,6 +200,7 @@ var wrap = function wrap(object, klass) {
 };
 
 var Concattable = UnionType('Concattable', _Signature.TYPES.STRING, _Signature.TYPES.NUMBER);
+console.log(Concattable);
 var apple = new Concattable();
 console.log(apple instanceof Concattable);
 

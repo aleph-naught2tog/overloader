@@ -21,8 +21,8 @@
       <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="181" lean-forward="true" selection-start-line="181" selection-end-line="181" />
+            <state relative-caret-position="64">
+              <caret line="172" column="30" selection-start-line="172" selection-start-column="30" selection-end-line="172" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -257,12 +257,12 @@
       <workItem from="1529163098044" duration="2844000" />
       <workItem from="1529168206410" duration="603000" />
       <workItem from="1529182571850" duration="27792000" />
-      <workItem from="1529238904689" duration="377000" />
+      <workItem from="1529238904689" duration="773000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="174808000" />
+    <option name="totallyTimeSpent" value="175204000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -277,28 +277,28 @@
     <frame x="106" y="22" width="1174" height="778" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info anchor="right" id="Remote Host" order="3" />
-      <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" weight="0.15418895" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="5" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="right" id="Database" order="4" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.329296" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Run" order="2" />
       <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.36060607" />
+      <window_info anchor="right" id="Remote Host" order="3" />
+      <window_info id="Designer" order="3" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.15418895" />
+      <window_info anchor="right" id="Database" order="4" show_stripe_button="false" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Code comment" order="11" weight="0.329296" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info id="npm" order="2" show_stripe_button="false" side_tool="true" weight="0.32956383" />
-      <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Inspection Results" order="8" weight="0.32892805" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3287879" />
@@ -454,8 +454,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="181" lean-forward="true" selection-start-line="181" selection-end-line="181" />
+        <state relative-caret-position="64">
+          <caret line="172" column="30" selection-start-line="172" selection-start-column="30" selection-end-line="172" selection-end-column="30" />
         </state>
       </provider>
     </entry>

@@ -122,23 +122,24 @@ class Orange {
 
 const UnionType = (name, ...types) => {
   class Unioner {
-
-    // static [Symbol.hasInstance](maybeInstance) {
-    //   //const type = mapTypes([maybeInstance])[0];
-    //   //return types.includes(type);
-    // };
-
-    // static [Symbol.hasInstance](instance) {
-    //   return Array.isArray(instance);
-    // }
+    static isA(maybeInstance) {
+      console.log(maybeInstance);
+      console.log(mapTypes([maybeInstance])[0]);
+      const type = mapTypes([maybeInstance])[0];
+      return types.includes(type);
+    }
 
     constructor(object) {
-      console.log('this', this);
+      console.log("hello");
+      console.log(this);
       console.log(object);
+      if (Unioner.isA(object) === false) {
+        throw new Error("cannot be cast");
+      }
     }
   }
 
-  // Unioner.types = mapTypes(types);
+  Unioner.types = mapTypes(types);
   // Unioner.box = (object) => {
   //   return new Unioner(object);
   // };
@@ -168,6 +169,7 @@ const wrap = (object, klass) => {
 
 
 const Concattable = UnionType('Concattable', TYPES.STRING, TYPES.NUMBER);
+console.log(Concattable);
 const apple = new Concattable();
 console.log(apple instanceof Concattable);
 
