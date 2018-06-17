@@ -3,14 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d8eeb44c-70ed-469a-830d-64918bbbdd56" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compile" beforeDir="false" afterPath="$PROJECT_DIR$/compile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/manipulations.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/manipulations.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Overload.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Overload.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Signature.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Signature.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/manipulations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/manipulations.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -28,8 +22,8 @@
       <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="316">
-              <caret line="152" column="32" lean-forward="true" selection-start-line="152" selection-start-column="32" selection-end-line="152" selection-end-column="32" />
+            <state relative-caret-position="271">
+              <caret line="142" lean-forward="true" selection-start-line="142" selection-end-line="142" />
             </state>
           </provider>
         </entry>
@@ -55,8 +49,8 @@
       <file leaf-file-name="Signature.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Signature.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="9" column="31" lean-forward="true" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+            <state relative-caret-position="200">
+              <caret line="20" column="43" lean-forward="true" selection-start-line="20" selection-start-column="43" selection-end-line="20" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -255,12 +249,12 @@
       <workItem from="1529155867684" duration="5000" />
       <workItem from="1529163098044" duration="2844000" />
       <workItem from="1529168206410" duration="603000" />
-      <workItem from="1529182571850" duration="10313000" />
+      <workItem from="1529182571850" duration="11955000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="156952000" />
+    <option name="totallyTimeSpent" value="158594000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -417,15 +411,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Signature.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" column="31" lean-forward="true" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+        <state relative-caret-position="200">
+          <caret line="20" column="43" lean-forward="true" selection-start-line="20" selection-start-column="43" selection-end-line="20" selection-end-column="43" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="152" column="32" lean-forward="true" selection-start-line="152" selection-start-column="32" selection-end-line="152" selection-end-column="32" />
+        <state relative-caret-position="271">
+          <caret line="142" lean-forward="true" selection-start-line="142" selection-end-line="142" />
         </state>
       </provider>
     </entry>

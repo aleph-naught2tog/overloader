@@ -128,18 +128,20 @@ const UnionType = (name, ...types) => {
     };
   });
 
-  return TYPES.REGISTRY.LOAD(name);
+  return name;
 };
 
-
-
-const IntersectionType = () => {
-
-};
+class Type {
+  static [Symbol.hasInstance](maybeType) {
+    return TYPES.REGISTRY.HAS(maybeType);
+  }
+}
 
 const Concattable = UnionType('Concattable', TYPES.STRING, TYPES.NUMBER);
-console.log(Concattable);
-console.log("apple" instanceof Concattable);
+// console.log(Concattable);
+// console.log("apple" instanceof Concattable);
+
+console.log(Concattable instanceof Type);
 
 const bloop = withOverload(x => x, false);
 
@@ -148,8 +150,10 @@ bloop.overloads.add({
   method: (a, b) => a + b
 });
 
+console.log(bloop.overloads.all);
+
 console.log(bloop("a", "b"));
 
-let orange = new Orange("meow");
-console.log(orange.withApple("potato", "beef"));
+// let orange = new Orange("meow");
+// console.log(orange.withApple("potato", "beef"));
 //console.log(orange.withApple([1, 2, 3, 4, 5]));

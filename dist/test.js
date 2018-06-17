@@ -162,14 +162,29 @@ var UnionType = function UnionType(name) {
     return _class;
   }(), _class.types = (0, _Signature.mapTypes)(types), _temp));
 
-  return _Signature.TYPES.REGISTRY.LOAD(name);
+  return name;
 };
 
-var IntersectionType = function IntersectionType() {};
+var Type = function () {
+  function Type() {
+    _classCallCheck(this, Type);
+  }
+
+  _createClass(Type, null, [{
+    key: Symbol.hasInstance,
+    value: function value(maybeType) {
+      return _Signature.TYPES.REGISTRY.HAS(maybeType);
+    }
+  }]);
+
+  return Type;
+}();
 
 var Concattable = UnionType('Concattable', _Signature.TYPES.STRING, _Signature.TYPES.NUMBER);
-console.log(Concattable);
-console.log("apple" instanceof Concattable);
+// console.log(Concattable);
+// console.log("apple" instanceof Concattable);
+
+console.log(Concattable instanceof Type);
 
 var bloop = (0, _Overload.withOverload)(function (x) {
   return x;
@@ -182,8 +197,10 @@ bloop.overloads.add({
   }
 });
 
+console.log(bloop.overloads.all);
+
 console.log(bloop("a", "b"));
 
-var orange = new Orange("meow");
-console.log(orange.withApple("potato", "beef"));
+// let orange = new Orange("meow");
+// console.log(orange.withApple("potato", "beef"));
 //console.log(orange.withApple([1, 2, 3, 4, 5]));

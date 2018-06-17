@@ -17,6 +17,7 @@ export const TYPES = {
   LAMBDA: '<LAMBDA>',
 
   REGISTRY: {
+    HAS: stringName => TYPES_REGISTRY.has(Symbol.for(stringName)),
     LOAD: stringName => TYPES_REGISTRY.get(Symbol.for(stringName))
   },
 
@@ -52,7 +53,13 @@ const switchOnConstructorName = (param) => {
       return constructorName;
   }
 };
+
+
 const getTypeNameOf = (param) => {
+  // console.log(param);
+
+  // if (TYPES_REGISTRY.has())
+
   if (Object.values(TYPES).includes(param)) {
     return param;
   }
