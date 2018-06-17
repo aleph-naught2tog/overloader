@@ -101,6 +101,7 @@ class Type {
 
 
 const getTypeNameOf = (param, onWayIn = false) => {
+  console.log(param);
   if (param instanceof Type) {
     let symbol = Symbol.keyFor(Symbol.for(param.constructor.name));
     return symbol;

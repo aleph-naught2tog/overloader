@@ -4,13 +4,61 @@ import { withOverload } from "./Overload";
 
 const identity = x => x;
 
+const proxiedValueOf = obj => new Proxy(obj.valueOf, {
+  apply: function (...args) {
+    console.log('yo');
+    console.log(args[0], args[1].unboxed);
+  }
+});
+
 const UnionType = (name, ...types) => {
   class Unioner {
+    static types = mapTypes(types);
+
     static isA(maybeInstance) {
       const type = mapTypes([maybeInstance])[0];
-      return types.includes(type);
+      return this.types.includes(type);
     }
 
+    static [Symbol.hasInstance](maybeInstance) {
+      const type = mapTypes([maybeInstance])[0];
+
+      if (type === this.name) {
+        return true;
+      }
+
+      return this.types.includes(type);
+    };
+
+    constructor(object) {
+      if (( object instanceof Unioner ) === false) {
+        throw new Error("cannot be cast");
+      }
+      // this.boxed = this;
+      this.unboxed = object;
+    }
+
+    valueOf() {
+      return this.unboxed;
+    }
+  }
+
+  Unioner.operationType = Symbol.for("UNION");
+  Unioner.typeName = name;
+
+  const klass = Unioner;
+
+  Object.defineProperty(klass, 'name', {
+    writable: false, enumerable: false, configurable: true, value: name
+  });
+
+  TYPES.register(name, klass);
+
+  return klass;
+};
+
+const IntersectionType = (name, ...types) => {
+  class Intersecter {
     static [Symbol.hasInstance](maybeInstance) {
       const type = mapTypes([maybeInstance])[0];
 
@@ -22,36 +70,19 @@ const UnionType = (name, ...types) => {
     };
 
     constructor(object) {
-      if ((object instanceof Unioner) === false) {
-        throw new Error("cannot be cast");
+      if (( object instanceof Intersecter ) === false) {
+        throw new Error("cannot be cast as intersection type");
       }
-      console.log(this);
-      // this.boxed = this;
+
       this.unboxed = object;
-      return new Proxy(this, {
-        apply: console.log,
-        call: console.log,
-        get: function(target, prop, receiver) {
-          console.log('get');
-          console.log('  ', prop);
-          console.log('------', target[prop]);
-          // console.log(receiver);
-
-          return Reflect.get(...arguments);
-        }
-      });
-    }
-
-    valueOf() {
-      return this.unboxed;
     }
   }
 
-  Unioner.types = mapTypes(types);
-  Unioner.operationType = Symbol.for("UNION");
-  Unioner.typeName = name;
+  Intersecter.types = mapTypes(types);
+  Intersecter.operationType = Symbol.for("INTERSECTION");
+  Intersecter.typeName = name;
 
-  const klass = Unioner;
+  const klass = Intersecter;
 
   Object.defineProperty(klass, 'name', {
     writable: false, enumerable: false, configurable: true, value: name
@@ -79,11 +110,21 @@ bloop.overloads.add({
   method: (a, b) => a + b
 });
 
-const chalk = require('chalk');
+const newConcat1 = new Concattable("orange");
+const newConcat2 = new Concattable(12);
+console.log(bloop(newConcat1, newConcat2));
 
-const tester = new Concattable("apple");
-console.log(tester);
-console.log(tester.unboxed);
+try {bloop(15);} catch (err) {console.log("caught")}
 
-console.log(bloop(new Concattable("a"), new Concattable("b")));
-console.log(bloop("a", "b"));
+const hasColor = { color: "bdsadsa" };
+
+const Colorable = UnionType('Colorable', hasColor);
+//
+// try {
+//   const green = new Colorable("green");
+// } catch (err) {
+//   console.log("hopefully this threw!")
+// }
+
+const blue = new Colorable({ color: "blue" });
+console.log(blue);

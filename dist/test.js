@@ -14,9 +14,23 @@ var identity = function identity(x) {
   return x;
 };
 
+var proxiedValueOf = function proxiedValueOf(obj) {
+  return new Proxy(obj.valueOf, {
+    apply: function apply() {
+      console.log('yo');
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      console.log(args[0], args[1].unboxed);
+    }
+  });
+};
+
 var UnionType = function UnionType(name) {
-  for (var _len = arguments.length, types = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    types[_key - 1] = arguments[_key];
+  for (var _len2 = arguments.length, types = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+    types[_key2 - 1] = arguments[_key2];
   }
 
   var Unioner = function () {
@@ -24,7 +38,7 @@ var UnionType = function UnionType(name) {
       key: "isA",
       value: function isA(maybeInstance) {
         var type = (0, _Signature.mapTypes)([maybeInstance])[0];
-        return types.includes(type);
+        return this.types.includes(type);
       }
     }, {
       key: Symbol.hasInstance,
@@ -35,7 +49,7 @@ var UnionType = function UnionType(name) {
           return true;
         }
 
-        return types.includes(type);
+        return this.types.includes(type);
       }
     }]);
 
@@ -45,21 +59,8 @@ var UnionType = function UnionType(name) {
       if (object instanceof Unioner === false) {
         throw new Error("cannot be cast");
       }
-      console.log(this);
       // this.boxed = this;
       this.unboxed = object;
-      return new Proxy(this, {
-        apply: console.log,
-        call: console.log,
-        get: function get(target, prop, receiver) {
-          console.log('get');
-          console.log('  ', prop);
-          console.log('------', target[prop]);
-          // console.log(receiver);
-
-          return Reflect.get.apply(Reflect, arguments);
-        }
-      });
     }
 
     _createClass(Unioner, [{
@@ -73,10 +74,59 @@ var UnionType = function UnionType(name) {
   }();
 
   Unioner.types = (0, _Signature.mapTypes)(types);
+
+
   Unioner.operationType = Symbol.for("UNION");
   Unioner.typeName = name;
 
   var klass = Unioner;
+
+  Object.defineProperty(klass, 'name', {
+    writable: false, enumerable: false, configurable: true, value: name
+  });
+
+  _Signature.TYPES.register(name, klass);
+
+  return klass;
+};
+
+var IntersectionType = function IntersectionType(name) {
+  for (var _len3 = arguments.length, types = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+    types[_key3 - 1] = arguments[_key3];
+  }
+
+  var Intersecter = function () {
+    _createClass(Intersecter, null, [{
+      key: Symbol.hasInstance,
+      value: function value(maybeInstance) {
+        var type = (0, _Signature.mapTypes)([maybeInstance])[0];
+
+        if (type === this.name) {
+          return true;
+        }
+
+        return types.includes(type);
+      }
+    }]);
+
+    function Intersecter(object) {
+      _classCallCheck(this, Intersecter);
+
+      if (object instanceof Intersecter === false) {
+        throw new Error("cannot be cast as intersection type");
+      }
+
+      this.unboxed = object;
+    }
+
+    return Intersecter;
+  }();
+
+  Intersecter.types = (0, _Signature.mapTypes)(types);
+  Intersecter.operationType = Symbol.for("INTERSECTION");
+  Intersecter.typeName = name;
+
+  var klass = Intersecter;
 
   Object.defineProperty(klass, 'name', {
     writable: false, enumerable: false, configurable: true, value: name
@@ -107,11 +157,25 @@ bloop.overloads.add({
   }
 });
 
-var chalk = require('chalk');
+var newConcat1 = new Concattable("orange");
+var newConcat2 = new Concattable(12);
+console.log(bloop(newConcat1, newConcat2));
 
-var tester = new Concattable("apple");
-console.log(tester);
-console.log(tester.unboxed);
+try {
+  bloop(15);
+} catch (err) {
+  console.log("caught");
+}
 
-console.log(bloop(new Concattable("a"), new Concattable("b")));
-console.log(bloop("a", "b"));
+var hasColor = { color: "bdsadsa" };
+
+var Colorable = UnionType('Colorable', hasColor);
+//
+// try {
+//   const green = new Colorable("green");
+// } catch (err) {
+//   console.log("hopefully this threw!")
+// }
+
+var blue = new Colorable({ color: "blue" });
+console.log(blue);
