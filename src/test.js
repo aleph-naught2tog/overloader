@@ -12,31 +12,42 @@ const UnionType = (name, ...types) => {
     }
 
     static [Symbol.hasInstance](maybeInstance) {
-
       const type = mapTypes([maybeInstance])[0];
 
       if (type === this.name) {
-        console.log('same name');
         return true;
       }
 
       return types.includes(type);
-      // return false;
     };
 
     constructor(object) {
-      console.log("###### unioner name:" + Unioner.name);
-      // if (Unioner.isA(object) === false) {
-      console.log("constructor");
-      console.log(object);
       if ((object instanceof Unioner) === false) {
         throw new Error("cannot be cast");
       }
+      console.log(this);
+      // this.boxed = this;
+      this.unboxed = object;
+      return new Proxy(this, {
+        apply: console.log,
+        call: console.log,
+        get: function(target, prop, receiver) {
+          console.log('get');
+          console.log('  ', prop);
+          console.log('------', target[prop]);
+          // console.log(receiver);
+
+          return Reflect.get(...arguments);
+        }
+      });
+    }
+
+    valueOf() {
+      return this.unboxed;
     }
   }
 
   Unioner.types = mapTypes(types);
-
   Unioner.operationType = Symbol.for("UNION");
   Unioner.typeName = name;
 
@@ -53,57 +64,26 @@ const UnionType = (name, ...types) => {
 
 const Class = {
     forName: name => {
-      console.log("==== START LOAD");
       let result = TYPES.REGISTRY.LOAD(name);
-      console.log("==== END LOAD");
-
       return result;
     }
   }
 ;
 
+const Concattable = UnionType('Concattable', TYPES.STRING, TYPES.NUMBER);
 
-const boop = UnionType('Concattable', TYPES.STRING, TYPES.NUMBER);
-
-function Applier(target, thisArg, argumentList) {
-  console.log("++++++ APPLY");
-  console.log(target);
-  console.log(thisArg);
-  console.log(argumentList);
-  console.log("++++++ END APPLY");
-
-  return target(argumentList);
-}
-
-const concatHandler = {
-  apply: Applier,
-  construct: function(target, argumentList, thisArg) {
-    console.log("____ CONSTRUCTOR ");
-    console.log(target);
-    console.log(thisArg);
-    console.log(argumentList);
-    console.log("____ END CONSTRUCTOR ");
-
-    return new target(...argumentList);
-  }
-};
-
-const Concattable = new Proxy(boop, concatHandler);
-
-Class.forName('Concattable');
-
-const bloop = withOverload(x => x, false);
+const bloop = withOverload(x => x, true);
 
 bloop.overloads.add({
   signature: new Signature(Concattable, Concattable),
   method: (a, b) => a + b
 });
-const chalk = require('chalk');
-console.log(chalk.yellow("~~~~ before new..."));
-console.log(new Concattable("meow"));
-// console.log(bloop(new Concattable("a"), new Concattable("b")));
-console.log(chalk.yellow("~~~~ after new..."));
 
-// let orange = new Orange("meow");
-// console.log(orange.withApple("potato", "beef"));
-//console.log(orange.withApple([1, 2, 3, 4, 5]));
+const chalk = require('chalk');
+
+const tester = new Concattable("apple");
+console.log(tester);
+console.log(tester.unboxed);
+
+console.log(bloop(new Concattable("a"), new Concattable("b")));
+console.log(bloop("a", "b"));

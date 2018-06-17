@@ -37,14 +37,11 @@ export const TYPES = {
     },
     LOAD: stringName => {
       const foundType = TYPES_REGISTRY.get(Symbol.for(stringName));
-      console.log(chalk.cyan(foundType));
 
       try {
         console.log(new foundType.constructor());
-        console.log("made it?");
         return foundType;
       } catch (err) {
-        console.log("didn't make it");
         console.log(err);
       }
 
@@ -104,15 +101,8 @@ class Type {
 
 
 const getTypeNameOf = (param, onWayIn = false) => {
-  console.log(chalk.green("get name of"));
   if (param instanceof Type) {
-    console.log(`-----------------------`);
-    console.log(param);
-    console.log(`--------${typeof param}`);
-    console.log(`--------${param.constructor.name}`);
-
     let symbol = Symbol.keyFor(Symbol.for(param.constructor.name));
-    console.log("Aftr symbol");
     return symbol;
   }
 
@@ -170,15 +160,9 @@ const getSimpleSignature = (...parameters) => {
 };
 
 export function Signature(...parameters) {
-  console.log("====In signature");
-  console.log( parameters );
-  console.log("==== after paramlist");
-  console.log(chalk.blue("%%%%%%%% before mapping types"));
   this.structure = mapTypes(parameters);
-  console.log(chalk.blue("%%%%%%%% after mapping types"));
 
   this.needsBoxCheck = this.structure.find(aParam => {
-    console.log("[] [] [] [] box check???");
     return ( aParam instanceof Type );
   });
 
