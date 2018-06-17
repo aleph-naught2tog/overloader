@@ -1,6 +1,49 @@
-import { Signature, TYPES, mapTypes } from "./Signature";
+import { Signature, TYPES, mapTypes, UnionType, IntersectionType } from "./Signature";
 import { withOverload } from "./Overload";
 //import { TEST_DATA } from './manipulations';
+
+
+const assertTrue = value => {
+  if (value) {
+    return true;
+  } else {
+    throw new Error("assertion failed");
+  }
+};
+
+const assertFalse = value => assert(!value);
+
+const assert = something => ({
+  equals: value => assertTrue(something === value),
+  doesNotEqual: value => assertTrue(something !== value),
+  willThrowOn: (...args) => {
+    let didThrow = false;
+
+    try {
+      something(...args);
+    } catch (error) {
+      didThrow = true;
+    }
+
+    assertTrue(didThrow);
+  },
+  willNotThrowOn: (...args) => {
+    let didThrow = false;
+
+    try {
+      something(...args);
+    } catch (error) {
+      didThrow = true;
+    }
+
+    assertFalse(didThrow);
+  }
+});
+
+assertTrue(true);
+assertFalse(false);
+assert(assertTrue).willThrowOn(false);
+// assert(assertTrue).willThrowOn(true);
 
 const identity = x => x;
 
@@ -10,88 +53,6 @@ const proxiedValueOf = obj => new Proxy(obj.valueOf, {
     console.log(args[0], args[1].unboxed);
   }
 });
-
-const UnionType = (name, ...types) => {
-  class Unioner {
-    static types = mapTypes(types);
-
-    static isA(maybeInstance) {
-      const type = mapTypes([maybeInstance])[0];
-      return this.types.includes(type);
-    }
-
-    static [Symbol.hasInstance](maybeInstance) {
-      const type = mapTypes([maybeInstance])[0];
-
-      if (type === this.name) {
-        return true;
-      }
-
-      return this.types.includes(type);
-    };
-
-    constructor(object) {
-      if (( object instanceof Unioner ) === false) {
-        throw new Error("cannot be cast");
-      }
-      // this.boxed = this;
-      this.unboxed = object;
-    }
-
-    valueOf() {
-      return this.unboxed;
-    }
-  }
-
-  Unioner.operationType = Symbol.for("UNION");
-  Unioner.typeName = name;
-
-  const klass = Unioner;
-
-  Object.defineProperty(klass, 'name', {
-    writable: false, enumerable: false, configurable: true, value: name
-  });
-
-  TYPES.register(name, klass);
-
-  return klass;
-};
-
-const IntersectionType = (name, ...types) => {
-  class Intersecter {
-    static [Symbol.hasInstance](maybeInstance) {
-      const type = mapTypes([maybeInstance])[0];
-
-      if (type === this.name) {
-        return true;
-      }
-
-      return types.includes(type);
-    };
-
-    constructor(object) {
-      if (( object instanceof Intersecter ) === false) {
-        throw new Error("cannot be cast as intersection type");
-      }
-
-      this.unboxed = object;
-    }
-  }
-
-  Intersecter.types = mapTypes(types);
-  Intersecter.operationType = Symbol.for("INTERSECTION");
-  Intersecter.typeName = name;
-
-  const klass = Intersecter;
-
-  Object.defineProperty(klass, 'name', {
-    writable: false, enumerable: false, configurable: true, value: name
-  });
-
-  TYPES.register(name, klass);
-
-  return klass;
-};
 
 const Class = {
     forName: name => {
@@ -114,17 +75,34 @@ const newConcat1 = new Concattable("orange");
 const newConcat2 = new Concattable(12);
 console.log(bloop(newConcat1, newConcat2));
 
-try {bloop(15);} catch (err) {console.log("caught")}
+try {
+  bloop(15);
+} catch (err) {
+  console.log("caught")
+}
 
 const hasColor = { color: "bdsadsa" };
-
 const Colorable = UnionType('Colorable', hasColor);
-//
-// try {
-//   const green = new Colorable("green");
-// } catch (err) {
-//   console.log("hopefully this threw!")
-// }
+const Readable = UnionType('Readable', { read: TYPES.LAMBDA });
+console.log(Readable);
+
+const IsReadableOrColorable = UnionType('IsReadableOrColorable', Colorable, Readable);
+console.log(IsReadableOrColorable);
+const beep = {};
+// console.log('beep.read: ' + beep.read);
+
+try {
+  const green = new Colorable("green");
+} catch (err) {
+  // console.log("hopefully this threw!")
+}
+
+try {
+  const green = new Colorable({ color: 12 });
+} catch (err) {
+  // console.log("hopefully this threw!")
+}
 
 const blue = new Colorable({ color: "blue" });
 console.log(blue);
+console.log(blue.color);
