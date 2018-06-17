@@ -1,5 +1,3 @@
-const log = require('util').inspect;
-
 export const requireNumbers = (...valuesToTest) => {
   valuesToTest.forEach(value => {
     if (isNaN(value)) {
@@ -12,17 +10,12 @@ export const requireIterable = (...valuesToTest) => {
   valuesToTest.forEach(value => {
     if (value instanceof Array
       || value instanceof Set) {
-      return;
+
     } else {
       throw new Error('must be iterable');
     }
   });
 };
-
-
-// .map(whetherTypesMatch(signature))
-// .reduce((isTrueSoFar, maybeTrue) => isTrueSoFar && maybeTrue, true);
-
 
 // noinspection JSUnusedLocalSymbols
 const isIterable = value => ( value instanceof Array
@@ -50,7 +43,7 @@ export const isNotEmpty = value => isArray(value) && value.length !== 0;
 const isFalsy = value => value == false; // intentional ==
 
 
-// noinspection EqualityComparisonWithCoercionJS // noinspection JSUnusedLocalSymbols
+// noinspection EqualityComparisonWithCoercionJS, JSUnusedLocalSymbols
 const isTruthy = value => value == true; // intentional ==
 
 export const range = (minimum, maximum, step = 1, shouldIncludeEndPoints = true) => {
@@ -72,7 +65,7 @@ export function flattenDeep(arr1) {
   return arr1.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
 }
 
-// noinspection JSUnusedLocalSymbols
+// noinspection JSUnusedGlobalSymbols
 export const shuffle = array => {
   let shuffledArray = [];
 
@@ -163,14 +156,13 @@ const compareCodePoints = (objectOne, objectTwo) => {
     let charOne = stringArrayOne.shift();
     let charTwo = stringArrayTwo.shift();
 
-    if (charOne === charTwo) {
-      continue;
-    } else {
+    if (charOne !== charTwo) {
       return charOne - charTwo;
     }
   }
 };
 
+// noinspection JSUnusedLocalSymbols
 const sortByKey = (key, type = "string") => {
   switch (type) {
     case "string":
@@ -179,8 +171,5 @@ const sortByKey = (key, type = "string") => {
       return (a, b) => a[key] - b[key];
     default:
       return (a, b) => compareCodePoints(a[key], b[key]);
-      break;
   }
 };
-
-const uniqueArray = array => Array.from(new Set(array));

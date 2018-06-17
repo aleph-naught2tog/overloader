@@ -1,6 +1,5 @@
-import { getMapKeys, flattenDeep } from "./manipulations";
+import { getMapKeys } from "./manipulations";
 
-const chalk = require('chalk');
 const VOID = ( () => {
 } )();
 
@@ -31,19 +30,18 @@ export const TYPES = {
     },
     LOAD: stringName => {
       const foundType = TYPES_REGISTRY.get(Symbol.for(stringName));
-
       try {
-        console.log(new foundType.constructor());
+        new foundType.constructor();
         return foundType;
       } catch (err) {
         console.log(err);
       }
-
     },
     SEARCH: parameter => checkTypes(parameter),
+    VIEW: () => TYPES_REGISTRY
   },
 
-  register: (className, TypeClass) => TYPES_REGISTRY.set(Symbol.for(className), TypeClass)
+  register: (className, TypeClass) => TYPES_REGISTRY.set(Symbol.for(className), TypeClass),
 };
 
 
@@ -52,15 +50,13 @@ class DefinedBy {
     this.canonical =
       Object.keys(someObject)
             .reduce((keysCoveredSoFar, currentKey) => {
-              console.log(keysCoveredSoFar);
-              console.log(currentKey);
               return ( {
                 ...keysCoveredSoFar,
                 [currentKey]: getTypeNameOf(someObject[currentKey])
               } );
             }, {});
 
-    TYPES.register(this.canonical.toString(), this);
+    TYPES.register(this.toString(), this);
   }
 
   toString() {
@@ -73,7 +69,7 @@ class DefinedBy {
 export const NamedType = (name, instanceCheck, ...types) => {
   class GenericClass {
     static types = mapTypes(types);
-    static check = instanceCheck(this.types);
+    static check = instanceCheck(GenericClass.types);
 
     static isA(maybeInstance) {
       const type = mapTypes([maybeInstance])[0];
@@ -92,12 +88,15 @@ export const NamedType = (name, instanceCheck, ...types) => {
       if (( object instanceof GenericClass ) === false) {
         throw new Error("cannot be cast");
       }
-      // this.boxed = this;
       this.unboxed = object;
 
       return new Proxy(this, {
-        get: function (thisArg, prop, receiver) {
-          return thisArg.unboxed[prop];
+        get: function (thisArg, prop) {
+          if (thisArg[prop]) {
+            return thisArg[prop];
+          } else {
+            return thisArg.unboxed[prop];
+          }
         }
       })
     }
@@ -107,7 +106,6 @@ export const NamedType = (name, instanceCheck, ...types) => {
     }
   }
 
-  GenericClass.operationType = Symbol.for("SELECTION"); // slot Symbol.for(OPERATION_KEY)
   GenericClass.typeName = name;
 
   const klass = GenericClass;
@@ -122,114 +120,12 @@ export const NamedType = (name, instanceCheck, ...types) => {
 };
 
 
-export const IntersectionType = (name, ...types) => {
-  class Intersecter {
-    static types = mapTypes(types);
+const unionInstanceCheck = array => oneType => array.includes(oneType);
 
-    static [Symbol.hasInstance](maybeInstance) {
-      const type = mapTypes([maybeInstance])[0];
+export const UnionType = (name, ...types) => NamedType(name, unionInstanceCheck, ...types);
 
-      if (type === this.name) {
-        return true;
-      }
-
-      return types.includes(type);
-    };
-
-    constructor(object) {
-      if (( object instanceof Intersecter ) === false) {
-        throw new Error("cannot be cast as intersection type");
-      }
-
-      this.unboxed = object;
-
-      return new Proxy(this, {
-        get: function (thisArg, prop, receiver) {
-          return thisArg.unboxed[prop];
-        }
-      })
-    }
-  }
-
-  Intersecter.operationType = Symbol.for("INTERSECTION");
-  Intersecter.typeName = name;
-
-  const klass = Intersecter;
-
-  Object.defineProperty(klass, 'name', {
-    writable: false, enumerable: false, configurable: true, value: name
-  });
-
-  TYPES.register(name, klass);
-
-  return klass;
-};
-
-
-export const UnionType = (name, ...types) => {
-  class Unioner {
-    static types = mapTypes(types);
-
-    static isA(maybeInstance) {
-      const type = mapTypes([maybeInstance])[0];
-      return this.types.includes(type);
-    }
-
-    static [Symbol.hasInstance](maybeInstance) {
-      const type = mapTypes([maybeInstance])[0];
-
-      if (type === this.name) {
-        return true;
-      }
-
-      return this.types.includes(type);
-    };
-
-    constructor(object) {
-      if (( object instanceof Unioner ) === false) {
-        throw new Error("cannot be cast");
-      }
-      // this.boxed = this;
-      this.unboxed = object;
-
-      return new Proxy(this, {
-        get: function (thisArg, prop, receiver) {
-          return thisArg.unboxed[prop];
-        }
-      })
-    }
-
-    valueOf() {
-      return this.unboxed;
-    }
-  }
-
-  Unioner.operationType = Symbol.for("UNION");
-  Unioner.typeName = name;
-
-  const klass = Unioner;
-
-  Object.defineProperty(klass, 'name', {
-    writable: false, enumerable: false, configurable: true, value: name
-  });
-
-  TYPES.register(name, klass);
-
-  return klass;
-};
-
-
-const reduceObjectToSignature2 = someObject =>
-  Object.keys(someObject)
-        .map(key => `${key}:${getTypeNameOf(someObject[key])}`)
-        .join();
-
-const reduceObjectToSignature = someObject =>
-  Object.keys(someObject)
-        .reduce((keysCoveredSoFar, currentKey) => ( {
-          ...keysCoveredSoFar,
-          [currentKey]: getTypeNameOf(someObject[currentKey])
-        } ), {});
+let intersectionInstanceCheck;
+export const IntersectionType = (name, ...types) => NamedType(name, intersectionInstanceCheck, ...types);
 
 const isConstructor = param => {
   let isConstructor = false;
@@ -276,10 +172,8 @@ class Type {
 
 
 const getTypeNameOf = (param, onWayIn = false) => {
-  console.log(param);
   if (param instanceof Type) {
-    let symbol = Symbol.keyFor(Symbol.for(param.constructor.name));
-    return symbol;
+    return Symbol.keyFor(Symbol.for(param.constructor.name));
   }
 
   if (onWayIn) {

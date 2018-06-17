@@ -1,4 +1,4 @@
-import { NoSignatureOfLengthError, NoSuchSignatureError, Signature, TYPES, mapTypesForBoxing } from "./Signature";
+import { NoSignatureOfLengthError, NoSuchSignatureError, Signature, TYPES } from "./Signature";
 import { getMapKeys, mapToString } from "./manipulations";
 
 const pipeHandler = {
@@ -100,7 +100,7 @@ export const withOverload = (someFunction, allowDefault = true) => {
     }
 
     if (allowDefault) {
-      return self(...allArguments);
+      return self;
     }
   };
 
@@ -114,12 +114,6 @@ export const withOverload = (someFunction, allowDefault = true) => {
     if (!hasAllowedArgumentCount) {
       throw new NoSignatureOfLengthError(signature, self);
     }
-    //
-    // if (self.shouldCheckBoxes()) {
-    //   console.log(mapTypesForBoxing(allArguments));
-    //   return;
-    // }
-
 
     if (self.hasOverloadFor(signature)) {
       overload = getOverload(calls, signature);
