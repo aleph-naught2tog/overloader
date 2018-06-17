@@ -1,13 +1,30 @@
-const VOID = (() => {
-})();
+import { getMapKeys, flattenDeep } from "./manipulations";
+
+const VOID = ( () => {
+} )();
 
 const TYPES_REGISTRY = new Map();
 
+const checkTypes = parameter => {
+  let keys = getMapKeys(TYPES_REGISTRY);
+
+  console.log(keys.map(key => TYPES_REGISTRY.get(key))
+                  .find(type => {
+                    console.log(type);
+                    console.log(parameter);
+                    console.log(parameter instanceof type);
+                    return ( parameter instanceof type );
+                  }));
+
+  return keys.map(key => TYPES_REGISTRY.get(key))
+             .find(type => ( parameter instanceof type ));
+};
+
 export const TYPES = {
-  STRING: (typeof "apple"),
-  NUMBER: (typeof 15),
-  BOOLEAN: (typeof true),
-  ARRAY: ([].constructor.name),
+  STRING: ( typeof "apple" ),
+  NUMBER: ( typeof 15 ),
+  BOOLEAN: ( typeof true ),
+  ARRAY: ( [].constructor.name ),
   VOID: '<VOID>',
   NULL: '<NULL>',
   CONSTRUCTOR: '<CONSTRUCTOR>',
@@ -18,7 +35,8 @@ export const TYPES = {
 
   REGISTRY: {
     HAS: stringName => TYPES_REGISTRY.has(Symbol.for(stringName)),
-    LOAD: stringName => TYPES_REGISTRY.get(Symbol.for(stringName))
+    LOAD: stringName => TYPES_REGISTRY.get(Symbol.for(stringName)),
+    SEARCH: parameter => checkTypes(parameter),
   },
 
   register: (className, TypeClass) => TYPES_REGISTRY.set(Symbol.for(className), TypeClass)
@@ -54,11 +72,26 @@ const switchOnConstructorName = (param) => {
   }
 };
 
+class Type {
+  static [Symbol.hasInstance](maybeType) {
+    return TYPES.REGISTRY.HAS(maybeType);
+  }
+}
 
-const getTypeNameOf = (param) => {
-  // console.log(param);
 
-  // if (TYPES_REGISTRY.has())
+const getTypeNameOf = (param, onWayIn = false) => {
+
+  if (param instanceof Type) {
+    return Symbol.for(param);
+  }
+
+  if (onWayIn) {
+    let maybeType = TYPES.REGISTRY.SEARCH(param);
+
+    if (maybeType) {
+      return maybeType;
+    }
+  }
 
   if (Object.values(TYPES).includes(param)) {
     return param;
@@ -94,7 +127,12 @@ const getTypeNameOf = (param) => {
   }
 };
 
-export const mapTypes = (parameters) => parameters.map(getTypeNameOf);
+export const mapTypesForBoxing = (parameters) => {
+  return parameters.map(p => {
+    return getTypeNameOf(p, true);
+  });
+};
+export const mapTypes = (parameters) => parameters.map(p => getTypeNameOf(p));
 
 const getSimpleSignature = (...parameters) => {
   return `${mapTypes(parameters).join()}`;
@@ -102,6 +140,9 @@ const getSimpleSignature = (...parameters) => {
 
 export function Signature(...parameters) {
   this.structure = mapTypes(parameters);
+
+  this.needsBoxCheck = this.structure.find(aParam => ( aParam instanceof Type ));
+
   this.allowsAny = this.structure.includes(TYPES.ANY);
 
   this.length = parameters.length;

@@ -137,54 +137,71 @@ var Orange = function Orange(name) {
   this.withApple = withApple;
 
   this.name = name;
+
+  console.log("hello");
 };
 
 var UnionType = function UnionType(name) {
-  var _class, _temp;
+  var Unioner = function () {
+    _createClass(Unioner, null, [{
+      key: "bob",
 
-  for (var _len = arguments.length, types = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    types[_key - 1] = arguments[_key];
-  }
 
-  _Signature.TYPES.register(name, (_temp = _class = function () {
-    function _class() {
-      _classCallCheck(this, _class);
-    }
+      // static [Symbol.hasInstance](maybeInstance) {
+      //   //const type = mapTypes([maybeInstance])[0];
+      //   //return types.includes(type);
+      // };
 
-    _createClass(_class, null, [{
-      key: Symbol.hasInstance,
-      value: function value(maybeInstance) {
-        var type = (0, _Signature.mapTypes)([maybeInstance])[0];
-        return types.includes(type);
-      }
+      value: function bob() {}
+
+      // static [Symbol.hasInstance](instance) {
+      //   return Array.isArray(instance);
+      // }
+
     }]);
 
-    return _class;
-  }(), _class.types = (0, _Signature.mapTypes)(types), _temp));
+    function Unioner(object) {
+      _classCallCheck(this, Unioner);
 
-  return name;
+      console.log('this', this);
+      console.log(object);
+    }
+
+    return Unioner;
+  }();
+
+  // Unioner.types = mapTypes(types);
+  // Unioner.box = (object) => {
+  //   return new Unioner(object);
+  // };
+
+
+  // console.log(Unioner.box(15));
+  // console.log(Unioner);
+  // console.log(new Unioner(15));
+  // return Unioner;
+  // };
+
+  var klass = Unioner;
+
+  Object.defineProperty(klass, 'name', {
+    writable: false, enumerable: false, configurable: true, value: name
+  });
+
+  _Signature.TYPES.register(name, klass);
+
+  return klass;
 };
 
-var Type = function () {
-  function Type() {
-    _classCallCheck(this, Type);
-  }
-
-  _createClass(Type, null, [{
-    key: Symbol.hasInstance,
-    value: function value(maybeType) {
-      return _Signature.TYPES.REGISTRY.HAS(maybeType);
-    }
-  }]);
-
-  return Type;
-}();
+var wrap = function wrap(object, klass) {
+  object.unboxed = object;
+  object.boxed = klass;
+};
 
 var Concattable = UnionType('Concattable', _Signature.TYPES.STRING, _Signature.TYPES.NUMBER);
-// console.log(Concattable);
-// console.log("apple" instanceof Concattable);
 
-console.log(Concattable instanceof Type);
+console.log(Concattable);
+console.log(new Concattable());
 
 var bloop = (0, _Overload.withOverload)(function (x) {
   return x;
@@ -197,9 +214,9 @@ bloop.overloads.add({
   }
 });
 
-console.log(bloop.overloads.all);
+// console.log(bloop.overloads.all);
 
-console.log(bloop("a", "b"));
+// console.log(bloop([], "b"));
 
 // let orange = new Orange("meow");
 // console.log(orange.withApple("potato", "beef"));

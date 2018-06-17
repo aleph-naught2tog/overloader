@@ -68,6 +68,9 @@ export const randomIndex = array => {
 
   return Math.round(Math.random() * ( array.length - 1 ));
 };
+export function flattenDeep(arr1) {
+  return arr1.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
+}
 
 // noinspection JSUnusedLocalSymbols
 export const shuffle = array => {

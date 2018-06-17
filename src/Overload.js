@@ -1,4 +1,4 @@
-import { NoSignatureOfLengthError, NoSuchSignatureError, Signature, TYPES } from "./Signature";
+import { NoSignatureOfLengthError, NoSuchSignatureError, Signature, TYPES, mapTypesForBoxing } from "./Signature";
 import { getMapKeys, mapToString } from "./manipulations";
 
 const pipeHandler = {
@@ -15,7 +15,7 @@ const pipeHandler = {
 };
 
 function Overload({ signature, method, pipe = null }) {
-  this.signature = (signature instanceof Signature) ? signature : new Signature(...signature);
+  this.signature = ( signature instanceof Signature ) ? signature : new Signature(...signature);
 
   this.method = new Proxy(method, pipeHandler);
 
@@ -52,13 +52,18 @@ export const withOverload = (someFunction, allowDefault = true) => {
 
   const self = someFunction;
   const calls = new Map();
-  const signatures = () => getMapKeys(calls);
+  const signatures = () => {
+    return getMapKeys(calls);
+  };
+
+  const allTypes = new Set();
 
   self.overloads = {
     all: calls,
     add: ({ signature, method, pipe }) => {
       const overload = new Overload({ signature, method, pipe });
       calls.set(overload.getSignature(), overload);
+      allTypes.add(...overload.getSignature().structure);
       return self.overloads;
     },
   };
@@ -67,6 +72,8 @@ export const withOverload = (someFunction, allowDefault = true) => {
   self.hasSignaturesOfLength = length => signatures().find(byLength(length));
   self.getSignaturesOfLength = length => signatures().filter(byLength(length));
   self.getSignaturesWithAny = () => signatures().filter(signature => signature.allowsAny);
+
+  self.shouldCheckBoxes = () => signatures().find(signature => signature.needsBoxCheck);
   self.allowsAny = () => self.getSignaturesWithAny().length !== 0;
 
   self.hasOverloadFor = signature => mapToString(signatures()).includes(signature.toString());
@@ -99,13 +106,20 @@ export const withOverload = (someFunction, allowDefault = true) => {
 
   self.getOverloadByArguments = allArguments => {
     let overload;
+
     let signature = new Signature(...allArguments);
-    const hasAllowedArgumentCount = self.hasSignaturesOfLength(allArguments.length);
     const mustBeExactMatch = !self.allowsAny() && !allowDefault;
+    const hasAllowedArgumentCount = self.hasSignaturesOfLength(allArguments.length);
 
     if (!hasAllowedArgumentCount) {
       throw new NoSignatureOfLengthError(signature, self);
     }
+    //
+    // if (self.shouldCheckBoxes()) {
+    //   console.log(mapTypesForBoxing(allArguments));
+    //   return;
+    // }
+
 
     if (self.hasOverloadFor(signature)) {
       overload = getOverload(calls, signature);

@@ -113,35 +113,68 @@ withApple.overloads
 class Orange {
   constructor(name) {
     this.name = name;
+
+    console.log("hello");
   }
 
   withApple = withApple;
 }
 
 const UnionType = (name, ...types) => {
-  TYPES.register(name, class {
-    static types = mapTypes(types);
+  class Unioner {
 
-    static [Symbol.hasInstance](maybeInstance) {
-      const type = mapTypes([maybeInstance])[0];
-      return types.includes(type);
-    };
+    // static [Symbol.hasInstance](maybeInstance) {
+    //   //const type = mapTypes([maybeInstance])[0];
+    //   //return types.includes(type);
+    // };
+
+    static bob() {
+
+    }
+
+    // static [Symbol.hasInstance](instance) {
+    //   return Array.isArray(instance);
+    // }
+
+    constructor(object) {
+      console.log('this', this);
+      console.log(object);
+    }
+  }
+
+  // Unioner.types = mapTypes(types);
+  // Unioner.box = (object) => {
+  //   return new Unioner(object);
+  // };
+
+
+  // console.log(Unioner.box(15));
+  // console.log(Unioner);
+  // console.log(new Unioner(15));
+  // return Unioner;
+  // };
+
+  const klass = Unioner;
+
+  Object.defineProperty(klass, 'name', {
+    writable: false, enumerable: false, configurable: true, value: name
   });
 
-  return name;
+  TYPES.register(name, klass);
+
+  return klass;
 };
 
-class Type {
-  static [Symbol.hasInstance](maybeType) {
-    return TYPES.REGISTRY.HAS(maybeType);
-  }
-}
+const wrap = (object, klass) => {
+  object.unboxed = object;
+  object.boxed = klass;
+};
+
 
 const Concattable = UnionType('Concattable', TYPES.STRING, TYPES.NUMBER);
-// console.log(Concattable);
-// console.log("apple" instanceof Concattable);
 
-console.log(Concattable instanceof Type);
+console.log(Concattable);
+console.log(new Concattable());
 
 const bloop = withOverload(x => x, false);
 
@@ -150,9 +183,9 @@ bloop.overloads.add({
   method: (a, b) => a + b
 });
 
-console.log(bloop.overloads.all);
+// console.log(bloop.overloads.all);
 
-console.log(bloop("a", "b"));
+// console.log(bloop([], "b"));
 
 // let orange = new Orange("meow");
 // console.log(orange.withApple("potato", "beef"));
