@@ -73,8 +73,8 @@ export const withOverload = (someFunction, allowDefault = true) => {
   self.doesNotHaveOverloadFor = signature => !self.hasOverloadFor(signature);
 
   const getOverload = (calls, signature) => {
-    const matchingKey = signatures().find(matchByStructure(signature));
 
+    const matchingKey = signatures().find(matchByStructure(signature));
     if (matchingKey === undefined) {
       throw new NoSuchSignatureError(signature);
     }

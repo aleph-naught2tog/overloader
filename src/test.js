@@ -1,5 +1,6 @@
-import { Signature, TYPES } from "./Signature";
+import { Signature, TYPES, mapTypes } from "./Signature";
 import { withOverload } from "./Overload";
+import { TEST_DATA } from './manipulations';
 
 const identity = x => x;
 const bob = withOverload(identity);
@@ -62,7 +63,7 @@ console.log("----------");
 
 const lengthFilterWithOverloads = filterBase => {
   const filter = withOverload(filterBase.method, false);
-  
+
   filter.overloads
         .add({
           signature: new Signature(TYPES.ARRAY),
@@ -80,7 +81,7 @@ const lengthFilterWithOverloads = filterBase => {
           method: filterFunction => filterFunction
         })
   ;
-  
+
   return filter;
 };
 
@@ -92,98 +93,63 @@ const omgItWorked = testArray.filter(filter(5));
 
 console.log(omgItWorked);
 
-class WrongTypeError extends Error {
-  constructor(message) {
-    super(message);
-    this.message = message;
-    this.name = 'WrongTypeError';
-  }
-}
-
-function TypedArray(type) {
-  const array = [];
-  array.type = type;
-  
-  array.addValue = value => {
-    if (typeof value === type) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-  
-  return new Proxy(array, ( {
-      set: (target, property, value, receiver) => {
-        let shouldProceed = false;
-        
-        switch (property) {
-          case "length":
-            shouldProceed = true;
-            break;
-          default: // should be the number of location
-            shouldProceed = target.addValue(value);
-            break;
-        }
-        
-        if (shouldProceed) {
-          target[property] = value;
-          return true;
-        } else {
-          throw new WrongTypeError(`<${value}> is not of ${array.type}`);
-        }
-      }
-    } )
-  );
-}
-
-function StringArray() {
-  let result = TypedArray.call(this, "string");
-  
-  return result;
-}
-
-function NumberArray() {
-  return new TypedArray("number");
-}
-
-function BooleanArray() {
-  return new TypedArray("boolean");
-}
-
-const aggregate = withOverload(x => x, false);
-aggregate.overloads
+const withApple = withOverload(x => x);
+withApple.overloads
          .add({
-           signature: new Signature(new StringArray()),
-           method: (array) => [array, (a, b) => `${a}${b}`],
+           signature: new Signature(TYPES.ANY),
+           method: lengthThing => `${lengthThing} has length ${lengthThing.length}`
+         })
+         .add({
+           signature: new Signature(TYPES.STRING, TYPES.STRING),
+           method: (stringOne, stringTwo) => [( stringOne + stringTwo ).toUpperCase()],
            pipe: true
          })
-         // .add({ signature: new Signature(new NumberArray()) })
-         .add({ signature: new Signature(new BooleanArray()), method: (array) => [array, (a, b) => "xX"], pipe: true })
-         .add({ signature: new Signature(new NumberArray()), method: (array) => [array, (a, b) => a + b], pipe: true })
-         .add({ signature: new Signature(TYPES.ANY, TYPES.LAMBDA), method: (array, reducer) => array.reduce(reducer) })
-;
+         .add({
+           signature: new Signature(TYPES.ARRAY),
+           method: array => [array.reverse()],
+           pipe: true
+         });
 
-let strings = new StringArray();
-strings.push("apple");
-strings.push("banana");
-console.log(strings);
-console.log(typeof strings);
-console.log(strings.constructor.name);
+class Orange {
+  constructor(name) {
+    this.name = name;
+  }
 
-let numbers = new NumberArray();
-numbers.push(1);
-numbers.push(22);
-numbers.push(900);
+  withApple = withApple;
+}
 
-let booleans = new BooleanArray();
-booleans.push(true);
-booleans.push(true);
-booleans.push(true);
-booleans.push(false);
-booleans.push(false);
+const UnionType = (name, ...types) => {
+  TYPES.register(name, class {
+    static types = mapTypes(types);
 
-console.log(strings);
+    static [Symbol.hasInstance](maybeInstance) {
+      const type = mapTypes([maybeInstance])[0];
+      return types.includes(type);
+    };
+  });
 
-console.log(aggregate(strings));
-console.log(aggregate(numbers));
-console.log(aggregate(booleans));
+  return TYPES.REGISTRY.LOAD(name);
+};
+
+
+
+const IntersectionType = () => {
+
+};
+
+const Concattable = UnionType('Concattable', TYPES.STRING, TYPES.NUMBER);
+console.log(Concattable);
+console.log("apple" instanceof Concattable);
+
+const bloop = withOverload(x => x, false);
+
+bloop.overloads.add({
+  signature: new Signature(Concattable, Concattable),
+  method: (a, b) => a + b
+});
+
+console.log(bloop("a", "b"));
+
+let orange = new Orange("meow");
+console.log(orange.withApple("potato", "beef"));
+//console.log(orange.withApple([1, 2, 3, 4, 5]));

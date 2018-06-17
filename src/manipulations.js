@@ -1,3 +1,5 @@
+const log = require('util').inspect;
+
 export const requireNumbers = (...valuesToTest) => {
   valuesToTest.forEach(value => {
     if (isNaN(value)) {
@@ -108,7 +110,7 @@ const generateRandomStudent = () => ( {
 
 const generateRandomStudents = number => Array(number).fill(0).map(generateRandomStudent);
 
-const TEST_DATA = generateRandomStudents(25);
+export const TEST_DATA = generateRandomStudents(25);
 
 // noinspection JSUnusedLocalSymbols
 const regexKeyFilter = (map, regex) => filterMap(map, key => regex.test(key));
@@ -132,16 +134,6 @@ const mapMap = (map, callback) => {
 
   return mappedMap;
 };
-
-function Counter() {
-  this.count = 0;
-
-  this.increment = () => {
-    this.count = this.count + 1
-
-    return this;
-  };
-}
 
 export const filterMap = (map, callback) => {
   const filteredMap = new Map();
@@ -188,162 +180,108 @@ const sortByKey = (key, type = "string") => {
   }
 };
 
-//console.log(TEST_DATA.sort(sortByKey('house')).map(o => o['house']));
-const reducer = (howToReduce) => {
-  const result = ( {
-    withInitialObject: array => array.reduce(howToReduce, {}),
-    withInitialArray: array => array.reduce(howToReduce, [])
-  } );
+const uniqueArray = array => Array.from(new Set(array));
 
-  return result;
-};
+let array = TEST_DATA;
 
-const reduce = (what) => {
-  const result = ( {
-    by: {
-      counting: how => reducer(how),
-      summing: how => reducer(how)
-    }
-  } );
+/*
+  SELECT:
+    I: takes an array of keys + what to do with them
+    O: a function that
+      _i: array of rows
+      _o: transformed array of rows
 
-  return result;
-};
-
-const columnGetFunction = key => data => data[key];
-
-const row = schema => data => ( {
-  get: key => data[key]
-} );
+  FROM:
+    I: some table
+      [ with:
+          WHERE:
+            I: condition
+            O: the rows of the table such that condition => true
+          JOIN:
+            _sub: join TYPE
+            I: another table
+      ]
+    O: the actual result set
 
 
-const resultSet = results => {
-  const resultObject = {
+FROM : table
+  WHERE before group by : predicate on rows
+  GROUP BY : columns
+    HAVING after group by : predicate on groups
+  ORDER BY : columns
+*/
 
-    groupBy: null // bloop,
-  };
+let counter = 0;
 
-  return resultObject;
-};
+const OR = Symbol("or");
+const AND = Symbol("and");
 
-// const chainable = (clause) => {
-//   clause.and = () => {
-//   };
-//   clause.or = () => {
-//   };
-// };
 
-const subTable = table => {
-  table.where = keyOrCondition => {
-    let where;
 
-    if (typeof keyOrCondition === "string") {
-      const key = keyOrCondition; // rename for clarity
-      where = ( {
-        equals: value => subTable(table).where(row => row[key] === value)
-      } );
-    } else {
-      where = subTable(table.filter(keyOrCondition));
-    }
 
-    return where;
-  };
+class Table {
 
-  table.groupBy = key => {
+  constructor(array) {
+    this.root = array;
 
-  };
+    this.whereConditions = [];
+    this.groupByColumns = [];
+  }
 
-  return table;
-};
+  where = (rowPredicate, operator) => {
+    this.table = array.filter(rowPredicate);
 
-const zeroedObject = (array, key) => {
-  return Array.from(new Set(array.map(item => item[key]))).reduce((acc, newKey) => {
-    acc[newKey] = new Counter();
-    return acc;
-  }, {})
-};
-
-const count = key => array =>
-  array
-    .map(row => row[key])
-    .reduce(
-      (counterObject, value) => {
-        counterObject[value].increment();
-        return counterObject;
-      }, zeroedObject(array, key)
-    )
-;
-
-const group = key => resultSet =>
-  Array.from(new Set(
-    resultSet
-      .map((row) => row[key])
-    )
-       )
-       .map(item => ( { [key]: item } ))
-;
-
-function ACTION(action) {
-  this.of = key => array => action(key)(array);
+    return {
+      or: { where: conditional => this.where(conditional, OR) },
+      and: { where: conditional => this.where(conditional, OR) }
+    };
+  }
 }
 
-const COUNT = new ACTION(count);
+Table.beepBloop = () => "apple";
 
-const select = (...columns) => {
-  let query = { select: true, from: false, where: false, groupBy: false, limit: false };
+var bob = new Table([]);
+console.log(require('util').inspect(bob));
 
-  const groupBy = (...keys) => resultSet => keys.map(key => group(key)(resultSet));
+const table = [
+  {row: ++counter, first: "bob", last: "bobberson", age: 25},
+  {row: ++counter, first: "tom", last: "tommerson", age: 12},
+  {row: ++counter, first: "diane", last: "dianerson", age: 28}
+];
 
+const identity = x => x;
+const selectKey = key => row => row[key];
 
-  const withColumns = table => {
-    query.from = true;
+const columnConcat = (...keys) => row => keys.map(key => selectKey(key)(row)).join(" ");
+const defaultColumnName = (action, keys) => `${action.name} ( ${keys.join()} )`;
 
-    table.groupBy = (...keys) => groupBy(...keys)(table);
+const multiSelectAction = (keys, action = columnConcat, as = defaultColumnName(action, keys)) => row => ({ [as]: action(...keys)(row) });
 
-    return table;
-  };
+const selectAction = (key, action = identity) => row => ({ [key]: action(selectKey(key)(row)) });
+// var selectAction = (key, action = identity) => row => ({ key: key, result: action(selectKey(key)(row)) });
 
-  const columnMapper = (row, index) => {
-    let rowObject = {};
-    columns.forEach(column => {
-      rowObject.id = index;
-      rowObject[column] = row[column];
-    });
-    return rowObject;
-  };
+const doSelectOnFrom =
+  (selectActions, inputTable) => inputTable.map(
+    row =>
+      selectActions.reduce(
+        (returnRowThusFar, singleSelectAction) => {
 
-  const selectFunction = (resultSet) => resultSet.map(columnMapper);
-  selectFunction.from = table => withColumns(subTable(table.map(columnMapper)));
+          return ({ ...returnRowThusFar, ...singleSelectAction(row)});
+        }, {}
+        // [singleSelectAction(row).key]: singleSelectAction(row).result })
+      )
+  );
 
+const select = (...actions) => ({ from: array => doSelectOnFrom(actions, array) });
 
-  /*
-   table
-   .where(restricted) (or | and) .where ...
-   // .innerJoin .....
+const simpleSelect =
+  select( selectAction('row'), selectAction('age') )
+    .from(table);
 
-   .groupBy(...)
-   .orderBy(...) // any resultset
-   .limit(...)   // any
+const multiSelect =
+  select( selectAction('row'), multiSelectAction(['first', 'last']), selectAction('age') )
+    .from(table);
 
-   */
+var logger = require('util').inspect;
 
-  // () => resultSet(table.map(columnMapper));
-
-  return selectFunction;
-};
-
-console.log(count('house')(select("house").from(TEST_DATA)));
-console.log(( select("house", "pet").from(TEST_DATA).groupBy('house', "pet") ));
-
-// SELECT: (...columns) => function that maps each row to those column values
-
-const table = (arrayOfObjects) => {
-  const self = {};
-  const tokenObject = arrayOfObjects[0];
-
-  self.rows = arrayOfObjects;
-};
-
-// console.log(generateRandomStudents(10).map(student =>
-//   `insert into wands (wood, length, core) values ('${student.wand.wood}', ${student.wand.length},
-// '${student.wand.core}');\ninsert into hp_students (age, house, pet, wand_id) values (${student.age},
-// '${student.house}', '${student.pet}', (select count(id) from wands));\n`).join(" "));
+console.log(logger(multiSelect));

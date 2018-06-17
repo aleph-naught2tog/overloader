@@ -4,7 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var log = require('util').inspect;
 
 var requireNumbers = exports.requireNumbers = function requireNumbers() {
   for (var _len = arguments.length, valuesToTest = Array(_len), _key = 0; _key < _len; _key++) {
@@ -162,7 +170,7 @@ var generateRandomStudents = function generateRandomStudents(number) {
   return Array(number).fill(0).map(generateRandomStudent);
 };
 
-var TEST_DATA = generateRandomStudents(25);
+var TEST_DATA = exports.TEST_DATA = generateRandomStudents(25);
 
 // noinspection JSUnusedLocalSymbols
 var regexKeyFilter = function regexKeyFilter(map, regex) {
@@ -196,18 +204,6 @@ var mapMap = function mapMap(map, callback) {
 
   return mappedMap;
 };
-
-function Counter() {
-  var _this = this;
-
-  this.count = 0;
-
-  this.increment = function () {
-    _this.count = _this.count + 1;
-
-    return _this;
-  };
-}
 
 var filterMap = exports.filterMap = function filterMap(map, callback) {
   var filteredMap = new Map();
@@ -269,194 +265,146 @@ var sortByKey = function sortByKey(key) {
   }
 };
 
-//console.log(TEST_DATA.sort(sortByKey('house')).map(o => o['house']));
-var reducer = function reducer(howToReduce) {
-  var result = {
-    withInitialObject: function withInitialObject(array) {
-      return array.reduce(howToReduce, {});
-    },
-    withInitialArray: function withInitialArray(array) {
-      return array.reduce(howToReduce, []);
-    }
-  };
-
-  return result;
+var uniqueArray = function uniqueArray(array) {
+  return Array.from(new Set(array));
 };
 
-var reduce = function reduce(what) {
-  var result = {
-    by: {
-      counting: function counting(how) {
-        return reducer(how);
-      },
-      summing: function summing(how) {
-        return reducer(how);
-      }
-    }
-  };
+var array = TEST_DATA;
 
-  return result;
+/*
+  SELECT:
+    I: takes an array of keys + what to do with them
+    O: a function that
+      _i: array of rows
+      _o: transformed array of rows
+
+  FROM:
+    I: some table
+      [ with:
+          WHERE:
+            I: condition
+            O: the rows of the table such that condition => true
+          JOIN:
+            _sub: join TYPE
+            I: another table
+      ]
+    O: the actual result set
+
+
+FROM : table
+  WHERE before group by : predicate on rows
+  GROUP BY : columns
+    HAVING after group by : predicate on groups
+  ORDER BY : columns
+*/
+
+var counter = 0;
+
+var OR = Symbol("or");
+var AND = Symbol("and");
+
+var Table = function Table(array) {
+  _classCallCheck(this, Table);
+
+  _initialiseProps.call(this);
+
+  this.root = array;
+
+  this.whereConditions = [];
+  this.groupByColumns = [];
 };
 
-var columnGetFunction = function columnGetFunction(key) {
-  return function (data) {
-    return data[key];
-  };
-};
+var _initialiseProps = function _initialiseProps() {
+  var _this = this;
 
-var row = function row(schema) {
-  return function (data) {
+  this.where = function (rowPredicate, operator) {
+    _this.table = array.filter(rowPredicate);
+
     return {
-      get: function get(key) {
-        return data[key];
-      }
+      or: { where: function where(conditional) {
+          return _this.where(conditional, OR);
+        } },
+      and: { where: function where(conditional) {
+          return _this.where(conditional, OR);
+        } }
     };
   };
 };
 
-var resultSet = function resultSet(results) {
-  var resultObject = {
-
-    groupBy: null // bloop,
-  };
-
-  return resultObject;
+Table.beepBloop = function () {
+  return "apple";
 };
 
-// const chainable = (clause) => {
-//   clause.and = () => {
-//   };
-//   clause.or = () => {
-//   };
-// };
+var bob = new Table([]);
+console.log(require('util').inspect(bob));
 
-var subTable = function subTable(table) {
-  table.where = function (keyOrCondition) {
-    var where = void 0;
+var table = [{ row: ++counter, first: "bob", last: "bobberson", age: 25 }, { row: ++counter, first: "tom", last: "tommerson", age: 12 }, { row: ++counter, first: "diane", last: "dianerson", age: 28 }];
 
-    if (typeof keyOrCondition === "string") {
-      var key = keyOrCondition; // rename for clarity
-      where = {
-        equals: function equals(value) {
-          return subTable(table).where(function (row) {
-            return row[key] === value;
-          });
-        }
-      };
-    } else {
-      where = subTable(table.filter(keyOrCondition));
-    }
-
-    return where;
-  };
-
-  table.groupBy = function (key) {};
-
-  return table;
+var identity = function identity(x) {
+  return x;
 };
-
-var zeroedObject = function zeroedObject(array, key) {
-  return Array.from(new Set(array.map(function (item) {
-    return item[key];
-  }))).reduce(function (acc, newKey) {
-    acc[newKey] = new Counter();
-    return acc;
-  }, {});
-};
-
-var count = function count(key) {
-  return function (array) {
-    return array.map(function (row) {
-      return row[key];
-    }).reduce(function (counterObject, value) {
-      counterObject[value].increment();
-      return counterObject;
-    }, zeroedObject(array, key));
+var selectKey = function selectKey(key) {
+  return function (row) {
+    return row[key];
   };
 };
 
-var group = function group(key) {
-  return function (resultSet) {
-    return Array.from(new Set(resultSet.map(function (row) {
-      return row[key];
-    }))).map(function (item) {
-      return _defineProperty({}, key, item);
-    });
+var columnConcat = function columnConcat() {
+  for (var _len3 = arguments.length, keys = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+    keys[_key3] = arguments[_key3];
+  }
+
+  return function (row) {
+    return keys.map(function (key) {
+      return selectKey(key)(row);
+    }).join(" ");
   };
+};
+var defaultColumnName = function defaultColumnName(action, keys) {
+  return action.name + ' ( ' + keys.join() + ' )';
+};
+
+var multiSelectAction = function multiSelectAction(keys) {
+  var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : columnConcat;
+  var as = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultColumnName(action, keys);
+  return function (row) {
+    return _defineProperty({}, as, action.apply(undefined, _toConsumableArray(keys))(row));
+  };
+};
+
+var selectAction = function selectAction(key) {
+  var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : identity;
+  return function (row) {
+    return _defineProperty({}, key, action(selectKey(key)(row)));
+  };
+};
+// var selectAction = (key, action = identity) => row => ({ key: key, result: action(selectKey(key)(row)) });
+
+var doSelectOnFrom = function doSelectOnFrom(selectActions, inputTable) {
+  return inputTable.map(function (row) {
+    return selectActions.reduce(function (returnRowThusFar, singleSelectAction) {
+
+      return _extends({}, returnRowThusFar, singleSelectAction(row));
+    }, {}
+    // [singleSelectAction(row).key]: singleSelectAction(row).result })
+    );
+  });
 };
 
 var select = function select() {
-  for (var _len3 = arguments.length, columns = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-    columns[_key3] = arguments[_key3];
+  for (var _len4 = arguments.length, actions = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+    actions[_key4] = arguments[_key4];
   }
 
-  var query = { select: true, from: false, where: false, groupBy: false, limit: false };
-
-  var groupBy = function groupBy() {
-    for (var _len4 = arguments.length, keys = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-      keys[_key4] = arguments[_key4];
-    }
-
-    return function (resultSet) {
-      return keys.map(function (key) {
-        return group(key)(resultSet);
-      });
-    };
-  };
-
-  var withColumns = function withColumns(table) {
-    query.from = true;
-
-    table.groupBy = function () {
-      return groupBy.apply(undefined, arguments)(table);
-    };
-
-    return table;
-  };
-
-  var columnMapper = function columnMapper(row, index) {
-    var rowObject = {};
-    columns.forEach(function (column) {
-      rowObject.id = index;
-      rowObject[column] = row[column];
-    });
-    return rowObject;
-  };
-
-  var selectFunction = function selectFunction(resultSet) {
-    return resultSet.map(columnMapper);
-  };
-  selectFunction.from = function (table) {
-    return withColumns(subTable(table.map(columnMapper)));
-  };
-
-  /*
-   table
-   .where(restricted) (or | and) .where ...
-   // .innerJoin .....
-    .groupBy(...)
-   .orderBy(...) // any resultset
-   .limit(...)   // any
-    */
-
-  // () => resultSet(table.map(columnMapper));
-
-  return selectFunction;
+  return { from: function from(array) {
+      return doSelectOnFrom(actions, array);
+    } };
 };
 
-console.log(count('house')(select("house").from(TEST_DATA)));
-console.log(select("house", "pet").from(TEST_DATA).groupBy('house', "pet"));
+var simpleSelect = select(selectAction('row'), selectAction('age')).from(table);
 
-// SELECT: (...columns) => function that maps each row to those column values
+var multiSelect = select(selectAction('row'), multiSelectAction(['first', 'last']), selectAction('age')).from(table);
 
-var table = function table(arrayOfObjects) {
-  var self = {};
-  var tokenObject = arrayOfObjects[0];
+var logger = require('util').inspect;
 
-  self.rows = arrayOfObjects;
-};
-
-// console.log(generateRandomStudents(10).map(student =>
-//   `insert into wands (wood, length, core) values ('${student.wand.wood}', ${student.wand.length},
-// '${student.wand.core}');\ninsert into hp_students (age, house, pet, wand_id) values (${student.age},
-// '${student.house}', '${student.pet}', (select count(id) from wands));\n`).join(" "));
+console.log(logger(multiSelect));

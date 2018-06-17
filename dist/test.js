@@ -1,16 +1,14 @@
 "use strict";
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _Signature = require("./Signature");
 
 var _Overload = require("./Overload");
 
+var _manipulations = require("./manipulations");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var identity = function identity(x) {
   return x;
@@ -111,118 +109,81 @@ var omgItWorked = testArray.filter(filter(5));
 
 console.log(omgItWorked);
 
-var WrongTypeError = function (_Error) {
-  _inherits(WrongTypeError, _Error);
-
-  function WrongTypeError(message) {
-    _classCallCheck(this, WrongTypeError);
-
-    var _this = _possibleConstructorReturn(this, (WrongTypeError.__proto__ || Object.getPrototypeOf(WrongTypeError)).call(this, message));
-
-    _this.message = message;
-    _this.name = 'WrongTypeError';
-    return _this;
-  }
-
-  return WrongTypeError;
-}(Error);
-
-function TypedArray(type) {
-  var array = [];
-  array.type = type;
-
-  array.addValue = function (value) {
-    if ((typeof value === "undefined" ? "undefined" : _typeof(value)) === type) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  return new Proxy(array, {
-    set: function set(target, property, value, receiver) {
-      var shouldProceed = false;
-
-      switch (property) {
-        case "length":
-          shouldProceed = true;
-          break;
-        default:
-          // should be the number of location
-          shouldProceed = target.addValue(value);
-          break;
-      }
-
-      if (shouldProceed) {
-        target[property] = value;
-        return true;
-      } else {
-        throw new WrongTypeError("<" + value + "> is not of " + array.type);
-      }
-    }
-  });
-}
-
-function StringArray() {
-  var result = TypedArray.call(this, "string");
-
-  return result;
-}
-
-function NumberArray() {
-  return new TypedArray("number");
-}
-
-function BooleanArray() {
-  return new TypedArray("boolean");
-}
-
-var aggregate = (0, _Overload.withOverload)(function (x) {
+var withApple = (0, _Overload.withOverload)(function (x) {
   return x;
-}, false);
-aggregate.overloads.add({
-  signature: new _Signature.Signature(new StringArray()),
-  method: function method(array) {
-    return [array, function (a, b) {
-      return "" + a + b;
-    }];
+});
+withApple.overloads.add({
+  signature: new _Signature.Signature(_Signature.TYPES.ANY),
+  method: function method(lengthThing) {
+    return lengthThing + " has length " + lengthThing.length;
+  }
+}).add({
+  signature: new _Signature.Signature(_Signature.TYPES.STRING, _Signature.TYPES.STRING),
+  method: function method(stringOne, stringTwo) {
+    return [(stringOne + stringTwo).toUpperCase()];
   },
   pipe: true
-})
-// .add({ signature: new Signature(new NumberArray()) })
-.add({ signature: new _Signature.Signature(new BooleanArray()), method: function method(array) {
-    return [array, function (a, b) {
-      return "xX";
-    }];
-  }, pipe: true }).add({ signature: new _Signature.Signature(new NumberArray()), method: function method(array) {
-    return [array, function (a, b) {
-      return a + b;
-    }];
-  }, pipe: true }).add({ signature: new _Signature.Signature(_Signature.TYPES.ANY, _Signature.TYPES.LAMBDA), method: function method(array, reducer) {
-    return array.reduce(reducer);
-  } });
+}).add({
+  signature: new _Signature.Signature(_Signature.TYPES.ARRAY),
+  method: function method(array) {
+    return [array.reverse()];
+  },
+  pipe: true
+});
 
-var strings = new StringArray();
-strings.push("apple");
-strings.push("banana");
-console.log(strings);
-console.log(typeof strings === "undefined" ? "undefined" : _typeof(strings));
-console.log(strings.constructor.name);
+var Orange = function Orange(name) {
+  _classCallCheck(this, Orange);
 
-var numbers = new NumberArray();
-numbers.push(1);
-numbers.push(22);
-numbers.push(900);
+  this.withApple = withApple;
 
-var booleans = new BooleanArray();
-booleans.push(true);
-booleans.push(true);
-booleans.push(true);
-booleans.push(false);
-booleans.push(false);
+  this.name = name;
+};
 
-console.log(strings);
+var UnionType = function UnionType(name) {
+  var _class, _temp;
 
-console.log(aggregate(strings));
-console.log(aggregate(numbers));
-console.log(aggregate(booleans));
+  for (var _len = arguments.length, types = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    types[_key - 1] = arguments[_key];
+  }
+
+  _Signature.TYPES.register(name, (_temp = _class = function () {
+    function _class() {
+      _classCallCheck(this, _class);
+    }
+
+    _createClass(_class, null, [{
+      key: Symbol.hasInstance,
+      value: function value(maybeInstance) {
+        var type = (0, _Signature.mapTypes)([maybeInstance])[0];
+        return types.includes(type);
+      }
+    }]);
+
+    return _class;
+  }(), _class.types = (0, _Signature.mapTypes)(types), _temp));
+
+  return _Signature.TYPES.REGISTRY.LOAD(name);
+};
+
+var IntersectionType = function IntersectionType() {};
+
+var Concattable = UnionType('Concattable', _Signature.TYPES.STRING, _Signature.TYPES.NUMBER);
+console.log(Concattable);
+console.log("apple" instanceof Concattable);
+
+var bloop = (0, _Overload.withOverload)(function (x) {
+  return x;
+}, false);
+
+bloop.overloads.add({
+  signature: new _Signature.Signature(Concattable, Concattable),
+  method: function method(a, b) {
+    return a + b;
+  }
+});
+
+console.log(bloop("a", "b"));
+
+var orange = new Orange("meow");
+console.log(orange.withApple("potato", "beef"));
+//console.log(orange.withApple([1, 2, 3, 4, 5]));

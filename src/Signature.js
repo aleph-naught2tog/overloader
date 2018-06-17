@@ -1,5 +1,8 @@
 const VOID = (() => {
 })();
+
+const TYPES_REGISTRY = new Map();
+
 export const TYPES = {
   STRING: (typeof "apple"),
   NUMBER: (typeof 15),
@@ -11,8 +14,15 @@ export const TYPES = {
   FUNCTION: 'FUNCTION',
   UNDEFINED: '<UNDEFINED>',
   ANY: '<ANY>',
-  LAMBDA: '<LAMBDA>'
+  LAMBDA: '<LAMBDA>',
+
+  REGISTRY: {
+    LOAD: stringName => TYPES_REGISTRY.get(Symbol.for(stringName))
+  },
+
+  register: (className, TypeClass) => TYPES_REGISTRY.set(Symbol.for(className), TypeClass)
 };
+
 const reduceObjectToSignature = someObject =>
   Object.keys(someObject)
         .map(key => `${key}:${getTypeNameOf(someObject[key])}`)
