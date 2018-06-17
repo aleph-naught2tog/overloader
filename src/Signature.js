@@ -1,5 +1,5 @@
 import { getMapKeys, flattenDeep } from "./manipulations";
-
+const chalk = require('chalk');
 const VOID = ( () => {
 } )();
 
@@ -7,14 +7,12 @@ const TYPES_REGISTRY = new Map();
 
 const checkTypes = parameter => {
   let keys = getMapKeys(TYPES_REGISTRY);
-
+  console.log(chalk.red(" start checking types"));
   console.log(keys.map(key => TYPES_REGISTRY.get(key))
                   .find(type => {
-                    console.log(type);
-                    console.log(parameter);
-                    console.log(parameter instanceof type);
                     return ( parameter instanceof type );
                   }));
+  console.log(chalk.red(" start checking types"));
 
   return keys.map(key => TYPES_REGISTRY.get(key))
              .find(type => ( parameter instanceof type ));
@@ -34,8 +32,23 @@ export const TYPES = {
   LAMBDA: '<LAMBDA>',
 
   REGISTRY: {
-    HAS: stringName => TYPES_REGISTRY.has(Symbol.for(stringName)),
-    LOAD: stringName => TYPES_REGISTRY.get(Symbol.for(stringName)),
+    HAS: stringName => {
+      return TYPES_REGISTRY.has(Symbol.for(stringName));
+    },
+    LOAD: stringName => {
+      const foundType = TYPES_REGISTRY.get(Symbol.for(stringName));
+      console.log(chalk.cyan(foundType));
+
+      try {
+        console.log(new foundType.constructor());
+        console.log("made it?");
+        return foundType;
+      } catch (err) {
+        console.log("didn't make it");
+        console.log(err);
+      }
+
+    },
     SEARCH: parameter => checkTypes(parameter),
   },
 
@@ -74,15 +87,33 @@ const switchOnConstructorName = (param) => {
 
 class Type {
   static [Symbol.hasInstance](maybeType) {
-    return TYPES.REGISTRY.HAS(maybeType);
+    const typeName = maybeType.constructor.name;
+
+    if (!typeName) {
+      throw new Error(`${maybeType} has no constructor name to check.`);
+    }
+
+    const doesExist = TYPES.REGISTRY.HAS(typeName);
+    if (doesExist) {
+      maybeType.class = typeName;
+    }
+
+    return doesExist;
   }
 }
 
 
 const getTypeNameOf = (param, onWayIn = false) => {
-
+  console.log(chalk.green("get name of"));
   if (param instanceof Type) {
-    return Symbol.for(param);
+    console.log(`-----------------------`);
+    console.log(param);
+    console.log(`--------${typeof param}`);
+    console.log(`--------${param.constructor.name}`);
+
+    let symbol = Symbol.keyFor(Symbol.for(param.constructor.name));
+    console.log("Aftr symbol");
+    return symbol;
   }
 
   if (onWayIn) {
@@ -139,9 +170,18 @@ const getSimpleSignature = (...parameters) => {
 };
 
 export function Signature(...parameters) {
+  console.log("====In signature");
+  console.log( parameters );
+  console.log("==== after paramlist");
+  console.log(chalk.blue("%%%%%%%% before mapping types"));
   this.structure = mapTypes(parameters);
+  console.log(chalk.blue("%%%%%%%% after mapping types"));
 
-  this.needsBoxCheck = this.structure.find(aParam => ( aParam instanceof Type ));
+  this.needsBoxCheck = this.structure.find(aParam => {
+    console.log("[] [] [] [] box check???");
+    return ( aParam instanceof Type );
+  });
+
 
   this.allowsAny = this.structure.includes(TYPES.ANY);
 

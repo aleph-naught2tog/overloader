@@ -343,7 +343,7 @@ Table.beepBloop = function () {
 };
 
 var bob = new Table([]);
-console.log(require('util').inspect(bob));
+//console.log(require('util').inspect(bob));
 
 var table = [{ row: ++counter, first: "bob", last: "bobberson", age: 25 }, { row: ++counter, first: "tom", last: "tommerson", age: 12 }, { row: ++counter, first: "diane", last: "dianerson", age: 28 }];
 
@@ -414,4 +414,4 @@ var multiSelect = select(selectAction('row'), multiSelectAction(['first', 'last'
 
 var logger = require('util').inspect;
 
-console.log(logger(multiSelect));
+//console.log(logger(multiSelect));

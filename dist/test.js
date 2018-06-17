@@ -6,139 +6,14 @@ var _Signature = require("./Signature");
 
 var _Overload = require("./Overload");
 
-var _manipulations = require("./manipulations");
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+//import { TEST_DATA } from './manipulations';
+
 var identity = function identity(x) {
   return x;
-};
-var bob = (0, _Overload.withOverload)(identity);
-
-function Test() {}
-
-var testObject = new Test();
-
-bob.overloads.add({
-  signature: new _Signature.Signature("a", 1),
-  method: function method(a, b) {
-    return [b, a];
-  },
-  pipe: true
-}).add({
-  signature: new _Signature.Signature(1, "a"),
-  method: function method(a, b) {
-    return a + " " + b;
-  }
-}).add({
-  signature: new _Signature.Signature("a", 1, "c"),
-  method: function method(a, b, c) {
-    return ["" + a + c, b];
-  },
-  pipe: true
-}).add({
-  signature: new _Signature.Signature(testObject),
-  method: function method(a) {
-    return [1, 'hello'];
-  },
-  pipe: true
-}).add({
-  signature: new _Signature.Signature(),
-  method: function method() {
-    return "orange";
-  }
-}).add({
-  signature: new _Signature.Signature(_Signature.TYPES.ANY),
-  method: function method(bob) {
-    return "apple";
-  }
-});
-
-console.log(bob(10, "apple")); // 10 apple
-console.log("----------");
-
-console.log(bob("orange", 12)); // 12 orange
-console.log("----------");
-
-console.log(bob("red", 55, "green")); // 55 redgreen
-console.log("----------");
-
-console.log(bob([1, 2, 3])); // "apple"
-console.log("----------");
-
-console.log(bob(new Test())); // 1 hello
-console.log("----------");
-
-// should fail
-console.log(bob(null, null));
-console.log("----------");
-
-var lengthFilterWithOverloads = function lengthFilterWithOverloads(filterBase) {
-  var filter = (0, _Overload.withOverload)(filterBase.method, false);
-
-  filter.overloads.add({
-    signature: new _Signature.Signature(_Signature.TYPES.ARRAY),
-    method: function method(array) {
-      return array.filter(function (obj) {
-        return obj.length >= 5;
-      });
-    }
-  }).add({
-    signature: new _Signature.Signature(_Signature.TYPES.NUMBER),
-    method: function method(number) {
-      return [function (obj) {
-        return obj.length >= number;
-      }];
-    },
-    pipe: true
-  }).add({
-    signature: new _Signature.Signature(_Signature.TYPES.LAMBDA),
-    method: function method(filterFunction) {
-      return filterFunction;
-    }
-  });
-
-  return filter;
-};
-
-var testArray = ["apple", "bear", "twentytwo", "a"];
-
-var filter = lengthFilterWithOverloads(identity);
-
-var omgItWorked = testArray.filter(filter(5));
-
-console.log(omgItWorked);
-
-var withApple = (0, _Overload.withOverload)(function (x) {
-  return x;
-});
-withApple.overloads.add({
-  signature: new _Signature.Signature(_Signature.TYPES.ANY),
-  method: function method(lengthThing) {
-    return lengthThing + " has length " + lengthThing.length;
-  }
-}).add({
-  signature: new _Signature.Signature(_Signature.TYPES.STRING, _Signature.TYPES.STRING),
-  method: function method(stringOne, stringTwo) {
-    return [(stringOne + stringTwo).toUpperCase()];
-  },
-  pipe: true
-}).add({
-  signature: new _Signature.Signature(_Signature.TYPES.ARRAY),
-  method: function method(array) {
-    return [array.reverse()];
-  },
-  pipe: true
-});
-
-var Orange = function Orange(name) {
-  _classCallCheck(this, Orange);
-
-  this.withApple = withApple;
-
-  this.name = name;
-
-  console.log("hello");
 };
 
 var UnionType = function UnionType(name) {
@@ -150,20 +25,33 @@ var UnionType = function UnionType(name) {
     _createClass(Unioner, null, [{
       key: "isA",
       value: function isA(maybeInstance) {
-        console.log(maybeInstance);
-        console.log((0, _Signature.mapTypes)([maybeInstance])[0]);
         var type = (0, _Signature.mapTypes)([maybeInstance])[0];
         return types.includes(type);
+      }
+    }, {
+      key: Symbol.hasInstance,
+      value: function value(maybeInstance) {
+
+        var type = (0, _Signature.mapTypes)([maybeInstance])[0];
+
+        if (type === this.name) {
+          console.log('same name');
+          return true;
+        }
+
+        return types.includes(type);
+        // return false;
       }
     }]);
 
     function Unioner(object) {
       _classCallCheck(this, Unioner);
 
-      console.log("hello");
-      console.log(this);
+      console.log("###### unioner name:" + Unioner.name);
+      // if (Unioner.isA(object) === false) {
+      console.log("constructor");
       console.log(object);
-      if (Unioner.isA(object) === false) {
+      if (object instanceof Unioner === false) {
         throw new Error("cannot be cast");
       }
     }
@@ -172,16 +60,9 @@ var UnionType = function UnionType(name) {
   }();
 
   Unioner.types = (0, _Signature.mapTypes)(types);
-  // Unioner.box = (object) => {
-  //   return new Unioner(object);
-  // };
 
-
-  // console.log(Unioner.box(15));
-  // console.log(Unioner);
-  // console.log(new Unioner(15));
-  // return Unioner;
-  // };
+  Unioner.operationType = Symbol.for("UNION");
+  Unioner.typeName = name;
 
   var klass = Unioner;
 
@@ -194,15 +75,44 @@ var UnionType = function UnionType(name) {
   return klass;
 };
 
-var wrap = function wrap(object, klass) {
-  object.unboxed = object;
-  object.boxed = klass;
+var Class = {
+  forName: function forName(name) {
+    console.log("==== START LOAD");
+    var result = _Signature.TYPES.REGISTRY.LOAD(name);
+    console.log("==== END LOAD");
+
+    return result;
+  }
 };
 
-var Concattable = UnionType('Concattable', _Signature.TYPES.STRING, _Signature.TYPES.NUMBER);
-console.log(Concattable);
-var apple = new Concattable();
-console.log(apple instanceof Concattable);
+var boop = UnionType('Concattable', _Signature.TYPES.STRING, _Signature.TYPES.NUMBER);
+
+function Applier(target, thisArg, argumentList) {
+  console.log("++++++ APPLY");
+  console.log(target);
+  console.log(thisArg);
+  console.log(argumentList);
+  console.log("++++++ END APPLY");
+
+  return target(argumentList);
+}
+
+var concatHandler = {
+  apply: Applier,
+  construct: function construct(target, argumentList, thisArg) {
+    console.log("____ CONSTRUCTOR ");
+    console.log(target);
+    console.log(thisArg);
+    console.log(argumentList);
+    console.log("____ END CONSTRUCTOR ");
+
+    return new (Function.prototype.bind.apply(target, [null].concat(_toConsumableArray(argumentList))))();
+  }
+};
+
+var Concattable = new Proxy(boop, concatHandler);
+
+Class.forName('Concattable');
 
 var bloop = (0, _Overload.withOverload)(function (x) {
   return x;
@@ -214,10 +124,11 @@ bloop.overloads.add({
     return a + b;
   }
 });
-
-// console.log(bloop.overloads.all);
-
-console.log(bloop(new Concattable("a"), new Concattable("b")));
+var chalk = require('chalk');
+console.log(chalk.yellow("~~~~ before new..."));
+console.log(new Concattable("meow"));
+// console.log(bloop(new Concattable("a"), new Concattable("b")));
+console.log(chalk.yellow("~~~~ after new..."));
 
 // let orange = new Orange("meow");
 // console.log(orange.withApple("potato", "beef"));

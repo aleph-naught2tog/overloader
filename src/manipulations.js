@@ -244,7 +244,7 @@ class Table {
 Table.beepBloop = () => "apple";
 
 var bob = new Table([]);
-console.log(require('util').inspect(bob));
+//console.log(require('util').inspect(bob));
 
 const table = [
   {row: ++counter, first: "bob", last: "bobberson", age: 25},
@@ -287,4 +287,4 @@ const multiSelect =
 
 var logger = require('util').inspect;
 
-console.log(logger(multiSelect));
+//console.log(logger(multiSelect));
