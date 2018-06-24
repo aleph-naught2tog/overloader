@@ -145,7 +145,7 @@ export const withOverload = (someFunction, allowDefault = true) => {
 
         return matchingOverload.method(target, ...realArguments);
       } catch (someOverloadingError) {
-        console.log('caught');
+        throw someOverloadingError;
       }
     }
   };

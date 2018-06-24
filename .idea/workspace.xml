@@ -2,25 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8eeb44c-70ed-469a-830d-64918bbbdd56" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/console.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/overload.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/type_tester.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.babelrc" beforeDir="false" afterPath="$PROJECT_DIR$/.babelrc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/untitled.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/untitled.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Overload.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Overload.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Signature.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Signature.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeCompiler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/maps.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/monkeypath.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/serve_files.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sql.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/sql.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/students.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/students.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tester.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/overload.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/overload.test.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -51,8 +35,8 @@
       <file leaf-file-name="Signature.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Signature.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="185" column="24" selection-start-line="185" selection-start-column="24" selection-end-line="185" selection-end-column="24" />
+            <state relative-caret-position="169">
+              <caret line="118" lean-forward="true" selection-start-line="118" selection-end-line="118" />
               <folding>
                 <element signature="e#3184#3703#0" />
                 <element signature="e#3625#3680#0" />
@@ -61,13 +45,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="overload.test.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/overload.test.js">
+      <file leaf-file-name="Overload.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Overload.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="517">
-              <caret line="192" column="7" selection-start-line="192" selection-start-column="7" selection-end-line="192" selection-end-column="7" />
+            <state relative-caret-position="66">
+              <caret line="3" column="21" lean-forward="true" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="overload.test.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/overload.test.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="251">
+              <caret line="169" column="46" lean-forward="true" selection-start-line="169" selection-start-column="46" selection-end-line="169" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Interface.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Interface.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="110">
+              <caret line="5" column="35" lean-forward="true" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="interface.test.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/interface.test.js">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -81,7 +88,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>!hasKey</find>
       <find>getPiped</find>
       <find>VOID</find>
       <find>\.number</find>
@@ -111,6 +117,7 @@
       <find>select</find>
       <find>isA\b</find>
       <find>reduceObjectToSignature</find>
+      <find>caught</find>
     </findStrings>
     <replaceStrings>
       <replace>let</replace>
@@ -144,7 +151,6 @@
         <option value="$PROJECT_DIR$/src/serve_files.php" />
         <option value="$PROJECT_DIR$/src/monkeypath.js" />
         <option value="$PROJECT_DIR$/run" />
-        <option value="$PROJECT_DIR$/src/Overload.js" />
         <option value="$PROJECT_DIR$/src/index.js" />
         <option value="$PROJECT_DIR$/src/students.js" />
         <option value="$PROJECT_DIR$/src/test.js" />
@@ -157,9 +163,11 @@
         <option value="$PROJECT_DIR$/src/tester.js" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.js" />
         <option value="$PROJECT_DIR$/src/console.js" />
-        <option value="$PROJECT_DIR$/src/Signature.js" />
-        <option value="$PROJECT_DIR$/src/Signature.js" />
+        <option value="$PROJECT_DIR$/src/Overload.js" />
         <option value="$PROJECT_DIR$/src/overload.test.js" />
+        <option value="$PROJECT_DIR$/src/Signature.js" />
+        <option value="$PROJECT_DIR$/src/Signature.js" />
+        <option value="$PROJECT_DIR$/src/Interface.js" />
       </list>
     </option>
   </component>
@@ -263,20 +271,9 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Jest.types enforce themselves">
+  <component name="RunManager" selected="Jest.types enforce themselves.union">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-    </configuration>
-    <configuration name="1+1 is true" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
-      <node-interpreter value="project" />
-      <node-options value="" />
-      <working-dir value="$PROJECT_DIR$" />
-      <envs />
-      <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/overload.test.js" />
-      <test-names>
-        <test-name value="1+1 is true" />
-      </test-names>
     </configuration>
     <configuration name="overload" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
@@ -300,7 +297,19 @@
         <test-name value="types enforce themselves" />
       </test-names>
     </configuration>
-    <configuration name="types enforce themselves.union.should allow colorables" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
+    <configuration name="types enforce themselves.union" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/overload.test.js" />
+      <test-names>
+        <test-name value="types enforce themselves" />
+        <test-name value="union" />
+      </test-names>
+    </configuration>
+    <configuration name="types enforce themselves.union.should allow type mismatches as long as there is one correct type" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <working-dir value="$PROJECT_DIR$" />
@@ -310,7 +319,7 @@
       <test-names>
         <test-name value="types enforce themselves" />
         <test-name value="union" />
-        <test-name value="should allow colorables" />
+        <test-name value="should allow type mismatches as long as there is one correct type" />
       </test-names>
     </configuration>
     <configuration name="union types" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
@@ -333,19 +342,19 @@
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
     </configuration>
     <list>
-      <item itemvalue="Jest.types enforce themselves.union.should allow colorables" />
-      <item itemvalue="Jest.1+1 is true" />
       <item itemvalue="Jest.overload" />
       <item itemvalue="Jest.union types" />
       <item itemvalue="Jest.types enforce themselves" />
+      <item itemvalue="Jest.types enforce themselves.union.should allow type mismatches as long as there is one correct type" />
+      <item itemvalue="Jest.types enforce themselves.union" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Jest.types enforce themselves.union" />
+        <item itemvalue="Jest.types enforce themselves.union.should allow type mismatches as long as there is one correct type" />
         <item itemvalue="Jest.types enforce themselves" />
         <item itemvalue="Jest.union types" />
         <item itemvalue="Jest.overload" />
-        <item itemvalue="Jest.1+1 is true" />
-        <item itemvalue="Jest.types enforce themselves.union.should allow colorables" />
       </list>
     </recent_temporary>
   </component>
@@ -391,17 +400,11 @@
       <workItem from="1529859330078" duration="47000" />
       <workItem from="1529859667284" duration="131000" />
       <workItem from="1529859823822" duration="26000" />
-      <workItem from="1529859890339" duration="5213000" />
+      <workItem from="1529859890339" duration="7667000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="types_enforce_themselves_readable_should_have_method_called_read - 2018.06.24 at 09h 24m 46s.xml">
-      <configuration name="types enforce themselves.readable.should have method called read" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="types_enforce_themselves_readable_should_have_method_called_read - 2018.06.24 at 09h 25m 01s.xml">
-      <configuration name="types enforce themselves.readable.should have method called read" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
     <history-entry file="types_enforce_themselves - 2018.06.24 at 09h 25m 09s.xml">
       <configuration name="types enforce themselves" configurationId="JavaScriptTestRunnerJest" />
     </history-entry>
@@ -426,9 +429,15 @@
     <history-entry file="types_enforce_themselves - 2018.06.24 at 13h 14m 05s.xml">
       <configuration name="types enforce themselves" configurationId="JavaScriptTestRunnerJest" />
     </history-entry>
+    <history-entry file="types_enforce_themselves_union_should_allow_type_mismatches_as_long_as_there_is_one_correct_type - 2018.06.24 at 13h 34m 04s.xml">
+      <configuration name="types enforce themselves.union.should allow type mismatches as long as there is one correct type" configurationId="JavaScriptTestRunnerJest" />
+    </history-entry>
+    <history-entry file="types_enforce_themselves_union - 2018.06.24 at 13h 34m 21s.xml">
+      <configuration name="types enforce themselves.union" configurationId="JavaScriptTestRunnerJest" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="222268000" />
+    <option name="totallyTimeSpent" value="224722000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -449,10 +458,10 @@
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3287879" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3287879" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.4227273" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.4227273" />
       <window_info anchor="right" id="Remote Host" order="3" />
       <window_info id="Designer" order="3" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23452769" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.23452769" />
       <window_info anchor="right" id="Database" order="4" show_stripe_button="false" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -512,8 +521,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/TypeCompiler.java" />
-    <entry file="file://$PROJECT_DIR$/sample.mystery" />
     <entry file="file://$PROJECT_DIR$/src/serve_files.php" />
     <entry file="file://$PROJECT_DIR$/TypeCompiler.java" />
     <entry file="file://$PROJECT_DIR$/src/monkeypath.js" />
@@ -675,13 +682,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Overload.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1362">
-          <caret line="86" selection-start-line="86" selection-end-line="86" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jest.config.js" />
     <entry file="file://$PROJECT_DIR$/src/type_tester.js">
       <provider selected="true" editor-type-id="text-editor" />
@@ -735,10 +735,20 @@
     <entry file="file://$PROJECT_DIR$/compile">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/interface.test.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Overload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="3" column="21" lean-forward="true" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Signature.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="185" column="24" selection-start-line="185" selection-start-column="24" selection-end-line="185" selection-end-column="24" />
+        <state relative-caret-position="169">
+          <caret line="118" lean-forward="true" selection-start-line="118" selection-end-line="118" />
           <folding>
             <element signature="e#3184#3703#0" />
             <element signature="e#3625#3680#0" />
@@ -748,8 +758,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/overload.test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="517">
-          <caret line="192" column="7" selection-start-line="192" selection-start-column="7" selection-end-line="192" selection-end-column="7" />
+        <state relative-caret-position="251">
+          <caret line="169" column="46" lean-forward="true" selection-start-line="169" selection-start-column="46" selection-end-line="169" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Interface.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" column="35" lean-forward="true" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
         </state>
       </provider>
     </entry>

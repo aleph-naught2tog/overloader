@@ -118,6 +118,13 @@ export const NamedType = (name, instanceCheck, ...inputTypes) => {
   }
 
   GenericClass.typeName = name;
+  GenericClass.cast = object => {
+    try {
+      return new GenericClass(object);
+    } catch (error) {
+      throw new Error(`You may not cast a <${object}> to a(n) ${GenericClass.typeName}`);
+    }
+  };
 
   const klass = GenericClass;
 

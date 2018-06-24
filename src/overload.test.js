@@ -56,7 +56,10 @@ describe('types enforce themselves', () => {
   const hasColor = { color: TYPES.STRING };
 
   const Colorable = UnionType('Colorable', hasColor);
-  const Readable = UnionType('Readable', { read: () => {} });
+  const Readable = UnionType('Readable', {
+    read: () => {
+    }
+  });
 
   const IsReadableOrColorable = UnionType('IsReadableOrColorable', Readable, Colorable);
 
@@ -102,11 +105,11 @@ describe('types enforce themselves', () => {
     });
 
     it('should should recognize colors', () => {
-      expect({color: 'orange'} instanceof Colorable).toBeTruthy();
+      expect({ color: 'orange' } instanceof Colorable).toBeTruthy();
     });
 
     it('should should recognize colors as isreadableorcolorable', () => {
-      expect({color: 'orange'} instanceof IsReadableOrColorable).toBeTruthy();
+      expect({ color: 'orange' } instanceof IsReadableOrColorable).toBeTruthy();
     });
 
     it('should allow readables', () => {
@@ -123,17 +126,17 @@ describe('types enforce themselves', () => {
 
     it('should allow objects with readable and colorable', () => {
       expect(() => new IsReadableOrColorable(
-        { color: 'blue' , read: string => string }
+        { color: 'blue', read: string => string }
       )).not.toThrow();
     });
 
     it('should allow objects with readable or colorable, and something else', () => {
       expect(() => new IsReadableOrColorable(
-        { color: 'blue' , read: string => string, age: 12 }
+        { color: 'blue', read: string => string, age: 12 }
       )).not.toThrow();
 
       expect(() => new IsReadableOrColorable(
-        { color: 'blue' , age: 12 }
+        { color: 'blue', age: 12 }
       )).not.toThrow();
 
       expect(() => new IsReadableOrColorable(
@@ -143,11 +146,11 @@ describe('types enforce themselves', () => {
 
     it('should allow type mismatches as long as there is one correct type', () => {
       expect(() => new IsReadableOrColorable(
-        { color: 15 , age: 12 }
+        { color: 15, age: 12 }
       )).toThrow();
 
       expect(() => new IsReadableOrColorable(
-        { color: 15 , read: string => string, age: 12 }
+        { color: 15, read: string => string, age: 12 }
       )).not.toThrow();
     });
   });
@@ -155,7 +158,7 @@ describe('types enforce themselves', () => {
 
 describe('intersection types', () => {
   const Readable = UnionType('Readable', { read: string => string });
-  const Colorable = UnionType('Colorable', {color: TYPES.STRING});
+  const Colorable = UnionType('Colorable', { color: TYPES.STRING });
 
   const read = new Readable({ read: string => string });
   const color = new Colorable({ color: 'orange' });
@@ -166,7 +169,7 @@ describe('intersection types', () => {
   it('must have all properties', () => {
     expect(() => new MustBeColorableAndReadable(
       { color: 'blue', horse: 15 }
-      )).toThrow();
+    )).toThrow();
   });
 
   it('must have all properties listed', () => {
@@ -191,5 +194,45 @@ describe('intersection types', () => {
     expect(() => new MustBeColorableAndReadable(
       { color: 'blue', read: 12 }
     )).toThrow();
+  });
+});
+
+describe('typings cascades as expected', () => {
+  const sayHello = withOverload(x => x, false);
+  const BigCat = UnionType('BigCat', { meow: () => TYPES.STRING });
+  const BigDog = UnionType('BigDog', { bark: () => TYPES.STRING });
+
+  sayHello.overloads
+          .add({
+            signature: new Signature({ bark: () => "woof" }),
+            method: barker => ("bark says:" + barker.bark())
+          })
+          .add({
+            signature: new Signature({ meow: () => "meow" }),
+            method: meower => ("meow says: " + meower.meow())
+          })
+          .add({
+            signature: new Signature(BigCat),
+            method: bigCat => ("big cat says: " + bigCat.meow())
+          })
+          .add({
+            signature: new Signature(BigDog),
+            method: bigDog => ("big dog says: " + bigDog.bark())
+          })
+  ;
+
+  it('should fail for wrong types', () => {
+    expect(() => sayHello(15)).toThrow();
+  });
+
+  it('should work', () => {
+    expect(() => new BigCat({meow: () => "apple"})).not.toThrow();
+
+    const bigCat = new BigCat({meow: () => "apple"});
+    console.log(bigCat);
+    expect(bigCat.meow()).toBe("apple");
+    expect(() => sayHello(bigCat)).not.toThrow();
+
+    expect(() => sayHello({ bark: () => "woof" })).not.toThrow();
   });
 });
