@@ -3,10 +3,6 @@ import { getTypeNameOf, TYPES } from "./Types";
 
 export const mapTypes = (parameters) => parameters.map(p => getTypeNameOf(p));
 
-// const getSimpleSignature = (...parameters) => {
-//   return `${mapTypes(parameters).join()}`;
-// };
-
 export function Signature(...parameters) {
   this.structure = mapTypes(parameters);
 
@@ -18,9 +14,6 @@ export function Signature(...parameters) {
 
   this.length = parameters.length;
 
-  // noinspection JSUnusedGlobalSymbols
-  // this.toString = () => getSimpleSignature(...parameters);
-  // this.toString = () => "";
   this.equals = (otherSignature) => {
     let result = false;
     if (otherSignature instanceof Signature) {

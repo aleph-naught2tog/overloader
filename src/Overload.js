@@ -77,7 +77,6 @@ export const withOverload = (someFunction, allowDefault = true) => {
   self.allowsAny = () => self.getSignaturesWithAny().length !== 0;
 
   self.hasOverloadFor = signature => mapToString(signatures()).includes(signature.toString());
-  self.doesNotHaveOverloadFor = signature => !self.hasOverloadFor(signature);
 
   const getOverload = (calls, signature) => {
 

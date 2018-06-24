@@ -28,6 +28,7 @@ export const NamedType = (name, instanceCheck, ...inputTypes) => {
       }
 
       this.unboxed = object;
+      this.type = name;
 
       return new Proxy(this, {
         get: function (thisArg, prop) {

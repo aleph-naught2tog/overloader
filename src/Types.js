@@ -10,9 +10,23 @@ const checkTypes = parameter => {
              .find(type => ( parameter instanceof type ));
 };
 
+class CANONICAL_STRING {
+  static [Symbol.hasInstance](maybeInstance) {
+    return typeof maybeInstance === typeof "apple";
+  }
+}
+
+class CANONICAL_NUMBER {
+  static [Symbol.hasInstance](maybeInstance) {
+    console.log(maybeInstance);
+    return typeof maybeInstance === typeof 15;
+  }
+}
+
 export const TYPES = {
-  STRING: ( typeof "apple" ),
-  NUMBER: ( typeof 15 ),
+  // STRING: ( typeof "apple" ),
+  STRING: CANONICAL_STRING,
+  NUMBER: CANONICAL_NUMBER,
   BOOLEAN: ( typeof true ),
   ARRAY: ( [].constructor.name ),
   VOID: '<VOID>',
@@ -32,8 +46,10 @@ export const TYPES = {
 
   register: (className, TypeClass) => TYPES_REGISTRY.set(Symbol.for(className), TypeClass),
 };
+
 const VOID = ( () => {
 } )();
+
 const isConstructor = param => {
   let isConstructor = false;
 
@@ -47,6 +63,7 @@ const isConstructor = param => {
 
   return isConstructor;
 };
+
 const switchOnConstructorName = (param) => {
   const constructorName = param.constructor.name;
   switch (constructorName) {
@@ -59,6 +76,7 @@ const switchOnConstructorName = (param) => {
       return constructorName;
   }
 };
+
 export const getTypeNameOf = (param, onWayIn = false) => {
   if (param instanceof Type) {
     return Symbol.keyFor(Symbol.for(param.constructor.name));
