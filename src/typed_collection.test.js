@@ -1,6 +1,6 @@
 import { NumericArray, StringArray, TypedCollection } from './TypedCollection';
 import { TYPES } from './Types';
-import { UnionType } from "./UnionType";
+import { SimpleType } from "./SimpleType";
 
 describe('typed collection', () => {
 
@@ -31,7 +31,7 @@ describe('typed collection', () => {
 });
 
 describe('complex collection', () => {
-  const Colorable = UnionType("Colorable", { color: TYPES.STRING });
+  const Colorable = SimpleType("Colorable", { color: TYPES.STRING });
   const ColorCollection = TypedCollection(Colorable);
 
   it('should allow construction', () => {

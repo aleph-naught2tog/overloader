@@ -13,7 +13,7 @@ export class DefinedBy {
               } );
             }, {});
 
-    TYPES.register(this.toString(), this);
+    TYPES.register(this.toString(), this.canonical);
   }
 
   toString() {

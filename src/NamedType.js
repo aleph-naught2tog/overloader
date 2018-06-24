@@ -3,6 +3,10 @@ import { mapTypes} from "./Signature";
 import { TYPES } from "./Types";
 
 export const NamedType = (name, instanceCheck, ...inputTypes) => {
+  if (inputTypes.length === 1) {
+    console.error("Your type base only has one factor: maybe try a SimpleType instead?");
+  }
+
   const types = inputTypes.map(type => Object.keys(type).length !== 0 ? flatten(type) : type);
 
   class GenericClass {

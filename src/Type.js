@@ -8,12 +8,6 @@ export class Type {
       throw new Error(`${maybeType} has no constructor name to check.`);
     }
 
-    const doesExist = TYPES.REGISTRY.HAS(typeName);
-
-    if (doesExist) {
-      maybeType.class = typeName;
-    }
-
-    return doesExist;
+    return TYPES.REGISTRY.HAS(typeName);
   }
 }

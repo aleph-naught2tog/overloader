@@ -18,16 +18,21 @@ class CANONICAL_STRING {
 
 class CANONICAL_NUMBER {
   static [Symbol.hasInstance](maybeInstance) {
-    console.log(maybeInstance);
     return typeof maybeInstance === typeof 15;
   }
 }
 
+class CANONICAL_BOOLEAN {
+  static [Symbol.hasInstance](maybeInstance) {
+    return typeof maybeInstance === typeof true;
+  }
+}
+
+
 export const TYPES = {
-  // STRING: ( typeof "apple" ),
   STRING: CANONICAL_STRING,
   NUMBER: CANONICAL_NUMBER,
-  BOOLEAN: ( typeof true ),
+  BOOLEAN: CANONICAL_BOOLEAN,
   ARRAY: ( [].constructor.name ),
   VOID: '<VOID>',
   NULL: '<NULL>',
@@ -44,7 +49,15 @@ export const TYPES = {
     SEARCH: parameter => checkTypes(parameter)
   },
 
-  register: (className, TypeClass) => TYPES_REGISTRY.set(Symbol.for(className), TypeClass),
+  register: (className, TypeClass) => {
+
+    if (TYPES_REGISTRY.has(Symbol.for(className))) {
+      console.warn(`Type ${className} already exists. This typemap will not be added.`);
+      return;
+    }
+
+    TYPES_REGISTRY.set(Symbol.for(className), TypeClass);
+  },
 };
 
 const VOID = ( () => {
