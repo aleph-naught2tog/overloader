@@ -2,7 +2,6 @@ import { TYPES } from "./Types";
 
 export class Type {
   static [Symbol.hasInstance](maybeType) {
-    console.log(maybeType);
     const typeName = maybeType.constructor.name;
 
     if (!typeName) {

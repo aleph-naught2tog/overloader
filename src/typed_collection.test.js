@@ -1,7 +1,5 @@
 import { NumericArray, StringArray, TypedCollection } from './TypedCollection';
 import { TYPES } from './Types';
-import { TypedFunction } from './Overload';
-import { Signature } from "./Signature";
 import { UnionType } from "./UnionType";
 
 describe('typed collection', () => {

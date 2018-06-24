@@ -3,6 +3,7 @@ import { withOverload } from "./Overload";
 import { UnionType } from "./UnionType";
 import { IntersectionType } from "./IntersectionType";
 import { TYPES } from "./Types";
+import { SimpleType } from "./SimpleType";
 
 test('1+1 is true', () => {
   expect(1 + 1).toBe(2);
@@ -58,11 +59,8 @@ describe('union types', () => {
 describe('types enforce themselves', () => {
   const hasColor = { color: TYPES.STRING };
 
-  const Colorable = UnionType('Colorable', hasColor);
-  const Readable = UnionType('Readable', {
-    read: () => {
-    }
-  });
+  const Colorable = SimpleType('Colorable', hasColor);
+  const Readable = SimpleType('Readable', { read: () => {} });
 
   const IsReadableOrColorable = UnionType('IsReadableOrColorable', Readable, Colorable);
 
@@ -160,8 +158,8 @@ describe('types enforce themselves', () => {
 });
 
 describe('intersection types', () => {
-  const Readable = UnionType('Readable', { read: string => string });
-  const Colorable = UnionType('Colorable', { color: TYPES.STRING });
+  const Readable = SimpleType('Readable', { read: string => string });
+  const Colorable = SimpleType('Colorable', { color: TYPES.STRING });
 
   const read = new Readable({ read: string => string });
   const color = new Colorable({ color: 'orange' });
@@ -202,8 +200,8 @@ describe('intersection types', () => {
 
 describe('typings cascades as expected', () => {
   const sayHello = withOverload(x => x, false);
-  const BigCat = UnionType('BigCat', { meow: () => TYPES.STRING });
-  const BigDog = UnionType('BigDog', { bark: () => TYPES.STRING });
+  const BigCat = SimpleType('BigCat', { meow: () => TYPES.STRING });
+  const BigDog = SimpleType('BigDog', { bark: () => TYPES.STRING });
 
   sayHello.overloads
           .add({
@@ -232,7 +230,6 @@ describe('typings cascades as expected', () => {
     expect(() => new BigCat({meow: () => "apple"})).not.toThrow();
 
     const bigCat = new BigCat({meow: () => "apple"});
-    console.log(bigCat);
     expect(bigCat.meow()).toBe("apple");
     expect(() => sayHello(bigCat)).not.toThrow();
 

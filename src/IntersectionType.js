@@ -13,13 +13,12 @@ const intersectionInstanceCheck = (array, rawTypes) => {
 
     if (Array.isArray(flatType)) {
       return rawTypes.map(MajorType => {
-        const foundMatch = flatType.find(minorType => ( minorType instanceof MajorType ));
+        const foundMatch = flatType.find(minorType => (minorType instanceof MajorType));
 
         return foundMatch;
       }).every(result => result);
     }
 
-    console.log("here");
     return array.includes(oneTypeAsString);
   };
 };

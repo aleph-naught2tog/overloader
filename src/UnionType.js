@@ -31,3 +31,4 @@ const unionInstanceCheck = (array, rawTypes) => (oneTypeAsString, typeAsObject) 
 };
 
 export const UnionType = (name, ...types) => NamedType(name, unionInstanceCheck, ...types);
+
