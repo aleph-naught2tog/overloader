@@ -1,4 +1,3 @@
-import { withOverload } from './overload';
 import { TEST_DATA } from "./manipulations";
 
 let array = TEST_DATA;

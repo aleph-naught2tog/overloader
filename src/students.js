@@ -23,7 +23,3 @@ const generateRandomStudent = () => ({
 });
 
 const generateRandomStudents = number => Array(number).fill(0).map(generateRandomStudent);
-
-const TEST_DATA = generateRandomStudents(10);
-
-export default StudentBody;

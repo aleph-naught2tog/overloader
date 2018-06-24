@@ -2,13 +2,30 @@ import { getMapKeys } from "./manipulations";
 
 const VOID = ( () => {
 } )();
-
 const TYPES_REGISTRY = new Map();
 
 const checkTypes = parameter => {
   let keys = getMapKeys(TYPES_REGISTRY);
   return keys.map(key => TYPES_REGISTRY.get(key))
              .find(type => ( parameter instanceof type ));
+};
+
+const flatten = array => {
+  if (!Array.isArray(array)) {
+    return array;
+  }
+
+  return array.reduce((arraySoFar, object) => {
+    let result;
+
+    if (Object.keys(object).length > 1) {
+      result = Object.keys(object).map(key => ( { [key]: object[key] } ));
+    } else {
+      result = ( { [Object.keys(object)[0]]: object[Object.keys(object)[0]] } );
+    }
+
+    return arraySoFar.concat(result);
+  }, []);
 };
 
 export const TYPES = {
@@ -36,6 +53,7 @@ export const TYPES = {
 
 class DefinedBy {
   constructor(someObject) {
+
     this.canonical =
       Object.keys(someObject)
             .reduce((keysCoveredSoFar, currentKey) => {
@@ -55,25 +73,31 @@ class DefinedBy {
   }
 }
 
-export const NamedType = (name, instanceCheck, ...types) => {
+export const NamedType = (name, instanceCheck, ...inputTypes) => {
+  const types = inputTypes.map(type => Object.keys(type).length !== 0 ? flatten(type) : type);
+
   class GenericClass {
     static types = mapTypes(types);
-    static check = instanceCheck(GenericClass.types);
+    static rawTypes = types;
+    static check = instanceCheck(GenericClass.types, GenericClass.rawTypes);
 
     static [Symbol.hasInstance](maybeInstance) {
+
       const type = mapTypes([maybeInstance])[0];
 
       if (type === this.name) {
         return true;
       }
 
-      return this.check(type); // slot: InstanceMethodCheck (obj) : bool
+      return this.check(type, maybeInstance); // slot: InstanceMethodCheck (obj) : bool
     };
 
     constructor(object) {
+
       if (( object instanceof GenericClass ) === false) {
-        throw new Error("cannot be cast");
+        throw Error("cannot be cast");
       }
+
       this.unboxed = object;
 
       return new Proxy(this, {
@@ -107,7 +131,64 @@ export const NamedType = (name, instanceCheck, ...types) => {
 };
 
 
-const unionInstanceCheck = array => oneType => array.includes(oneType);
+const unionInstanceCheck = (array, rawTypes) => (oneTypeAsString, typeAsObject) => {
+  let flatType;
+
+  if (( typeAsObject instanceof Object ) && !Array.isArray(typeAsObject)) {
+    flatType = flatten([typeAsObject]);
+  } else {
+    flatType = typeAsObject;
+  }
+
+  if (Array.isArray(flatType)) {
+    for (let type of flatType) {
+
+      let foundType = rawTypes.find(MajorType => {
+        try {
+          return ( type instanceof MajorType );
+        } catch (error) {
+          return false;
+        }
+      });
+
+      if (foundType) {
+        return true;
+      }
+    }
+  }
+
+  return array.includes(oneTypeAsString);
+};
+
+const intersectionInstanceCheck = (array, rawTypes) => {
+  console.log(array);
+  console.log(rawTypes);
+  return (oneTypeAsString, typeAsObject) => {
+    let flatType;
+
+    console.log(oneTypeAsString);
+    console.log(typeAsObject);
+
+    if (( typeAsObject instanceof Object ) && !Array.isArray(typeAsObject)) {
+      flatType = flatten([typeAsObject]);
+    } else {
+      flatType = typeAsObject;
+    }
+
+    if (Array.isArray(flatType)) {
+      return rawTypes.map(MajorType => {
+        const foundMatch = flatType.find(minorType => ( minorType instanceof MajorType ));
+
+        return foundMatch;
+      }).every(result => result);
+    }
+
+    console.log("here");
+    return array.includes(oneTypeAsString);
+  };
+};
+
+export const IntersectionType = (name, ...types) => NamedType(name, intersectionInstanceCheck, ...types);
 
 export const UnionType = (name, ...types) => NamedType(name, unionInstanceCheck, ...types);
 
@@ -124,6 +205,25 @@ const isConstructor = param => {
 
   return isConstructor;
 };
+
+class Type {
+  static [Symbol.hasInstance](maybeType) {
+    const typeName = maybeType.constructor.name;
+
+    if (!typeName) {
+      throw new Error(`${maybeType} has no constructor name to check.`);
+    }
+
+    const doesExist = TYPES.REGISTRY.HAS(typeName);
+
+    if (doesExist) {
+      maybeType.class = typeName;
+    }
+
+    return doesExist;
+  }
+}
+
 const switchOnConstructorName = (param) => {
   const constructorName = param.constructor.name;
   switch (constructorName) {
@@ -136,24 +236,6 @@ const switchOnConstructorName = (param) => {
       return constructorName;
   }
 };
-
-class Type {
-  static [Symbol.hasInstance](maybeType) {
-    const typeName = maybeType.constructor.name;
-
-    if (!typeName) {
-      throw new Error(`${maybeType} has no constructor name to check.`);
-    }
-
-    const doesExist = TYPES.REGISTRY.HAS(typeName);
-    if (doesExist) {
-      maybeType.class = typeName;
-    }
-
-    return doesExist;
-  }
-}
-
 
 const getTypeNameOf = (param, onWayIn = false) => {
   if (param instanceof Type) {
