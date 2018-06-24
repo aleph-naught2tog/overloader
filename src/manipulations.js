@@ -174,3 +174,21 @@ const sortByKey = (key, type = "string") => {
       return (a, b) => compareCodePoints(a[key], b[key]);
   }
 };
+
+export const flatten = array => {
+  if (!Array.isArray(array)) {
+    return array;
+  }
+
+  return array.reduce((arraySoFar, object) => {
+    let result;
+
+    if (Object.keys(object).length > 1) {
+      result = Object.keys(object).map(key => ( { [key]: object[key] } ));
+    } else {
+      result = ( { [Object.keys(object)[0]]: object[Object.keys(object)[0]] } );
+    }
+
+    return arraySoFar.concat(result);
+  }, []);
+};

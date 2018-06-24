@@ -1,5 +1,6 @@
-import { NoSignatureOfLengthError, NoSuchSignatureError, Signature, TYPES } from "./Signature";
+import { NoSignatureOfLengthError, NoSuchSignatureError, Signature} from "./Signature";
 import { getMapKeys, mapToString } from "./manipulations";
+import { TYPES } from "./Types";
 
 const pipeHandler = {
   apply: function (target, self, argumentList) {
@@ -151,4 +152,11 @@ export const withOverload = (someFunction, allowDefault = true) => {
   };
 
   return new Proxy(self, overloadedCallHandler);
+};
+
+export const TypedFunction = (signature, method) => {
+  const overload = withOverload(method, false);
+  overload.overloads.add({ signature: signature, method: method });
+
+  return overload;
 };

@@ -1,5 +1,8 @@
-import { Signature, TYPES, UnionType, IntersectionType } from "./Signature";
+import { Signature} from "./Signature";
 import { withOverload } from "./Overload";
+import { UnionType } from "./UnionType";
+import { IntersectionType } from "./IntersectionType";
+import { TYPES } from "./Types";
 
 test('1+1 is true', () => {
   expect(1 + 1).toBe(2);
