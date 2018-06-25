@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8eeb44c-70ed-469a-830d-64918bbbdd56" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Interface.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Interface.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/NamedType.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/NamedType.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Overload.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Overload.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SimpleType.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/SimpleType.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypedCollection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypedCollection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Types.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Types.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/typed.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/typed.test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/typed_collection.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/typed_collection.test.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -50,8 +44,8 @@
       <file leaf-file-name="Types.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Types.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="532">
-              <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+            <state relative-caret-position="488">
+              <caret line="39" column="3" lean-forward="true" selection-start-line="39" selection-start-column="3" selection-end-line="39" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -65,11 +59,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="typed.test.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="typed.test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/typed.test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="34" column="26" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+            <state relative-caret-position="420">
+              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
             </state>
           </provider>
         </entry>
@@ -77,8 +71,17 @@
       <file leaf-file-name="SimpleType.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/SimpleType.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="946">
+            <state relative-caret-position="1616">
               <caret line="83" column="51" selection-start-line="83" selection-start-column="51" selection-end-line="83" selection-end-column="51" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Interface.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Interface.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="286">
+              <caret line="12" column="21" lean-forward="true" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -86,35 +89,8 @@
       <file leaf-file-name="Overload.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Overload.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="132" column="4" lean-forward="true" selection-start-line="132" selection-start-column="4" selection-end-line="132" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NamedType.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/NamedType.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="63" lean-forward="true" selection-start-line="63" selection-end-line="63" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Interface.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Interface.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="71" column="13" lean-forward="true" selection-start-line="71" selection-start-column="13" selection-end-line="71" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TypedCollection.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/TypedCollection.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-370">
-              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+            <state relative-caret-position="239">
+              <caret line="165" column="29" lean-forward="true" selection-start-line="165" selection-start-column="29" selection-end-line="165" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -217,10 +193,10 @@
         <option value="$PROJECT_DIR$/src/Types.js" />
         <option value="$PROJECT_DIR$/src/TypedCollection.js" />
         <option value="$PROJECT_DIR$/src/typed_collection.test.js" />
-        <option value="$PROJECT_DIR$/src/Overload.js" />
-        <option value="$PROJECT_DIR$/src/typed.test.js" />
         <option value="$PROJECT_DIR$/src/SimpleType.js" />
         <option value="$PROJECT_DIR$/src/Interface.js" />
+        <option value="$PROJECT_DIR$/src/Overload.js" />
+        <option value="$PROJECT_DIR$/src/typed.test.js" />
       </list>
     </option>
   </component>
@@ -456,7 +432,7 @@
       <workItem from="1529859890339" duration="7667000" />
       <workItem from="1529874722047" duration="2143000" />
       <workItem from="1529876955473" duration="6972000" />
-      <workItem from="1529884341210" duration="8910000" />
+      <workItem from="1529884341210" duration="10162000" />
     </task>
     <servers />
   </component>
@@ -493,7 +469,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="242747000" />
+    <option name="totallyTimeSpent" value="243999000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -782,10 +758,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Types.js">
+    <entry file="file://$PROJECT_DIR$/src/TypedCollection.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="532">
-          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+        <state relative-caret-position="-370">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/NamedType.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-21">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
         </state>
       </provider>
     </entry>
@@ -796,45 +779,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/NamedType.js">
+    <entry file="file://$PROJECT_DIR$/src/Types.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="63" lean-forward="true" selection-start-line="63" selection-end-line="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Overload.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="132" column="4" lean-forward="true" selection-start-line="132" selection-start-column="4" selection-end-line="132" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/typed.test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="34" column="26" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+        <state relative-caret-position="488">
+          <caret line="39" column="3" lean-forward="true" selection-start-line="39" selection-start-column="3" selection-end-line="39" selection-end-column="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SimpleType.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="946">
+        <state relative-caret-position="1616">
           <caret line="83" column="51" selection-start-line="83" selection-start-column="51" selection-end-line="83" selection-end-column="51" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TypedCollection.js">
+    <entry file="file://$PROJECT_DIR$/src/Overload.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-370">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        <state relative-caret-position="239">
+          <caret line="165" column="29" lean-forward="true" selection-start-line="165" selection-start-column="29" selection-end-line="165" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Interface.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="71" column="13" lean-forward="true" selection-start-line="71" selection-start-column="13" selection-end-line="71" selection-end-column="13" />
+        <state relative-caret-position="286">
+          <caret line="12" column="21" lean-forward="true" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/typed.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
         </state>
       </provider>
     </entry>

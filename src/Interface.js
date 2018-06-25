@@ -48,8 +48,8 @@ class UnusableClass {
     if (this.requirements.has(methodName)) {
       const otherFunction = this.requirements.get(methodName);
 
-      if (namedFunction.ownSignature.equals(otherFunction.ownSignature)) {
-        this.implementations.set(methodName, this.requirements.get(methodName));
+      if (namedFunction.ownSignature.equals(otherFunction.signature)) {
+        this.implementations.set(methodName, namedFunction);
         this.requirements.delete(methodName);
       } else {
         throw new Error("wrong signature");

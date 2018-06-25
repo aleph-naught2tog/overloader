@@ -1,4 +1,4 @@
-import { TypedFunction } from './Overload';
+import { EmptyTypedFunction, TypedFunction } from './Overload';
 import { Signature } from './Signature';
 import { TYPES } from "./Types";
 import { Interface, RequirementCollection } from "./Interface";
@@ -20,18 +20,20 @@ describe('bleh type', () => {
   it('jkljklj', () => {
     const Sortable = new Interface();
     const sortableRequirements = new RequirementCollection();
-    const Sorter = new TypedFunction(
-      new Signature(TYPES.NUMBER, TYPES.NUMBER), (a, b) => a - b);
+    const Sorter = new EmptyTypedFunction(new Signature(TYPES.NUMBER, TYPES.NUMBER));
+    const Echoer = new EmptyTypedFunction(new Signature(TYPES.STRING));
 
     sortableRequirements.add(
       SimpleType('sort', { sort: Sorter })
     );
+    sortableRequirements.add(
+      SimpleType('echo', { echo: Echoer })
+    );
 
     Sortable.define(sortableRequirements);
     const base = Sortable.getUnimplementedBase();
+    const badSort = () => {};
     expect(() => base.confirm()).toThrow();
-    const badSort = () => {
-    };
     expect(() => base.implement('badSort', badSort)).toThrow();
     expect(() => base.implement('sort', badSort)).toThrow();
 
@@ -40,10 +42,20 @@ describe('bleh type', () => {
     );
 
     expect(() => base.implement('sort', sort)).not.toThrow();
+    expect(() => base.confirm()).toThrow();
+
+    const echo = new TypedFunction(
+      new Signature(TYPES.STRING), a => a
+    );
+
+    expect(() => base.implement('echo', echo)).not.toThrow();
+    expect(() => base.confirm()).not.toThrow();
+
     const Classer = base.confirm();
     let bob = new Classer();
-    console.log(Classer);
-    console.log(bob);
-    console.log(bob.sort(3, 4));
+
+    console.log(bob.echo("apple"));
+    expect(bob.sort(1,4)).toBe(-3);
+    expect(bob.echo("apple")).toBe("apple");
   });
 });

@@ -161,3 +161,14 @@ export const TypedFunction = (signature, method) => {
 
   return overload;
 };
+
+export function EmptyTypedFunction(signature) {
+  this.signature = signature;
+  this.type = TypedFunction;
+
+  return new Proxy(this, {
+    apply: function (target, thisArg, allArguments) {
+      throw new Error("You cannot call a method with no body");
+    }
+  });
+};
