@@ -26,13 +26,15 @@ describe('bleh type', () => {
     sortableRequirements.add(
       SimpleType('sort', { sort: Sorter })
     );
+
     sortableRequirements.add(
       SimpleType('echo', { echo: Echoer })
     );
 
     Sortable.define(sortableRequirements);
     const base = Sortable.getUnimplementedBase();
-    const badSort = () => {};
+    const badSort = () => {
+    };
     expect(() => base.confirm()).toThrow();
     expect(() => base.implement('badSort', badSort)).toThrow();
     expect(() => base.implement('sort', badSort)).toThrow();
@@ -55,7 +57,97 @@ describe('bleh type', () => {
     let bob = new Classer();
 
     console.log(bob.echo("apple"));
-    expect(bob.sort(1,4)).toBe(-3);
+    expect(bob.sort(1, 4)).toBe(-3);
+    expect(bob.echo("apple")).toBe("apple");
+    console.log(Sortable);
+    console.log(Sortable.requirements);
+  });
+
+  it('second', () => {
+    const Sorter = new Signature(TYPES.NUMBER, TYPES.NUMBER);
+    const Echoer = new Signature(TYPES.STRING);
+
+    const Sortable = Interface.from({
+      sort: Sorter,
+      echo: Echoer
+    });
+
+    console.log(Sortable);
+    const base = Sortable.getUnimplementedBase();
+    const badSort = () => {
+    };
+    expect(() => base.confirm()).toThrow();
+    expect(() => base.implement('badSort', badSort)).toThrow();
+    expect(() => base.implement('sort', badSort)).toThrow();
+
+    const sort = new TypedFunction(
+      new Signature(TYPES.NUMBER, TYPES.NUMBER), (a, b) => a - b
+    );
+
+    expect(() => base.implement('sort', sort)).not.toThrow();
+    expect(() => base.confirm()).toThrow();
+
+    const echo = new TypedFunction(
+      new Signature(TYPES.STRING), a => a
+    );
+
+    expect(() => base.implement('echo', echo)).not.toThrow();
+    expect(() => base.confirm()).not.toThrow();
+
+    const Classer = base.confirm();
+    let bob = new Classer();
+
+    expect(bob.sort(1, 4)).toBe(-3);
+    expect(bob.echo("apple")).toBe("apple");
+  });
+
+  it('second', () => {
+    const Sorter = new Signature(TYPES.NUMBER, TYPES.NUMBER);
+    const Echoer = new Signature(TYPES.STRING);
+
+    const Echoable = Interface.from({
+      echo: Echoer
+    });
+
+    const Sortable =
+      Interface
+        .from({
+          sort: [Sorter, new Signature(TYPES.NUMBER)]
+        })
+        .implements(Echoable)
+    ;
+
+    const base = Sortable.getUnimplementedBase();
+    const badSort = () => {
+    };
+    expect(() => base.confirm()).toThrow();
+    expect(() => base.implement('badSort', badSort)).toThrow();
+    expect(() => base.implement('sort', badSort)).toThrow();
+
+    const sort = [
+      new TypedFunction(
+        new Signature(TYPES.NUMBER, TYPES.NUMBER), (a, b) => a - b
+      ), new TypedFunction(
+        new Signature(TYPES.NUMBER), a => a * a
+      )
+    ];
+
+    expect(() => base.implement('sort', sort)).not.toThrow();
+    expect(() => base.confirm()).toThrow();
+
+    const echo = new TypedFunction(
+      new Signature(TYPES.STRING), a => a
+    );
+
+    console.log(base);
+    expect(() => base.implement('echo', echo)).not.toThrow();
+    expect(() => base.confirm()).toThrow();
+
+    const Classer = base.confirm();
+    let bob = new Classer();
+
+    console.log(bob);
+    expect(bob.sort(1, 4)).toBe(-3);
     expect(bob.echo("apple")).toBe("apple");
   });
 });

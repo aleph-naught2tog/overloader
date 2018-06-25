@@ -2,8 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8eeb44c-70ed-469a-830d-64918bbbdd56" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/parser.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Interface.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Interface.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Overload.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Overload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Signature.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Signature.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypedCollection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypedCollection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collections.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/collections.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/overload.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/overload.test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/typed.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/typed.test.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -32,56 +38,47 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="overload.test.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/overload.test.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4093">
-              <caret line="45" column="23" lean-forward="true" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Types.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Types.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="488">
-              <caret line="39" column="3" lean-forward="true" selection-start-line="39" selection-start-column="3" selection-end-line="39" selection-end-column="3" />
+            <state relative-caret-position="261">
+              <caret line="36" column="7" lean-forward="true" selection-start-line="36" selection-start-column="7" selection-end-line="36" selection-end-column="7" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DefinedBy.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/DefinedBy.js">
+      <file leaf-file-name="collections.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/collections.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="11" column="39" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
+            <state relative-caret-position="324">
+              <caret line="49" column="30" lean-forward="true" selection-start-line="49" selection-start-column="30" selection-end-line="49" selection-end-column="30" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="typed.test.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/typed.test.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SimpleType.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/SimpleType.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1616">
-              <caret line="83" column="51" selection-start-line="83" selection-start-column="51" selection-end-line="83" selection-end-column="51" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Interface.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Interface.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Interface.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="12" column="21" lean-forward="true" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
+            <state relative-caret-position="145">
+              <caret line="54" column="10" selection-start-line="54" selection-start-column="10" selection-end-line="54" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="typed.test.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/typed.test.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="413">
+              <caret line="141" column="22" selection-start-line="141" selection-start-column="22" selection-end-line="141" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TypedCollection.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/TypedCollection.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="369">
+              <caret line="22" column="14" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -89,8 +86,8 @@
       <file leaf-file-name="Overload.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Overload.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
-              <caret line="165" column="29" lean-forward="true" selection-start-line="165" selection-start-column="29" selection-end-line="165" selection-end-column="29" />
+            <state relative-caret-position="121">
+              <caret line="138" column="31" selection-start-line="138" selection-start-column="31" selection-end-line="138" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -106,11 +103,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ownName</find>
-      <find>getOverload\b</find>
-      <find>groupBy(...keys)(table)</find>
-      <find>curKey \=\&gt;\n    arrayOfObjects\[curKey\]\.reduce\(\(groupedSoFar\, currentItem\) \=\&gt; \{\n      const keyValueToGroupBy \= currentItem\[key\]\;\n\n      if \(keyValueToGroupBy in groupedSoFar\) \{\n        groupedSoFar\[keyValueToGroupBy\]\.push\(currentItem\)\;\n      \} else \{\n        groupedSoFar\[keyValueToGroupBy\] \= \[currentItem\]\;\n      \}\n\n      return groupedSoFar\;\n    \}\, \{\}\)</find>
-      <find>^var\b</find>
       <find>range</find>
       <find>matchWithAnyFound</find>
       <find>TYPES.reg</find>
@@ -136,6 +128,11 @@
       <find>checkTypes</find>
       <find>SEARCH</find>
       <find>\.class</find>
+      <find>allowDefault</find>
+      <find>withOverload</find>
+      <find>shouldCheckBoxes</find>
+      <find>needsBoxCheck</find>
+      <find>GenericCollection(GenericType)</find>
     </findStrings>
     <replaceStrings>
       <replace>let</replace>
@@ -147,6 +144,7 @@
       <replace>.method</replace>
       <replace>calls</replace>
       <replace>const</replace>
+      <replace>GenericCollection</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src</dir>
@@ -180,23 +178,25 @@
         <option value="$PROJECT_DIR$/src/tester.js" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.js" />
         <option value="$PROJECT_DIR$/src/console.js" />
-        <option value="$PROJECT_DIR$/src/collections.js" />
         <option value="$PROJECT_DIR$/src/manipulations.js" />
-        <option value="$PROJECT_DIR$/src/Signature.js" />
-        <option value="$PROJECT_DIR$/src/Signature.js" />
         <option value="$PROJECT_DIR$/src/UnionType.js" />
         <option value="$PROJECT_DIR$/src/IntersectionType.js" />
-        <option value="$PROJECT_DIR$/src/overload.test.js" />
         <option value="$PROJECT_DIR$/src/DefinedBy.js" />
         <option value="$PROJECT_DIR$/src/Type.js" />
         <option value="$PROJECT_DIR$/src/NamedType.js" />
         <option value="$PROJECT_DIR$/src/Types.js" />
-        <option value="$PROJECT_DIR$/src/TypedCollection.js" />
         <option value="$PROJECT_DIR$/src/typed_collection.test.js" />
         <option value="$PROJECT_DIR$/src/SimpleType.js" />
-        <option value="$PROJECT_DIR$/src/Interface.js" />
+        <option value="$PROJECT_DIR$/src/parser.rb" />
+        <option value="$PROJECT_DIR$/compiler/Compiler.java" />
+        <option value="$PROJECT_DIR$/src/Signature.js" />
+        <option value="$PROJECT_DIR$/src/Signature.js" />
+        <option value="$PROJECT_DIR$/src/overload.test.js" />
         <option value="$PROJECT_DIR$/src/Overload.js" />
+        <option value="$PROJECT_DIR$/src/collections.js" />
+        <option value="$PROJECT_DIR$/src/TypedCollection.js" />
         <option value="$PROJECT_DIR$/src/typed.test.js" />
+        <option value="$PROJECT_DIR$/src/Interface.js" />
       </list>
     </option>
   </component>
@@ -226,9 +226,9 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="191" />
+    <option name="x" value="271" />
     <option name="y" value="22" />
-    <option name="width" value="1089" />
+    <option name="width" value="1009" />
     <option name="height" value="778" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -237,8 +237,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -250,15 +250,6 @@
               <item name="overloader" type="b2602c69:ProjectViewProjectNode" />
               <item name="overloader" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="overloader" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
-            </path>
-            <path>
-              <item name="overloader" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
-              <item name="Scratches" type="d62648e6:ScratchProjectViewPane$MyRootNode" />
             </path>
           </expand>
           <select />
@@ -286,7 +277,8 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="JavaScript.Libraries" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -300,9 +292,21 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Jest.types enforce themselves.union">
+  <component name="RunManager" selected="Jest.overload">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration name="bleh type.second" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/typed.test.js" />
+      <test-names>
+        <test-name value="bleh type" />
+        <test-name value="second" />
+      </test-names>
     </configuration>
     <configuration name="overload" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
@@ -315,15 +319,16 @@
         <test-name value="overload" />
       </test-names>
     </configuration>
-    <configuration name="types enforce themselves" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
+    <configuration name="overload.it works" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
-      <scope-kind value="SUITE" />
+      <scope-kind value="TEST" />
       <test-file value="$PROJECT_DIR$/src/overload.test.js" />
       <test-names>
-        <test-name value="types enforce themselves" />
+        <test-name value="overload" />
+        <test-name value="it works" />
       </test-names>
     </configuration>
     <configuration name="types enforce themselves.union" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
@@ -351,17 +356,6 @@
         <test-name value="should allow type mismatches as long as there is one correct type" />
       </test-names>
     </configuration>
-    <configuration name="union types" type="JavaScriptTestRunnerJest" factoryName="Jest" temporary="true" nameIsGenerated="true">
-      <node-interpreter value="project" />
-      <node-options value="" />
-      <working-dir value="$PROJECT_DIR$" />
-      <envs />
-      <scope-kind value="SUITE" />
-      <test-file value="$PROJECT_DIR$/src/overload.test.js" />
-      <test-names>
-        <test-name value="union types" />
-      </test-names>
-    </configuration>
     <configuration name="&lt;template&gt;" type="JUnit" default="true" selected="false">
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
@@ -371,19 +365,19 @@
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
     </configuration>
     <list>
-      <item itemvalue="Jest.overload" />
-      <item itemvalue="Jest.union types" />
-      <item itemvalue="Jest.types enforce themselves" />
       <item itemvalue="Jest.types enforce themselves.union.should allow type mismatches as long as there is one correct type" />
       <item itemvalue="Jest.types enforce themselves.union" />
+      <item itemvalue="Jest.bleh type.second" />
+      <item itemvalue="Jest.overload.it works" />
+      <item itemvalue="Jest.overload" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Jest.overload" />
+        <item itemvalue="Jest.overload.it works" />
+        <item itemvalue="Jest.bleh type.second" />
         <item itemvalue="Jest.types enforce themselves.union" />
         <item itemvalue="Jest.types enforce themselves.union.should allow type mismatches as long as there is one correct type" />
-        <item itemvalue="Jest.types enforce themselves" />
-        <item itemvalue="Jest.union types" />
-        <item itemvalue="Jest.overload" />
       </list>
     </recent_temporary>
   </component>
@@ -432,23 +426,14 @@
       <workItem from="1529859890339" duration="7667000" />
       <workItem from="1529874722047" duration="2143000" />
       <workItem from="1529876955473" duration="6972000" />
-      <workItem from="1529884341210" duration="10162000" />
+      <workItem from="1529884341210" duration="10827000" />
+      <workItem from="1529895207013" duration="142000" />
+      <workItem from="1529895494437" duration="305000" />
+      <workItem from="1529896250566" duration="8167000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="types_enforce_themselves - 2018.06.24 at 09h 25m 09s.xml">
-      <configuration name="types enforce themselves" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="types_enforce_themselves - 2018.06.24 at 09h 27m 20s.xml">
-      <configuration name="types enforce themselves" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="overload_test_js - 2018.06.24 at 10h 02m 19s.xml">
-      <configuration name="overload.test.js" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="types_enforce_themselves_union_should_allow_colorables - 2018.06.24 at 12h 07m 15s.xml">
-      <configuration name="types enforce themselves.union.should allow colorables" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
     <history-entry file="1+1_is_true - 2018.06.24 at 13h 13m 34s.xml">
       <configuration name="1+1 is true" configurationId="JavaScriptTestRunnerJest" />
     </history-entry>
@@ -467,9 +452,21 @@
     <history-entry file="types_enforce_themselves_union - 2018.06.24 at 13h 34m 21s.xml">
       <configuration name="types enforce themselves.union" configurationId="JavaScriptTestRunnerJest" />
     </history-entry>
+    <history-entry file="bleh_type_second - 2018.06.24 at 22h 35m 34s.xml">
+      <configuration name="bleh type.second" configurationId="JavaScriptTestRunnerJest" />
+    </history-entry>
+    <history-entry file="bleh_type_second - 2018.06.24 at 22h 35m 51s.xml">
+      <configuration name="bleh type.second" configurationId="JavaScriptTestRunnerJest" />
+    </history-entry>
+    <history-entry file="overload_it_works - 2018.06.24 at 22h 47m 06s.xml">
+      <configuration name="overload.it works" configurationId="JavaScriptTestRunnerJest" />
+    </history-entry>
+    <history-entry file="overload - 2018.06.24 at 22h 47m 27s.xml">
+      <configuration name="overload" configurationId="JavaScriptTestRunnerJest" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="243999000" />
+    <option name="totallyTimeSpent" value="253278000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -481,7 +478,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="191" y="22" width="1089" height="778" extended-state="0" />
+    <frame x="271" y="22" width="1009" height="778" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3287879" />
@@ -490,10 +487,10 @@
       <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3287879" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3287879" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.4227273" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.26969698" />
       <window_info anchor="right" id="Remote Host" order="3" />
       <window_info id="Designer" order="4" />
-      <window_info content_ui="combo" id="Project" order="0" weight="0.23336548" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.22962113" />
       <window_info anchor="right" id="Database" order="4" show_stripe_button="false" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3287879" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -503,9 +500,9 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info id="npm" order="3" show_stripe_button="false" side_tool="true" weight="0.32956383" />
+      <window_info anchor="bottom" id="Inspection Results" order="10" weight="0.32892805" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection Results" order="10" weight="0.32892805" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -526,14 +523,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Overload.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="1" column="33" selection-start-line="1" selection-start-column="33" selection-end-line="1" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tester.js" />
     <entry file="file://$PROJECT_DIR$/src/Overload.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3080">
@@ -680,13 +669,6 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/interface.test.js" />
-    <entry file="file://$PROJECT_DIR$/src/collections.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="12" lean-forward="true" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="uml://JavaScript-modules-diagram//Users/magdalena/overloader/src/Signature.js">
       <provider selected="true" editor-type-id="UmlEditorProvider">
         <state>
@@ -716,13 +698,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Signature.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="33" column="1" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/IntersectionType.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="352">
@@ -737,31 +712,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/overload.test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4093">
-          <caret line="45" column="23" lean-forward="true" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/typed_collection.test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1078">
-          <caret line="66" column="59" selection-start-line="66" selection-start-column="59" selection-end-line="66" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/UnionType.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="495">
           <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TypedCollection.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-370">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
@@ -779,38 +733,83 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Types.js">
+    <entry file="file://$PROJECT_DIR$/src/parser.rb">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/compiler/Compiler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="39" column="3" lean-forward="true" selection-start-line="39" selection-start-column="3" selection-end-line="39" selection-end-column="3" />
+        <state relative-caret-position="259">
+          <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SimpleType.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1616">
-          <caret line="83" column="51" selection-start-line="83" selection-start-column="51" selection-end-line="83" selection-end-column="51" />
+        <state relative-caret-position="88">
+          <caret line="4" column="35" selection-start-line="4" selection-start-column="35" selection-end-line="4" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Signature.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="417">
+          <caret line="23" column="7" lean-forward="true" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/overload.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="38" column="15" lean-forward="true" selection-start-line="38" selection-start-column="15" selection-end-line="38" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/typed_collection.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="642">
+          <caret line="53" column="5" lean-forward="true" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Types.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="36" column="7" lean-forward="true" selection-start-line="36" selection-start-column="7" selection-end-line="36" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Overload.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="165" column="29" lean-forward="true" selection-start-line="165" selection-start-column="29" selection-end-line="165" selection-end-column="29" />
+        <state relative-caret-position="121">
+          <caret line="138" column="31" selection-start-line="138" selection-start-column="31" selection-end-line="138" selection-end-column="31" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Interface.js">
+    <entry file="file://$PROJECT_DIR$/src/collections.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="12" column="21" lean-forward="true" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
+        <state relative-caret-position="324">
+          <caret line="49" column="30" lean-forward="true" selection-start-line="49" selection-start-column="30" selection-end-line="49" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TypedCollection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="22" column="14" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/typed.test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+        <state relative-caret-position="413">
+          <caret line="141" column="22" selection-start-line="141" selection-start-column="22" selection-end-line="141" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Interface.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="54" column="10" selection-start-line="54" selection-start-column="10" selection-end-line="54" selection-end-column="10" />
         </state>
       </provider>
     </entry>

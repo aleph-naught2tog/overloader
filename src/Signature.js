@@ -4,11 +4,11 @@ import { getTypeNameOf, TYPES } from "./Types";
 export const mapTypes = (parameters) => parameters.map(p => getTypeNameOf(p));
 
 export function Signature(...parameters) {
-  this.structure = mapTypes(parameters);
-
-  this.needsBoxCheck = this.structure.find(aParam => {
-    return ( aParam instanceof Type );
-  });
+  if (parameters.length === 0) {
+    this.structure = [TYPES.VOID];
+  } else {
+    this.structure = mapTypes(parameters);
+  }
 
   this.allowsAny = this.structure.includes(TYPES.ANY);
 

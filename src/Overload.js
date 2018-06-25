@@ -44,13 +44,9 @@ const matchWithAnyFound = (signature, signaturesWithAny) => {
     .find(whereAllTypesMatchOrAny);
 };
 
-export const withOverload = (someFunction, allowDefault = true) => {
+export const withOverload = () => {
 
-  if (!someFunction) {
-    someFunction = x => x;
-  }
-
-  const self = someFunction;
+  const self = x => x;
   const calls = new Map();
   const signatures = () => {
     return getMapKeys(calls);
@@ -73,7 +69,6 @@ export const withOverload = (someFunction, allowDefault = true) => {
   self.getSignaturesOfLength = length => signatures().filter(byLength(length));
   self.getSignaturesWithAny = () => signatures().filter(signature => signature.allowsAny);
 
-  self.shouldCheckBoxes = () => signatures().find(signature => signature.needsBoxCheck);
   self.allowsAny = () => self.getSignaturesWithAny().length !== 0;
 
   self.hasOverloadFor = signature => mapToString(signatures()).includes(signature.toString());
@@ -97,17 +92,13 @@ export const withOverload = (someFunction, allowDefault = true) => {
         return getOverload(calls, maybeSignature);
       }
     }
-
-    if (allowDefault) {
-      return self;
-    }
   };
 
   self.getOverloadByArguments = allArguments => {
     let overload;
 
     let signature = new Signature(...allArguments);
-    const mustBeExactMatch = !self.allowsAny() && !allowDefault;
+    const mustBeExactMatch = !self.allowsAny();
     const hasAllowedArgumentCount = self.hasSignaturesOfLength(allArguments.length);
 
     if (!hasAllowedArgumentCount) {
@@ -154,7 +145,7 @@ export const withOverload = (someFunction, allowDefault = true) => {
 };
 
 export const TypedFunction = (signature, method) => {
-  const overload = withOverload(method, false);
+  const overload = withOverload();
   overload.overloads.add({ signature: signature, method: method });
   overload.ownSignature = signature;
   overload.type = TypedFunction;
@@ -171,4 +162,10 @@ export function EmptyTypedFunction(signature) {
       throw new Error("You cannot call a method with no body");
     }
   });
-};
+}
+
+export function EmptyOverloadedFunction(...signatures) {
+  this.overloads = signatures.map(signature => new EmptyTypedFunction(signature));
+  this.leftToImplement = signatures.length;
+  this.implement = signature => {};
+}

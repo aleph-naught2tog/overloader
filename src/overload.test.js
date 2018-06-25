@@ -10,7 +10,7 @@ test('1+1 is true', () => {
 });
 
 describe('overload', () => {
-  let bob = withOverload(x => x);
+  let bob = withOverload();
   bob.overloads
      .add({
        signature: new Signature("a", 1),
@@ -31,18 +31,19 @@ describe('overload', () => {
        method: () => "orange"
      })
   ;
-
+  console.log(bob());
   test('it works', () => {
     expect(bob(10, "apple")).toBe("10 apple");
     expect(bob("orange", 12)).toBe("12 orange");
     expect(bob("red", 55, "green")).toBe("55 redgreen");
+    expect(bob()).toBe("orange");
   });
 });
 
 describe('union types', () => {
   const Concattable = UnionType('Concattable', TYPES.STRING, TYPES.NUMBER);
 
-  const bloop = withOverload(x => x, true);
+  const bloop = withOverload();
   bloop.overloads.add({
     signature: new Signature(Concattable, Concattable),
     method: (a, b) => a + b
@@ -199,7 +200,7 @@ describe('intersection types', () => {
 });
 
 describe('typings cascades as expected', () => {
-  const sayHello = withOverload(x => x, false);
+  const sayHello = withOverload();
   const BigCat = SimpleType('BigCat', { meow: () => TYPES.STRING });
   const BigDog = SimpleType('BigDog', { bark: () => TYPES.STRING });
 

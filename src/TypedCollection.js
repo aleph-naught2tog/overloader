@@ -6,6 +6,7 @@ export const TypedCollection = (name, SomeType) => {
 
     constructor() {
       this.items = [];
+      this.staticType = Symbol.for(TypedCollection.allowedType.name);
     }
 
     add(item) {
@@ -13,6 +14,14 @@ export const TypedCollection = (name, SomeType) => {
         this.items.push(item);
       } else {
         throw new Error("Wrong type");
+      }
+    }
+
+    merge(anotherCollectionOfSameType) {
+      if (anotherCollectionOfSameType instanceof TypedCollection) {
+        if (anotherCollectionOfSameType.staticType === this.staticType) {
+          return [...this.items, ...anotherCollectionOfSameType.items];
+        }
       }
     }
 
