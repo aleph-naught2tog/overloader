@@ -66,6 +66,10 @@ export const NamedType = (name, instanceCheck, ...inputTypes) => {
     writable: false, enumerable: false, configurable: true, value: name
   });
 
+  Object.defineProperty(klass, 'category', {
+    writable: false, enumerable: false, configurable: true, value: 'ComplexType'
+  });
+
   TYPES.register(name, klass);
 
   return klass;

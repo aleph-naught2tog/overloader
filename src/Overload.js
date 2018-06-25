@@ -156,6 +156,8 @@ export const withOverload = (someFunction, allowDefault = true) => {
 export const TypedFunction = (signature, method) => {
   const overload = withOverload(method, false);
   overload.overloads.add({ signature: signature, method: method });
+  overload.ownSignature = signature;
+  overload.type = TypedFunction;
 
   return overload;
 };

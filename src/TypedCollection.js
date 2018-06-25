@@ -1,6 +1,6 @@
 import { TYPES } from './Types';
 
-export const TypedCollection = SomeType => {
+export const TypedCollection = (name, SomeType) => {
   class TypedCollection {
     static allowedType = SomeType;
 
@@ -20,6 +20,10 @@ export const TypedCollection = SomeType => {
       return this.items.length;
     }
 
+    forEach(action) {
+      return this.items.forEach(action);
+    }
+
     valueOf() {
       return this.items;
     }
@@ -36,5 +40,5 @@ export const TypedCollection = SomeType => {
   return klass;
 };
 
-export const NumericArray = TypedCollection(TYPES.NUMBER);
-export const StringArray = TypedCollection(TYPES.STRING);
+export const NumericArray = TypedCollection('NumericArray', TYPES.NUMBER);
+export const StringArray = TypedCollection('StringArray', TYPES.STRING);

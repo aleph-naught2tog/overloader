@@ -3,23 +3,93 @@ import { Signature } from './Signature';
 import { TYPES } from "./Types";
 import { TypedCollection } from "./TypedCollection";
 
-TYPES.iterable = {
-  of: SomeType => {
-    return new TypedCollection(SomeType);
-  }
+export const RequirementCollection = TypedCollection('RequirementCollection', TYPES.SIMPLE_TYPE);
+
+const classmaker = (props, baseClass = class {
+}) => {
+
+  const buildingClass = class extends baseClass {
+    constructor(...args) {
+      super(...args);
+    }
+  };
+
+  props.forEach((value, propName) => {
+    const key = Symbol.keyFor(propName);
+    Object.defineProperty(buildingClass.prototype, key, { value: value });
+  });
+
+  return buildingClass;
 };
 
-class Interfaces {
-  static types = {
-    define: TypedFunction(new Signature(TYPES.iterable.of(SomeType)), methodDefinitions => {})
-  };
-  static define = Interfaces.types.define;
+class UnusableClass {
+
+  static get(interfaceObject) {
+    return new UnusableClass(interfaceObject);
+  }
+
+  constructor(self) {
+    const requirements = self.requirements;
+    this.requirements = new Map();
+    requirements.forEach(requirement => {
+      const key = requirement.name;
+      this.requirements.set(Symbol.for(key), requirement.value);
+    });
+    this.implementations = new Map();
+  }
+
+  implement(name, namedFunction) {
+    if (namedFunction.type !== TypedFunction) {
+      throw new Error("not typed");
+    }
+
+    const methodName = Symbol.for(name);
+
+    if (this.requirements.has(methodName)) {
+      const otherFunction = this.requirements.get(methodName);
+
+      if (namedFunction.ownSignature.equals(otherFunction.ownSignature)) {
+        this.implementations.set(methodName, this.requirements.get(methodName));
+        this.requirements.delete(methodName);
+      } else {
+        throw new Error("wrong signature");
+      }
+    }
+  }
+
+  getRemainingToBeImplemented() {
+    return this.requirements.keys();
+  }
+
+  getImplementations() {
+    return this.implementations.keys();
+  }
+
+  confirm() {
+    if (this.requirements.size !== 0) {
+      throw new Error("You have not implemented all required methods.");
+    } else {
+      return classmaker(this.implementations);
+    }
+  }
 }
 
-const interface = Interfaces.define(requirements);
-const Wrapper = interface.implementation();
-Wrapper.open();
-Wrapper
-  .implement(functionName, functionBody)
-  .implement(functionName, functionBody);
-Wrapper.close();
+const DefType = new Signature(RequirementCollection);
+
+export class Interface {
+  static types = {
+    define: self =>
+      TypedFunction(DefType, (requirements) => {
+        self.requirements = requirements;
+        return self;
+      })
+  };
+
+  define(requirements) {
+    return Interface.types.define(this)(requirements);
+  };
+
+  getUnimplementedBase() {
+    return UnusableClass.get(this);
+  }
+}

@@ -21,7 +21,7 @@ const SimpleNamedType = (name, type) => {
     static type = type;
     static mapped = mapTypes([type])[0];
     static key = key;
-    static typeOfValue = type[key];
+    static value = type[key];
 
     static [Symbol.hasInstance](maybeInstance) {
       const type = mapTypes([maybeInstance])[0];
@@ -38,7 +38,7 @@ const SimpleNamedType = (name, type) => {
         return false
       }
 
-      if (!( maybeInstance[GenericClass.key] instanceof GenericClass.typeOfValue )) {
+      if (!( maybeInstance[GenericClass.key] instanceof GenericClass.value )) {
         return false;
       }
 
@@ -82,6 +82,10 @@ const SimpleNamedType = (name, type) => {
 
   Object.defineProperty(klass, 'name', {
     writable: false, enumerable: false, configurable: true, value: name
+  });
+
+  Object.defineProperty(klass, 'category', {
+    writable: false, enumerable: false, configurable: true, value: 'SimpleType'
   });
 
   TYPES.register(name, klass);

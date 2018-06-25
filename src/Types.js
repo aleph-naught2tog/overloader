@@ -28,8 +28,22 @@ class CANONICAL_BOOLEAN {
   }
 }
 
+class SimpleTypeClass {
+  static [Symbol.hasInstance](maybeInstance) {
+    return maybeInstance.category === "SimpleType";
+  }
+}
+
+class ComplexTypeClass {
+  static [Symbol.hasInstance](maybeInstance) {
+    return maybeInstance.category === "ComplexType";
+  }
+}
+
 
 export const TYPES = {
+  SIMPLE_TYPE: SimpleTypeClass,
+  COMPLEX_TYPE: ComplexTypeClass,
   STRING: CANONICAL_STRING,
   NUMBER: CANONICAL_NUMBER,
   BOOLEAN: CANONICAL_BOOLEAN,
@@ -52,7 +66,7 @@ export const TYPES = {
   register: (className, TypeClass) => {
 
     if (TYPES_REGISTRY.has(Symbol.for(className))) {
-      console.warn(`Type ${className} already exists. This typemap will not be added.`);
+      //console.warn(`Type ${className} already exists. This typemap will not be added.`);
       return;
     }
 
